@@ -1,0 +1,470 @@
+<!DOCTYPE HTML>
+<!--未加入Bootstrap的两行链接-->
+<html lang="en">
+<% include header%>
+    <head>
+        <title>
+            <%= title %>
+        </title>
+        <link href="./images/favicon.ico" rel="shortcut icon" />
+        <link href="stylesheets/uploadreport.css" rel="stylesheet" type="text/css">
+        <link href="stylesheets/fileinput.min.css" rel="stylesheet" type="text/css">
+    </head>
+    <body>
+        <div id="report_header_img"></div>
+        <!--右边文字-->
+        <div class="main" style="margin-top:0">
+            <div class="subleft_report">
+                <div class="leftup_report">
+                    <ul class="nav nav-pills nav-stacked">
+                        <li role="presentation" class="active">
+                            <a href="" id="courseshow"></a>
+                        </li>
+                        <li role="presentation" class="dropdown">
+                            <a class="dropdown-toggle" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">
+                                验证试验
+                                <span class="caret"></span>
+                            </a>
+                            <ul class="dropdown-menu">
+                                <li role="presentation">
+                                    <a href="subReport?courseid=0">涡街流量计验证实验</a>
+                                </li>
+                                <li role="presentation">
+                                    <a href="subReport?courseid=1">超声波流量计验证实验</a>
+                                </li>
+                                <li role="presentation">
+                                    <a href="subReport?courseid=2">超声波液位计验证实验</a>
+                                </li>
+                            </ul>
+                        </li>
+
+                        <li role="presentation" class="dropdown">
+                            <a class="dropdown-toggle" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">
+                                校准实验
+                                <span class="caret"></span>
+                            </a>
+                            <ul class="dropdown-menu">
+                                <li role="presentation">
+                                    <a href="subReport?courseid=3">涡街流量计综合实验</a>
+                                </li>
+                                <li role="presentation">
+                                    <a href="subReport?courseid=4">超声波流量计综合实验</a>
+                                </li>
+                                <li role="presentation">
+                                    <a href="subReport?courseid=5">超声波液位计综合实验</a>
+                                </li>
+                            </ul>
+                        </li>
+
+                        <li role="presentation" class="dropdown">
+                            <a class="dropdown-toggle" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">
+                                设计实验
+                                <span class="caret"></span>
+                            </a>
+                            <ul class="dropdown-menu">
+                                <li role="presentation">
+                                    <a href="subReport?courseid=6">涡街流量计设计实验</a>
+                                </li>
+                                <li role="presentation">
+                                    <a href="subReport?courseid=7">超声波流量计设计实验</a>
+                                </li>
+                                <li role="presentation">
+                                    <a href="subReport?courseid=8">超声波流液位计设计实验</a>
+                                </li>
+                            </ul>
+                        </li>
+                    </ul>
+                </div>
+                <!-- <div class="leftdown_report">
+                    <div class="instruction">
+                        <div class="report_fdiv">
+                            <img src="images/svg/text.svg" alt="text图标">
+                            <span>报告要求：</span>
+                            <img src="images/svg/required.svg" alt="必填图标">
+                        </div>
+                        <div class="repost_content">
+                            <textarea rows="4" cols="23" id="repConclusion" name="repConclusion"></textarea>
+                        </div>
+                    </div>
+                </div> -->
+            </div>
+            <div class="right_report">
+                <h2>实验报告</h2>
+                <div id="information" class="report">
+                    <div class="report_fdiv">
+                        <img src="images/svg/text.svg" alt="text图标">
+                        <span>学生资料</span>
+                        <img src="images/svg/required.svg" alt="必填图标">
+                    </div>
+                    <div class="pull-left">
+                        <p>实验名称：
+                            <span>
+                                <%=result[0].courseName%>
+                            </span>
+                        </p>
+                        <p>实验人：
+                            <span>
+                                <%=result[0].name%>
+                            </span>
+                        </p>
+                        <p>实验状态：
+                            <span>
+                                <% switch(result[0].status){
+                   case 0:%>未实验
+                                    <% break; %>
+                                        <% case 1:%>已实验（报告未提交）
+                                            <% break; %>
+                                                <% case 2:%>已完成
+                                                    <% break; %>
+                                                        <% } %>
+                            </span>
+                        </p>
+                    </div>
+                    <div class="pull-right">
+                        <p>实验时间：
+                            <span>
+                                <% if(result[0].StartTime) { %>
+                                    <%=result[0].StartTime%>
+                                        <% } 
+                            else { %> 未实验
+                                            <% } %>
+
+                            </span>
+                        </p>
+                        <p>学号：
+                            <span>
+                                <%=result[0].userName%>
+                            </span>
+                        </p>
+                        <p>实验报告：
+                            <span>
+                                <% if(result[0].teascore) { %>已批改
+                                    <% } 
+                        else { %> 未批改
+                                        <% } %>
+                            </span>
+                        </p>
+                    </div>
+                    <div class="clearfix"></div>
+                </div>
+                <div id="exp3patameter" class="report" style="display:none">
+                    <div class="report_fdiv">
+                        <img src="images/svg/text.svg" alt="text图标">
+                        <span>校准曲线参数</span>
+                        <img src="images/svg/required.svg" alt="必填图标">
+                    </div>
+                    <div class="pull-left">
+                        <p>曲线坐标轴x轴：
+                            <span>
+                                实际流量值
+                            </span>
+                        </p>
+                        <p>校准曲线方程：
+                            <span>
+                                y=ax+b
+                            </span>
+                        </p>
+                        <br>
+                        <p style="font-size: 16px;font-Weight:bold">参数填写：(保留小数点后三位)
+                            <div class="form-inline" style="font-size: 17px;font-Weight:bold">
+                                y=
+
+                                <input type="text" id="a" name="a" class="form-control" style="width:100px" placeholder="a" /> x+
+                                <!-- <input type="text" id="a" name="a" class="form-control" style="width:100px" placeholder="a"  onchange="if(/\D/.test(this.value)){alert('只能输入数字，小数点最多保留三位');this.value='';}">  -->
+                                <!-- <input type="text" id="b" name="b" class="form-control" style="width:100px" placeholder="b" onkeyup= "if(/^d*(?:.d{0,2})?$/.test(this.value)){alert('只能输入数字,小数点后只能保留两位');this.value='';}" /> -->
+                                <input type="text" id="b" name="b" class="form-control" style="width:100px" placeholder="b" />
+                                <button type="button" class="btn btn-success" onclick="subparameter()">提交</button>
+                            </div>
+                        </p>
+                    </div>
+                    <div class="pull-right">
+                        <p>曲线坐标轴y轴：
+                            <span>
+                                涡街流量计流量值
+                            </span>
+                        </p>
+                    </div>
+                    <div class="clearfix"></div>
+                </div>
+                <div id="exp4patameter" class="report" style="display:none">
+                    <div class="report_fdiv">
+                        <img src="images/svg/text.svg" alt="text图标">
+                        <span>校准曲线参数</span>
+                        <img src="images/svg/required.svg" alt="必填图标">
+                    </div>
+                    <div class="pull-left">
+                        <p>曲线坐标轴x轴：
+                            <span>
+                                实际流量值
+                            </span>
+                        </p>
+                        <p>校准曲线方程：
+                            <span>
+                                y=ax+b
+                            </span>
+                        </p>
+                        <br>
+                        <p style="font-size: 16px;font-Weight:bold">参数填写：(保留小数点后三位)
+                            <div class="form-inline" style="font-size: 17px;font-Weight:bold">
+                                y=
+                                <input type="text" id="a" name="a" class="form-control" style="width:100px" placeholder="a"> x+
+                                <input type="text" id="b" name="b" class="form-control" style="width:100px" placeholder="b">
+                                <button type="button" class="btn btn-success" onclick="subparameter()">提交</button>
+                            </div>
+                        </p>
+                    </div>
+                    <div class="pull-right">
+                        <p>曲线坐标轴y轴：
+                            <span>
+                                超声波流量计流量值
+                            </span>
+                        </p>
+                    </div>
+                    <div class="clearfix"></div>
+                </div>
+                <div id="exp5patameter" class="report" style="display:none">
+                    <div class="report_fdiv">
+                        <img src="images/svg/text.svg" alt="text图标">
+                        <span>校准曲线参数</span>
+                        <img src="images/svg/required.svg" alt="必填图标">
+                    </div>
+                    <div class="pull-left">
+                        <p>曲线坐标轴x轴：
+                            <span>
+                                实际液位值
+                            </span>
+                        </p>
+                        <p>校准曲线方程：
+                            <span>
+                                y=ax+b
+                            </span>
+                        </p>
+                        <br>
+                        <p style="font-size: 16px;font-Weight:bold">参数填写：(保留小数点后三位)
+                            <div class="form-inline" style="font-size: 17px;font-Weight:bold">
+                                y=
+                                <input type="text" id="a" name="a" class="form-control" style="width:100px" placeholder="a"> x+
+                                <input type="text" id="b" name="b" class="form-control" style="width:100px" placeholder="b">
+                                <button type="button" class="btn btn-success" onclick="subparameter()">提交</button>
+                            </div>
+                        </p>
+                    </div>
+                    <div class="pull-right">
+                        <p>曲线坐标轴y轴：
+                            <span>
+                                超声波液位计液位值
+                            </span>
+                        </p>
+                    </div>
+                    <div class="clearfix"></div>
+                </div>
+                <div class="report">
+                    <div class="report_fdiv">
+                        <img src="images/svg/text.svg" alt="text图标">
+                        <span>实验思考题</span>
+                        <img src="images/svg/required.svg" alt="必填图标">
+                    </div>
+                    <div class="repost_content">
+                        <span>
+                            <%=result[0].question%>
+                        </span>
+                    </div>
+                </div>
+                <form role="form" method="post" enctype="multipart/form-data" onSubmit="return chkinput(this)">
+                    <div id="data" class="report">
+                        <div class="report_fdiv">
+                            <img src="images/svg/text.svg" alt="text图标">
+                            <input type="button" name="btn" value="查看实验数据" onclick="showTableContent()">
+                            <div class="repost_content" style="height:400px; overflow-x: auto; overflow-y: auto;">
+                                <table id="tableData" align="left" border="1" style="margin-left:0px; width: 95%;">
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                    <br>
+                    <div id="showfile" class="form-group" style="width:50%;margin-top: 20px;">
+                        <label style="font-size:20px;">上传实验报告:</label>
+                        <input id="thumbnail" name="thumbnail" type="file">
+                    </div>
+                    <input type="button" class="btn btn-default" style="font-size:15px" value='预览实验报告' onclick="showreport('<%=result[0].id%>')">
+
+                </form>
+            </div>
+            <div class="right_report" id="warn">
+                <iframe src="" width='100%' height="1000px" scrolling="no" frameborder='0' id="showpdf" style="display:none">
+                    This browser does not support PDFs. Please download the PDF to view it:
+                    <a href="/index.pdf">Download PDF</a>
+                </iframe>
+            </div>
+            <div class="clearfix"></div>
+
+        </div>
+
+        <!--底部导航栏-->
+        <% include footer%>
+
+            <script src="javascripts/jquery-1.12.3.min.js" type="text/javascript"></script>
+            <script src="javascripts/bootstrap.js" type="text/javascript"></script>
+            <script src="javascripts/fileinput.min.js" type="text/javascript"></script>
+            <script src="javascripts/zh.js" type="text/javascript"></script>
+            <script>
+                function showreport(id) {
+                    $.post('scoreSubmit/download', {
+                        id: id,
+                    }, function (data) {
+                        if (data.length == 0 || data == "null") {
+                            document.getElementById("warn").innerHTML = "未上传实验报告";
+                        }
+                        else {
+                            console.log(data);
+                            data = data.slice(8);
+                            console.log(data);
+                            document.getElementById("showpdf").src = data;
+                            document.getElementById("showpdf").style.display = "block";
+                        }
+                        // var open=new ActiveXObject("SharePoint.OpenDocuments.2");
+                        // open.ViewDocument(data);   
+                    })
+                }
+                function showTableContent() {
+                    $.post('subReport/show', {
+                    }, function (data) {
+                        var a = data.repData;
+                        // if(a){
+                        console.log(a);
+                        var r = a.split(",");
+                        console.log(r);
+                        var col = 4;//这里为生成4列的表格 
+                        var lines = Math.ceil(r.length / col);//很关键的一步，这里为生成表格的行数  
+                        var str = "<table><tbody>";//表头  
+                        for (var j = 0; j < lines; j++) {//遍历表格行  
+                            str += "<tr>";
+                            for (var k = 0; k < col; k++) {//遍历表格列  
+                                str += "<td>";
+                                if (typeof r[k + j * col] == "undefined") { str += "&nbsp"; }
+                                else { str += r[k + j * col]; }
+                                str += "</td>";
+                            };//表格行结束  
+                            str += "</tr>";
+                        };
+                        str += "</tbody></table>";
+                        // else str="未实验<table><tbody><tr><td>暂无实验数据</tr></td></tbody></table>";
+                        document.getElementById("tableData").innerHTML = str;
+                    })
+                }
+                // var file = document.getElementById("thumbnail").value;
+                // if (file == null || file == "") {
+                //     alert("请选择上传的报告");
+                //     return (false);
+                // }
+                // return (true);
+                window.onload = function () {
+                    if ('<%=result[0].teascore%>' && '<%=result[0].teascore%>' != '0')
+                        document.getElementById("showfile").style.display = "none";
+
+                    var url = window.location.href;
+                    var id = url.substring(url.length - 1, url.length);
+                    switch (id) {
+                        case "t":
+                            document.getElementById("courseshow").innerText = "实验选择";
+                            break;
+                        case "0":
+                            document.getElementById("courseshow").innerText = "涡街流量计验证实验";
+                            break;
+                        case "1":
+                            document.getElementById("courseshow").innerText = "超声波流量计验证实验";
+                            break;
+                        case "2":
+                            document.getElementById("courseshow").innerText = "超声波液位计验证实验";
+                            break;
+                        case "3":
+                            document.getElementById("courseshow").innerText = "涡街流量计综合实验";
+                            document.getElementById("exp3patameter").style.display = "block";
+                            break;
+                        case "4":
+                            document.getElementById("courseshow").innerText = "超声波流量计综合实验";
+                            document.getElementById("exp4patameter").style.display = "block";
+                            break;
+                        case "5":
+                            document.getElementById("courseshow").innerText = "超声波液位计综合实验";
+                            document.getElementById("exp5patameter").style.display = "block";
+                            break;
+                        case "6":
+                            document.getElementById("courseshow").innerText = "涡街流量计设计实验";
+                            break;
+                        case "7":
+                            document.getElementById("courseshow").innerText = "超声波流量计设计实验";
+                            break;
+                        case "8":
+                            document.getElementById("courseshow").innerText = "超声波液位计设计实验";
+                            break;
+                    }
+
+                }
+                /* $('#buttonSubmit').click(function(e)
+                 {
+             
+                     $.ajax({
+                         type: 'POST',
+                         async: false,
+                         url: '/uploadReport',
+                         data: $('form').serialize()
+                     });
+             
+                     if(confirm("报告已提交,按确认关闭此窗口,取消返回继续编辑"))
+                     {
+                         window.close();                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                          
+                     }
+                 }
+                 );*/
+
+                $("#thumbnail").fileinput(
+                    {
+                        language: 'zh', //设置语言
+                        uploadUrl: "/subReport/", //上传的地址
+                        allowedFileExtensions: ['pdf'],//接收的文件后缀
+                        uploadAsync: true, //默认异步上传
+                        showUpload: true, //是否显示上传按钮
+                        showRemove: true, //显示移除按钮
+                        showPreview: false, //是否显示预览
+                        showCaption: true,//是否显示标题
+                        browseClass: "btn btn-primary", //按钮样式    
+                        dropZoneEnabled: false,//是否显示拖拽区域
+                        //minImageWidth: 50, //图片的最小宽度
+                        //minImageHeight: 50,//图片的最小高度
+                        //maxImageWidth: 1000,//图片的最大宽度
+                        //maxImageHeight: 1000,//图片的最大高度
+                        //maxFileSize:0,//单位为kb，如果为0表示不限制文件大小
+                        //minFileCount: 0,
+                        //maxFileCount: 10, //表示允许同时上传的最大文件个数
+                        enctype: 'multipart/form-data',
+                        validateInitialCount: true,
+                        previewFileIcon: "<iclass='glyphicon glyphicon-king'></i>",
+                        //msgFilesTooMany: "选择上传的文件数量({n}) 超过允许的最大数值{m}！",
+                    }).on("fileuploaded", function (data) {
+                        if (data.response) { alert('处理成功'); }
+                        if (data == "finished") { alert('处理成功'); }
+                    });
+
+                function subparameter() {
+                    var a = document.getElementById("a").value;
+                    var b = document.getElementById("b").value;
+                    var reg = /^[-\+]?\d+(\.\d+)?$/;
+                    if ((!a) || (!b)) { alert("参数不能为空"); return }
+                    if (!reg.test(a) || !reg.test(b)) {
+                        alert("参数类型不对");
+                        return;
+                    }
+                    $.post('subReport/subpara', {
+                        a: a,
+                        b: b
+                    }, function (data) {
+                        if (data == "1")
+                            alert("提交成功");
+                        else alert("提交失败");
+                    })
+                }
+            </script>
+    </body>
+
+</html>

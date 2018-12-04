@@ -1,0 +1,272 @@
+﻿<!DOCTYPE HTML>
+<html lang="en">
+
+<% include header%>
+
+    <head>
+        <title>
+            <%= title %>
+        </title>
+        <link href="./images/favicon.ico" rel="shortcut icon" />
+        <link href="/stylesheets/chooseCourse.css" rel="stylesheet" type="text/css">
+        <style>
+            html {
+                height: 100%;
+                min-height: 810px;
+            }
+
+            body {
+                height: 100%;
+            }
+            #bottom {
+                position: absolute;
+                bottom: 0;
+            }
+        </style>
+    </head>
+
+    <body>
+        <!-- <meta name="viewport" content="width=device-width, initial-scale=1">     -->
+
+        <div id="course_header_img"></div>
+        <div class="main" style="margin-top: 0">
+            <!-- <div> -->
+            <div class="chooseCourse">实验课程</div>
+
+            <div class="expContainer">
+                <div class="expTitle">验证型实验</div>
+                <div class="courseItem" id="course0">
+                    <span>涡街流量计验证实验</span>
+                    <img>
+                    <span class="courseStatus">
+                    </span>
+                </div>
+
+                <div class="courseItem" id="course1">
+                    <span>超声波流量计验证实验</span>
+                    <img>
+                    <span class="courseStatus">
+                    </span>
+                </div>
+
+                <div class="courseItem" id="course2">
+                    <span>超声波液位计验证实验</span>
+                    <img>
+                    <span class="courseStatus">
+                    </span>
+                </div>
+            </div>
+
+            <div class="expContainer">
+                <div class="expTitle">综合型实验</div>
+
+                <div class="courseItem" id="course3">
+                    <span>涡街流量计综合实验</span>
+                    <img>
+                    <span class="courseStatus"> </span>
+                </div>
+
+                <div class="courseItem" id="course4">
+                    <span>超声波流量计综合实验</span>
+                    <img>
+                    <span class="courseStatus"> </span>
+                </div>
+
+                <div class="courseItem" id="course5">
+                    <span>超声波液位计综合实验</span>
+                    <img>
+                    <span class="courseStatus"></span>
+                </div>
+            </div>
+            <div class="expContainer">
+                <div class="expTitle">设计型实验</div>
+
+                <div class="courseItem" id="course6">
+                    <span>涡街流量计设计实验</span>
+                    <img>
+                    <span class="courseStatus"> </span>
+                </div>
+
+                <div class="courseItem" id="course7">
+                    <span>超声波流量计设计实验</span>
+                    <img>
+                    <span class="courseStatus"> </span>
+                </div>
+
+                <div class="courseItem" id="course8">
+                    <span>超声波液位计设计实验</span>
+                    <img>
+                    <span class="courseStatus"></span>
+                </div>
+            </div>
+            <div class="clearfix"></div>
+
+        </div>
+
+        <!--底部导航栏-->
+        <% include footer%>
+
+            <script src="javascripts/jquery-1.12.3.min.js" type="text/javascript"></script>
+            <script src="javascripts/bootstrap.js" type="text/javascript"></script>
+
+            <script type="text/javascript">
+                // $.post('onlineExp/getReadState',{
+                //            device_id:device_id
+                //         }, function(data) {
+
+                //        }
+                // )
+
+                var status0, status1, status2, status3, status4, status5, status6, status7, status8;
+                var tableid, courseid;
+                window.onload = loadCourseInfo();
+                function loadCourseInfo() {
+                    $.get('onlineExp/courseInfo', function (result) {
+                        for (var i = 0; i < result.length; i++) {
+                            switch (result[i].courseID) {
+                                case 0:
+                                    status0 = result[i].status;
+                                    break;
+                                case 1:
+                                    status1 = result[i].status;
+                                    break;
+                                case 2:
+                                    status2 = result[i].status;
+                                    break;
+                                case 3:
+                                    status3 = result[i].status;
+                                    break;
+                                case 4:
+                                    status4 = result[i].status;
+                                    break;
+                                case 5:
+                                    status5 = result[i].status;
+                                    break;
+                                case 6:
+                                    status6 = result[i].status;
+                                    break;
+                                case 7:
+                                    status7 = result[i].status;
+                                    break;
+                                case 8:
+                                    status8 = result[i].status;
+                                    break;
+                            }
+                        }
+                        changeCourseAppearance('course0', status0);
+                        changeCourseAppearance('course1', status1);
+                        changeCourseAppearance('course2', status2);
+                        changeCourseAppearance('course3', status3);
+                        changeCourseAppearance('course4', status4);
+                        changeCourseAppearance('course5', status5);
+                        changeCourseAppearance('course6', status6);
+                        changeCourseAppearance('course7', status7);
+                        changeCourseAppearance('course8', status8);
+                        console.log("status0的值为" + status0);
+
+                        //设置课程栏目样式
+                        function changeCourseAppearance(divID, status) {
+                            //    if (status == null) {
+                            //        document.getElementById(divID).getElementsByTagName('span')[1].innerHTML = "未选课";
+                            //        document.getElementById(divID).getElementsByTagName('img')[0].src = "/images/common/cross.png";
+                            //    }
+                            if (status == 0) {
+                                document.getElementById(divID).getElementsByTagName('span')[1].innerHTML = "未实验";
+                                document.getElementById(divID).getElementsByTagName('img')[0].src = "/images/common/warn.png";
+                            }
+                            else if (status == 1) {
+                                document.getElementById(divID).getElementsByTagName('span')[1].innerHTML = "已实验";
+                                document.getElementById(divID).getElementsByTagName('img')[0].src = "/images/common/tick.png";
+                            }
+                            else if (status == 2) {
+                                document.getElementById(divID).getElementsByTagName('span')[1].innerHTML = "已完成";
+                                document.getElementById(divID).getElementsByTagName('img')[0].src = "/images/common/uploaded.png";
+                            }
+                        }
+
+                        //    function redirectToExperiment(status, targetURL) {
+                        //        if (status == 0) {
+                        //            if (confirm('你即将开始实验，继续请按确认'))
+                        //                window.location.href = targetURL;
+                        //        }
+                        //        else if (status == 1) {
+                        //            if (confirm('您已完成此实验,重做会覆盖之前的实验记录,继续请按确认。'))
+                        //                window.location.href = targetURL;
+                        //        }
+                        //        else if (status == 2) {
+                        //            alert('您已提交报告,不能重新进行此实验。');
+                        //        }
+                        //    }
+
+                    });
+                }
+                $('#course0').click(function () {
+                    window.location.href = '/experiment/0';
+                });
+                $('#course1').click(function () {
+                    window.location.href = '/experiment/1';
+                });
+                $('#course2').click(function () {
+                    window.location.href = '/experiment/2';
+                });
+                $('#course3').click(function () {
+                    window.location.href = '/experiment/3';
+                });
+                $('#course4').click(function () {
+                    window.location.href = '/experiment/4';
+                });
+                $('#course5').click(function () {
+                    window.location.href = '/experiment/5';
+                });
+                $('#course6').click(function () {
+                    window.location.href = '/experiment/6';
+                });
+                $('#course7').click(function () {
+                    window.location.href = '/experiment/7';
+                });
+                $('#course8').click(function () {
+                    window.location.href = '/experiment/8';
+                    // redirectToExperiment(status8,'/experiment/8')
+                });
+    // var flag=0;
+    // var socket = io.connect();
+    // socket.on("Data Pack", function(device_id) {
+    //    if(flag==0){
+    //     $.post('onlineExp/tableInsert',{
+    //                device_id:device_id
+    //             }, function(data) {
+    //            })}
+    //     flag=1;
+    // });
+
+
+
+
+        // $('#course8').click(function(){
+        //     $.post('onlineExp/tableMatch',{
+        //            courseid:8
+        //         }, function(data) {
+        //         tableid=data;
+        //         window.location.href = '/experiment/8?tableid='+tableid;
+        //        })
+            // $.post('onlineExp/verify',{
+            //     courseid:8
+            //  }, function(data) {
+            // if (data=="null"){
+            //     alert('未选该实验');
+            //  }
+            //  else if(data.verifystatus==0){
+            //     alert('实验未审核，请等待审核通过');}
+            //  else if(data.verifystatus==1){
+            //     alert('未审核通过，请与老师联系');}
+            //  else{
+            //   var status=data.status;
+            //   redirectToExperiment(status,'/experiment/8');
+            //  }
+            // })
+            // window.location.href = '/experiment/8';
+        // });
+            </script>
+    </body>
+
+</html>

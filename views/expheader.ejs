@@ -1,0 +1,332 @@
+<link href="/stylesheets/experNew.css" rel="stylesheet" type="text/css" media="screen">
+<script src="/javascripts/experCommon.js"></script>
+<script src="https://open.ys7.com/sdk/js/1.1/ezuikit.js"></script>
+<div id="experiment">
+
+    <div class="expTitle">流量与液位综合检测平台</div>
+
+    <!--图形化数据显示-->
+    <div id="labelFlowRateVortex"></div>
+    <!--涡街流量计 瞬时流量 -->
+    <div id="labelTotalFlowVortex"></div>
+    <!-- 累积流量 -->
+    <div id="text" style="font-size: 16px;display:none">当前未占用实验桌</div>
+    <div id="choosetable" style="display:none">
+        <select id="choose" class="form-control" style="width:120px;font-size: 16px">
+        </select>
+    </div>
+    <div id="labelFlowRateHM"></div>
+    <!-- 超声波流量计瞬时流量 -->
+
+    <div id="labelTotalFlowHM"></div>
+    <!-- 累积流量 -->
+    <div id="labelTempHM"></div>
+    <!-- 水温 -->
+
+    <div id="labelWaterLevel"></div>
+    <!-- 超声波液位计液位 -->
+    
+    <div id="labelTempAir"></div>
+    <!-- 气温 -->
+
+    <div id="labelWeight"></div>
+    <div id="labelFrequency"> </div>
+
+    <span class="switch s1">
+        <input id="sw1" type="checkbox" />
+        <label for="sw1"></label>
+    </span>
+
+    <span class="switch s2">
+        <input id="sw2" type="checkbox" />
+        <label for="sw2"></label>
+    </span>
+
+    <span class="switch s3">
+        <input id="sw3" type="checkbox" />
+        <label for="sw3"></label>
+    </span>
+
+    <span class="switch s4">
+        <input id="sw4" type="checkbox" />
+        <label for="sw4"></label>
+    </span>
+
+    <div id="labelFlowRateVortexSide"></div>
+    <div id="labelFlowRateHMSide"></div>
+    <div id="labelWaterLevelSide"></div>
+    <div id="labelWeightSide"></div>
+
+    <div class="Slider">
+        <div class="sRange"></div>
+        <div class="sValidRange" id="sValidRange"></div>
+        <input id="frequencySlider" type="range" min="0" max="50" value="30" onmousemove="updateFrequencyValue();">
+    </div>
+    <div id="labelFrequencySide"></div>
+    <button id="buttonStartExperiment" class="btn-lg btn-info">开始实验</button>
+    <button id="buttonResetExperiment" class="btn-lg btn-default">重置实验</button>
+
+    <div>实验日志</div>
+    <div id="expLog"></div>
+    <!-- <canvas id="video-canvas"> -->
+    <div id="liveVideo">
+        <video id="video-canvas" poster="" controls playsInline webkit-playsinline autoplay>
+            <!-- <source id="v1" src="rtmp://rtmp.open.ys7.com/openlive/73933847faa847cbba01a05314d59e09" type="" />
+        <source id="v2" src="http://hls.open.ys7.com/openlive/73933847faa847cbba01a05314d59e09.m3u8" type="application/x-mpegURL" /> -->
+            <source id="v1" src="" type="" />
+            <source id="v2" src="" type="application/x-mpegURL" />
+        </video>
+    </div>
+    <!-- </canvas>  -->
+</div>
+
+<div id="Warnings" style="z-index: 999">
+    <div id="WarningOverflow" class="warning" align="center" style="background:url(/images/common/warning.png) no-repeat; height:320px; width:440px">
+        <h1 style="position:relative; top: 20px; font-size: 50px; font-weight: bolder;">
+            警告
+        </h1>
+        <p class="p_warning" align="center">上储水槽液位超限</p>
+        <p class="p_warning" align="center">已自动打开出水阀</p>
+        <p class="p_warning" align="center">并停止离心泵</p>
+        <button class="btn-lg btn-default" id="OverflowOK" style="height: 50px;" onclick="overflow()">确定</button>
+    </div>
+
+    <div id="WeightError" class="warning" align="center" style="background:url(/images/common/warning.png) no-repeat; height:320px; width:440px">
+        <h1 style="position:relative; top: 20px; font-size: 50px; font-weight: bolder;">
+            故障
+        </h1>
+        <p class="p_warning" align="center">电子秤采集数据失败</p>
+        <button class="btn-lg btn-default" id="WeightOK" style="height: 50px;">确定</button>
+    </div>
+
+    <div id="VortexError" class="warning" align="center" style="background:url(/images/common/warning.png) no-repeat; height:320px; width:440px">
+        <h1 style="position:relative; top: 20px; font-size: 50px; font-weight: bolder;">
+            故障
+        </h1>
+        <p class="p_warning" align="center">涡街流量计采集数据失败</p>
+        <button class="btn-lg btn-default" id="VortexOK" style="height: 50px;">确定</button>
+    </div>
+
+    <div id="LevelError" class="warning" align="center" style="background:url(/images/common/warning.png) no-repeat; height:320px; width:440px">
+        <h1 style="position:relative; top: 20px; font-size: 50px; font-weight: bolder;">
+            故障
+        </h1>
+        <p class="p_warning" align="center">超声波液位计采集数据失败</p>
+        <button class="btn-lg btn-default" id="LevelOK" style="height: 50px;">确定</button>
+    </div>
+
+    <div id="HeatError" class="warning" align="center" style="background:url(/images/common/warning.png) no-repeat; height:320px; width:440px">
+        <h1 style="position:relative; top: 20px; font-size: 50px; font-weight: bolder;">
+            故障
+        </h1>
+        <p class="p_warning" align="center">超声波流量计（热能表）采集数据失败</p>
+        <button class="btn-lg btn-default" id="HeatOK" style="height: 50px;">确定</button>
+    </div>
+
+    <!-- <div id="FreqError"  class="warning" align="center" style="background:url(/images/common/warning.png) no-repeat; height:320px; width:440px">
+            <h1 style="position:relative; top: 20px; font-size: 50px; font-weight: bolder;">
+                故障
+            </h1>
+            <p class="p_warning" align="center">变频器故障</p>
+            <button class="btn-lg btn-default" id="FreqOK" style="height: 50px;">确定</button>
+        </div> -->
+
+    <div id="WarningResetFinished" class="warning" align="center" style="background:url(/images/common/warning.png) no-repeat; height:320px; width:440px">
+        <h1 style="position:relative; top: 40px; font-size: 50px; font-weight: bolder;">
+            提示
+        </h1>
+        <p class="p_warning" align="center">
+            <br/>
+        </p>
+        <p class="p_warning" align="center">上水槽已清空</p>
+        <p class="p_warning" align="center">可以开始实验</p>
+        <button class="btn-lg btn-default" id="resetFinishedOK" style="height: 50px;">确定</button>
+    </div>
+</div>
+
+
+
+<!--实验设备介绍-->
+<div id="InstrumentIntroductions" style="z-index: 1000">
+    <div id="UltraSonicFlowmeter" class="instrumentIntro" align="center">
+        <h1>
+            超声波流量计
+        </h1>
+        <hr style="width: 700px;" />
+        <img src="/images/Instruments/HeatMeter.jpg" ; width="300px" align="center" />
+
+        <p align="left" class="instrumentIntroParagraph">
+            超声波流量计是一种非接触式仪表，它既可以测量大管径的介质流量也可以用于不易接触和观察的介质的测量。它的测量准确度很高，几乎不受被测介质的各种参数的干扰，尤其可以解决其它仪表不能的强腐蚀性、非导电性、放射性及易燃易爆介质的流量测量问题。
+        </p>
+        <p align="left" class="instrumentIntroParagraph">
+            超声波流量计采用时差式测量原理：一个探头发射信号穿过管壁、介质、另一侧管壁后，被另一个探头接收到，同时，第二个探头同样发射信号被第一个探头接收到，由于受到介质流速的影响，二者存在时间差Δt，根据推算可以得出流速V和时间差Δt之间的换算关系V=(C2/2L)×Δt，进而可以得到流量值Q
+        </p>
+
+        <p align="left" class="instrumentIntroParagraph">
+            本实验中使用的是超声波热能表，它在超声波流量计的基础上增加了入口温度探头和出口温度探头，并同时具有软件计量功能，可以通过流量和温度差计算流经发热器的热能损耗，进而计算价格。不过在本实验中，仅使用了热能表的流量数据。
+        </p>
+    </div>
+
+    <div id="UltraSonicDistance" class="instrumentIntro" align="center">
+        <h1>
+            超声波液位传感器
+        </h1>
+        <hr style="width: 700px;" />
+        <img src="/images/Instruments/UltraSonic.jpg" ; width="300px" align="center" />
+
+        <p align="left" class="instrumentIntroParagraph">
+            超声波测距原理是在超声波发射装置发出超声波，它的根据是接收器接到超声波时的时间差，与雷达测距原理相似。
+        </p>
+
+        <p align="left" class="instrumentIntroParagraph">
+            超声波指向性强，在介质中传播的距离较远，因而超声波经常用于距离的测量，如测距仪和物 位测量仪等都可以通过超声波来实现。利用超声波检测往往比较迅速、方便、计算简单、易于做到实时控制，并且在测量精度方面能达到工业实用的要求，因此在移 动机器人的研制上也得到了广泛的应用。
+        </p>
+
+        <p align="left" class="instrumentIntroParagraph">
+            通过超声波发射装置发出超声波，根据接收器接到超声波时的时间差就可以知道距离了。这与雷达测距原理相似。 超声波发射器向某一方向发射超声波，在发射时刻的同时开始计时，超声波在空气中传播，途中碰到障碍物就立即返回来，超声波接收器收到反射波就立即停止计时。（超声波在空气中的传播速度为340m/s，根据计时器记录的时间t，就可以计算出发射点距障碍物的距离(s)，即：s=340t/2）
+        </p>
+
+        <p align="left" class="instrumentIntroParagraph">
+            本实验中使用超声波测距传感器检测上储水槽的液位。传感器垂直安装在储水槽上方，检测液面与传感器间的距离。要获得实际的液位值需从传感器与水槽底部的距离上减去传感器测得的实际距离。
+        </p>
+    </div>
+
+    <div id="VortexMeter" class="instrumentIntro" align="center">
+        <h1>
+            涡街流量计
+        </h1>
+        <hr style="width: 700px;" />
+        <img src="/images/Instruments/Vortex.jpg" width="300px" align="center" />
+
+        <p align="left" class="instrumentIntroParagraph">
+            涡街流量计是根据卡门（Karman）涡街原理研究生产的，主要用于工业管道介质流体的流量测量，如气体、液体、蒸汽等多种介质。其特点是压力损失小，量程范围大，精度高，在测量工况体积流量时几乎不受流体密度、压力、温度、粘度等参数的影响。无可动机械零件，因此可靠性高，维护量小。仪表参数能长期稳定。涡街流量计采用压电应力式传感器，可靠性高，可在-20℃～+250℃的工作温度范围内工作。有模拟标准信号，也有数字脉冲信号输出，容易与计算机等数字系统配套使用，是一种比较先进、理想的测量仪器。
+            </p>
+
+        <p align="left" class="instrumentIntroParagraph">
+            在流体中设置三角柱型旋涡发生体，则从旋涡发生体两侧交替地产生有规则的旋涡，这种旋涡称为卡门旋涡，旋涡列在旋涡发生体下游非对称地排列。 涡街流量计是根据卡门涡街原理(Kármán Vortex Street)测量气体、蒸汽或液体的体积流量、标况的体积流量或质量流量的体积流量计。并可作为流量变送器应用于自动化控制系统中。
+            涡街流量计是应用流体振荡原理来测量流量的，流体在管道中经过涡街流量变送器时，在三角柱的旋涡发生体后上下交替产生正比于流速的两列旋涡，旋涡的释放频率与流过旋涡发生体的流体平均速度及旋涡发生体特征宽度有关，可用下式表示：
+            <br>
+            <img src="/images/Instruments/v1.jpg" align="center" />
+            <br> 式中：f为旋涡的释放频率，单位为Hz；v为流过旋涡发生体的流体平均速度，单位为m/s；d为旋涡发生体特征宽度，单位为m；St为斯特劳哈尔数（Strouhal number），无量纲，它的数值范围为0.14－0.27。
+            St是雷诺数的函数，
+            <img src="/images/Instruments/v2.jpg" />。
+            <br> 当雷诺数Re在
+            <img src="/images/Instruments/v3.jpg" />范围内，St值约为0.2。在测量中，要尽量满足流体的雷诺数在
+            <img src="/images/Instruments/v3.jpg" />，此时旋涡频率
+            <img src="/images/Instruments/v4.jpg" />。 由此，通过测量旋涡频率就可以计算出流过旋涡发生体的流体平均速度v，再由式
+            <img src="/images/Instruments/v5.jpg" />可以求出流量q，其中A为流体流过旋涡发生体的截面积。
+        </p>
+
+    </div>
+</div>
+
+<!--仪表动态显示-->
+<div id="LiveInstruments">
+    <!--超声波流量计 -->
+    <div id="UltraSonicFlowmeterLive" style="z-index: 999; position: absolute; left:0; top:0; width: 660px; display:none">
+        <img src="/images/LiveInstrument/UltrasonicFlowmeter.png" />
+        <!--温度-->
+        <img src="/images/LCD/dot.png" style="position: absolute; left:265px; top:80px; width: 25px" />
+        <img id="USFlowTempDigit1" src="/images/LCD/_.png" style="position: absolute; left:225px; top:80px; width: 25px" />
+        <img id="USFlowTempDigit2" src="/images/LCD/_.png" style="position: absolute; left:250px; top:80px; width: 25px" />
+        <img id="USFlowTempDigit3" src="/images/LCD/_.png" style="position: absolute; left:280px; top:80px; width: 25px" />
+        <img id="USFlowTempDigit4" src="/images/LCD/_.png" style="position: absolute; left:305px; top:80px; width: 25px" />
+
+        <!--T1-->
+        <img src="/images/LCD/_.png" style="position: absolute; left:192px; top:118px; width: 20px" />
+        <img src="/images/LCD/_.png" style="position: absolute; left:212px; top:118px; width: 20px" />
+        <img src="/images/LCD/_.png" style="position: absolute; left:232px; top:118px; width: 20px" />
+        <img src="/images/LCD/_.png" style="position: absolute; left:252px; top:118px; width: 20px" />
+
+        <!--T2-->
+        <img src="/images/LCD/_.png" style="position: absolute; left:385px; top:118px; width: 20px" />
+        <img src="/images/LCD/_.png" style="position: absolute; left:405px; top:118px; width: 20px" />
+        <img src="/images/LCD/_.png" style="position: absolute; left:425px; top:118px; width: 20px" />
+        <img src="/images/LCD/_.png" style="position: absolute; left:445px; top:118px; width: 20px" />
+
+
+        <!--流量-->
+        <img src="/images/LCD/dot.png" style="position: absolute; left:270px; top:150px; width: 30px" />
+        <img id="USFlowDigit1" src="/images/LCD/_.png" style="position: absolute; left:250px; top:150px; width: 30px" />
+        <img id="USFlowDigit2" src="/images/LCD/_.png" style="position: absolute; left:290px; top:150px; width: 30px" />
+        <img id="USFlowDigit3" src="/images/LCD/_.png" style="position: absolute; left:320px; top:150px; width: 30px" />
+        <img id="USFlowDigit4" src="/images/LCD/_.png" style="position: absolute; left:350px; top:150px; width: 30px" />
+       
+
+    </div>
+
+    <!--涡街流量计 -->
+    <div id="VortexLive" style="z-index: 999; position: absolute; left:0; top:0; width: 500px;">
+        <img src="/images/LiveInstrument/Vortex.png" />
+        <!-- <img src="/images/LCD/_.png" style="position: absolute; left:195px; top:168px; width: 20px" /> -->
+        <img src="/images/LCD/_.png" style="position: absolute; left:215px; top:168px; width: 20px" />
+        <img src="/images/LCD/_.png" style="position: absolute; left:235px; top:168px; width: 20px" />
+        <img src="/images/LCD/_.png" style="position: absolute; left:255px; top:168px; width: 20px" />
+        <img src="/images/LCD/_.png" style="position: absolute; left:275px; top:168px; width: 20px" />
+
+        <!-- <img src="/images/LCD/2.png" style="position: absolute; left:215px; top:168px; width: 20px" />
+        <img src="/images/LCD/5.png" style="position: absolute; left:235px; top:168px; width: 20px" />
+        <img src="/images/LCD/2.png" style="position: absolute; left:255px; top:168px; width: 20px" />
+        <img src="/images/LCD/1.png" style="position: absolute; left:275px; top:168px; width: 20px" />
+ -->
+
+        <!--流量-->
+        <img src="/images/LCD/dot.png" style="position: absolute; left:192px; top:214px; width: 20px" />
+        <img id="VortexFlowDigit1" src="/images/LCD/_.png" style="position: absolute; left:177px; top:214px; width: 20px" />
+        <img id="VortexFlowDigit2" src="/images/LCD/_.png" style="position: absolute; left:207px; top:214px; width: 20px" />
+        <img id="VortexFlowDigit3" src="/images/LCD/_.png" style="position: absolute; left:227px; top:214px; width: 20px" />
+        <img id="VortexFlowDigit4" src="/images/LCD/_.png" style="position: absolute; left:247px; top:214px; width: 20px" />
+
+    </div>
+</div>
+
+<div class="highcharts">
+</div>
+<script src="/highcharts/highcharts.js"></script>
+<script src="/highcharts/modules/exporting.js"></script>
+<script src="/javascripts/jquery-1.12.3.min.js"></script>
+
+<script>
+//     $(document).ready(function () {
+//    var url = window.location.href;
+//    var str = url.substring(url.length-1,url.length);
+//    switch(str){
+//     case "1":
+//     {document.getElementById("v1").src="rtmp://rtmp.open.ys7.com/openlive/73933847faa847cbba01a05314d59e09";
+//     document.getElementById("v2").src="http://hls.open.ys7.com/openlive/73933847faa847cbba01a05314d59e09.m3u8";}
+//     break;
+//     case "2":
+//     {document.getElementById("v1").src="rtmp://rtmp.open.ys7.com/openlive/73933847faa847cbba01a05314d59e09";
+//     document.getElementById("v2").src="http://hls.open.ys7.com/openlive/73933847faa847cbba01a05314d59e09.m3u8";}
+//     break;
+//     case "3":
+//     {document.getElementById("v1").src="rtmp://rtmp.open.ys7.com/openlive/73933847faa847cbba01a05314d59e09";
+//     document.getElementById("v2").src="http://hls.open.ys7.com/openlive/73933847faa847cbba01a05314d59e09.m3u8";}
+//     break;
+//     case "4":
+//     {document.getElementById("v1").src="rtmp://rtmp.open.ys7.com/openlive/73933847faa847cbba01a05314d59e09";
+//     document.getElementById("v2").src="http://hls.open.ys7.com/openlive/73933847faa847cbba01a05314d59e09.m3u8";}
+//     break;
+//     case "5":
+//     {document.getElementById("v1").src="rtmp://rtmp.open.ys7.com/openlive/73933847faa847cbba01a05314d59e09";
+//     document.getElementById("v2").src="http://hls.open.ys7.com/openlive/73933847faa847cbba01a05314d59e09.m3u8";}
+//     break;
+//     case "6":
+//     {document.getElementById("v1").src="rtmp://rtmp.open.ys7.com/openlive/73933847faa847cbba01a05314d59e09";
+//     document.getElementById("v2").src="http://hls.open.ys7.com/openlive/73933847faa847cbba01a05314d59e09.m3u8";}
+//     break;
+//    //alert("id为"+str);
+//     }
+// });
+//    var player = new EZUIPlayer('video-canvas');
+//    player.on('error', function(){
+//         console.log('error');
+//     });
+//     player.on('play', function(){
+//     console.log('play');
+//     });
+//     player.on('pause', function(){
+//         console.log('pause');
+//     });
+</script>
+</body>

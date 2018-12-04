@@ -1,0 +1,294 @@
+﻿<!DOCTYPE HTML>
+<!--未加入Bootstrap的两行链接-->
+<html lang="en" xmlns="http://www.w3.org/1999/html">
+
+<% include header%>
+
+    <link href="stylesheets/index.css" rel="stylesheet" type="text/css">
+
+    <script>
+// window.onload=updateFrequencyValue();//window.onload 回调函数其实是在页面加载完成后（包括图片内容的显示）才会执行，
+// 并不是页面加载的等待过程中就执行。
+    </script> 
+
+    <div id="index_header_img">
+
+        <div id="warnmessage">
+            <% if (locals.success) { %>
+                <div id="alt_sucess" class="alert alert-success">
+                    <%- success %>
+                </div>
+                <% } %>
+
+                    <% if (locals.error) { %>
+                        <div id="alt_warning" class="alert alert-warning">
+                            <%= error %>
+                        </div>
+                        <% } %>
+        </div>
+
+        <% if (locals.username) { %>
+            <% } else { %>
+                <div class="log">
+                    <form method="post">
+                        <div class="chooseRole">
+                            <label>
+                                <input type="radio" name="role" value="s" checked>
+                                <font color="white">学生</font>
+                            </label>
+                            <label class="checkbox-inline">
+                                <input type="radio" name="role" value="t">
+                                <font color="white">老师</font>
+                            </label>
+                            <label class="checkbox-inline">
+                                <input type="radio" name="role" value="m">
+                                <font color="white">管理员</font>
+                            </label>
+
+                        </div>
+                        <div>
+                        <select class="login" id="school_sel" name="school_sel">
+                                <% for(var d in school){%>
+                                    <option><%=school[d].school%></option>
+                                <%}%>
+                        </select>
+                        </div>
+                        <br>
+                        <input id="txtUserName" class="login" type="text" name="txtUserName" placeholder="用户名">
+                        <br>
+                        <input id="txtUserPwd" class="login" type="password" name="txtUserPwd" placeholder=" 密码">
+                        <br>
+                        <input id="btnSub" class="btn btn-lg btn-default" type="submit" value="登录" style="color: #222222; width: 95px;height:40px; border-radius: 4px; z-index: 10;">
+                        <a class="btn btn-lg btn-default" href="/reg" style="color: #222222; width: 95px;height:40px;border-radius: 4px; z-index: 10;">注册</a>
+                        <br>
+                        <!-- <input name="chbRem" id="chbRem" type="checkbox" value="remember-me" ><font color="white"><b>记住密码</b></font></input> -->
+                        <a class="btn btn-link" href="/forget" role="button" style="color:white ">
+                            <b>忘记密码</b>
+                        </a>
+                    </form>
+                </div>
+                <% }  %>
+
+    </div>
+
+    <!--------------------------------------------------四个图标------------------------------------------------------>
+    <div class="main" style="margin-top:0px;">
+        <div class="banner-bottom-section" id="intro">
+            <div class="setc">
+                <img src="images/index/coi1.jpg" alt="" />
+                <p>丰富的检测技术实验课程
+                    <br />自定义实验
+                </p>
+            </div>
+            <div class="setc">
+                <img src="images/index/coi2.jpg" alt="" />
+                <p>远程在线操作
+                    <br />随时随地做实验</p>
+            </div>
+            <div class="setc">
+                <img src="images/index/coi3.jpg" alt="" />
+                <p>网上实验报告提交
+                    <br />方便你的时间安排</p>
+            </div>
+            <div class="setc">
+                <img src="images/index/coi4.jpg" alt="" />
+                <p>教师网上评分
+                    <br />随时批改</p>
+            </div>
+            <div class="clearfix"></div>
+        </div>
+
+        <!--==========================以下为网站简介=================================================-->
+        <div class="banner-bottom-section">
+            <h2 class="text-center">平台简介</h2>
+            <div class="text">
+                <p>
+                    针对现有传感器与检测技术实验平台没有物位、流量实验的现状，本教程编者团队在国家级精品课程、国家级精品资源共享课程“检测技术”课程的建设过程中， 与南京新思维自动化科技有限公司联合研制了远程开放式流量/液位综合检测平台，依托此实体平台和互联网，
+                    可不受时间、距离限制，开展多种流量、液位的无人值守、智能考评、远程、网上操作实体平台的虚拟/现实型综合设计实验。
+                </p>
+            </div>
+            <div class="text" style="height:200px">
+                <img src="images/index/msz.jpg" alt="教师图片" />
+                <p>周杏鹏，东南大学检测技术与自动化装置学科带头人、博士点负责任人，东南大学控制科学与工程一级学科学术委员会委员；并长期担任国务院学位办学位授权评审专家，科技部国家科技支撑计划项目、国家技术发明奖、科学技术进步奖评审专家，教育部推荐国家科学技术进步奖、人事部博士后流动站及博士后基金教评审专家，江苏省、重庆市、山东省科技咨询专家，江苏省仪器仪表学会智能化仪器仪表专业委员会主任，东南大学教学委员会委员；现任东南大学农业信息化与物联网技术研究中心主任，东南大学检测技术与自动化装置研究所所长，东南大学工学部学部委员，国家精品课程、国家精品资源共享课程——《检测技术》课程负责人、首席教授；国家核心期刊《测控技术》编委.</p>
+            </div>
+        </div>
+
+        <!---------------------------------------------实验课程-------------------------------------------------------------->
+        <div class="banner-bottom-section" id="expDemo">
+            <h2 class="text-center">实验界面演示</h2>
+            <div class="setc">
+                <img src="images/index/shiyan1.jpg" />
+                <div class="couse_text">
+                    <p>涡街流量计验证实验</p>
+                </div>
+                <div class="couse_button">
+                    <img src="images/report/people.svg" alt="" />
+                    <a href="/experiment/0">
+                        <button type="button">进入</button>
+                    </a>
+                </div>
+            </div>
+
+            <div class="setc">
+                <img src="images/index/shiyan2.jpg" alt="" />
+                <div class="couse_text">
+                    <p>涡街流量计综合实验</p>
+                </div>
+                <div class="couse_button">
+                    <img src="images/report/people.svg" alt="" />
+                    <a href="/experiment/3">
+                        <button type="button">进入</button>
+                    </a>
+                </div>
+            </div>
+            <div class="setc">
+                <img src="images/index/shiyan1.jpg" alt="" />
+                <div class="couse_text">
+                    <p>超声波流量计综合实验</p>
+                </div>
+                <div class="couse_button">
+                    <img src="images/report/people.svg" alt="" />
+                    <a href="/experiment/4">
+                        <button type="button">进入</button>
+                    </a>
+                </div>
+            </div>
+            <div class="setc">
+                <img src="images/index/shiyan2.jpg" alt="" />
+                <div class="couse_text">
+                    <p>超声波液位计设计实验</p>
+                </div>
+                <div class="couse_button">
+                    <img src="images/report/people.svg" alt="" />
+                    <a href="/experiment/8">
+                        <button type="button">进入</button>
+                    </a>
+                </div>
+            </div>
+
+            <div class="clearfix"></div>
+        </div>
+
+        <!--------------------------------------------合作高校---------------------------------------------------------------------------->
+        <!-- <div class="banner-bottom-section">
+            <h2 class="text-center">高校合作</h2>
+            <div class="setc school">
+                <img src="images/index/njgongye.jpg" alt="" />
+                <div>
+                <span>南京工业大学</span>
+                <div class="school_peo">人数</div>
+                </div>
+            </div>
+            <div class="setc school">
+                <img src="images/index/njligong.jpg" alt="" />
+                <div>
+                <span>南京理工大学</span>
+                <div class="school_peo">人数</div>
+                </div>
+            </div>
+            <div class="setc school">
+                <img src="images/index/njnongye.jpg" alt="" />
+                <div>
+                <span>南京农业大学</span>
+                <div class="school_peo">人数</div>
+                </div>
+            </div>
+            <div class="setc school">
+                <img src="images/index/zkd.jpg" alt="" />
+                <div>
+                <span>中国科学技术大学</span>
+                <div class="school_peo">人数</div>
+                </div>
+            </div>
+            <div class="clearfix"></div>
+            <div class="setc school">
+                <img src="images/index/xiandianzi.jpg" alt="" />
+                <div>
+                <span>西安电子科技大学</span>
+                <div class="school_peo">人数</div>
+                </div>
+            </div>
+            <div class="setc school">
+                <img src="images/index/wuhanligong.jpg" alt="" />
+                <div>
+                <span>武汉理工大学</span>
+                <div class="school_peo">人数</div>
+                </div>
+            </div>
+            <div class="setc school">
+                <img src="images/index/njgongye.jpg" alt="" />
+                <div>
+                <span>南京工业大学</span>
+                <div class="school_peo">人数</div>
+                </div>
+            </div>
+            <div class="setc school">
+                <img src="images/index/chongqinyoudian.jpg" alt="" />
+                <div>
+                <span>重庆邮电大学</span>
+                <div class="school_peo">人数</div>
+                </div>
+            </div>
+        </div> -->
+        <div class="clearfix"></div>
+    </div>
+
+    <!--========================底部导航栏=========================================-->
+
+    <% include footer%>
+
+        <script type="text/javascript">
+            String.prototype.format = function (args) {
+                var result = this;
+                if (arguments.length > 0) {
+                    if (arguments.length == 1 && typeof (args) == "object") {
+                        for (var key in args) {
+                            if (args[key] != undefined) {
+                                var reg = new RegExp("({" + key + "})", "g");
+                                result = result.replace(reg, args[key]);
+                            }
+                        }
+                    }
+                    else {
+                        for (var i = 0; i < arguments.length; i++) {
+                            if (arguments[i] != undefined) {
+                                var reg = new RegExp("({)" + i + "(})", "g");
+                                result = result.replace(reg, arguments[i]);
+                            }
+                        }
+                    }
+                }
+                return result;
+            }
+
+            $(function () {
+                $('#btnSub').on('click', function () {
+                    var
+                        $txtUserName = $('#txtUserName'),
+                        txtUserNameVal = $.trim($txtUserName.val()),
+                        $txtUserPwd = $('#txtUserPwd'),
+                        txtUserPwdVal = $.trim($txtUserPwd.val()),
+                        errorTip = '<div id="errorTip" class="alert alert-warning">{0}</div> ';
+
+                    $("#errorTip,#alt_warning").remove();
+
+                    if (txtUserNameVal.length == 0) {
+                        $("#warnmessage").prepend(errorTip.format('用户名不能为空'));
+                        $txtUserName.focus();
+                        return false;
+                    }
+
+                    if (txtUserPwdVal.length == 0) {
+                        $("#warnmessage").prepend(errorTip.format('密码不能为空'));
+                        $txtUserPwd.focus();
+                        return false;
+                    }
+
+                    return true;
+                })
+            });
+        </script>
+
+        </body>
+
+</html>

@@ -1,0 +1,301 @@
+/* course.html文件中的css文件 */
+
+#report_header_img {
+    background: url(/images/common/report1.jpg) no-repeat center;
+    width: 100%;
+    height: 160px;
+    background-size: cover;
+}
+
+.left_report {
+    width: 25%;
+    float: left;
+    background-color: #666; 
+    border-radius: 5px;
+    box-shadow: 1px 1px #888; 
+}
+.stuleft_report1 {
+    margin-left: 5%;
+    width: 20%;
+    float: left;
+    border-radius: 5px;
+    /* box-shadow: 1px 1px #888;  */
+}
+.stuleft_report {
+    width: 100%;
+    float: left;
+    
+    background-color: #666; 
+    border-radius: 5px;
+    box-shadow: 1px 1px #888; 
+}
+.subleft_report {
+    width: 25%;
+    float: left;
+    background-color: rgb(255, 255, 255); 
+    border-radius: 5px;
+}
+
+.leftup_report {
+    width: 100%;
+    float: left;
+    background-color: #666; 
+    border-radius: 5px;
+    box-shadow: 1px 1px #888; 
+}
+
+.leftdown_report {
+    margin-top: 15%;
+    float: left;
+    width: 100%;
+    background-color: rgb(241, 241, 241); 
+    border-radius: 5px;
+    box-shadow: 1px 1px #888; 
+}
+
+.right_report {
+    float: right;
+    width: 70%;
+}
+.score_detail {
+    float: right;
+    margin-right:10%;
+    width: 70%;
+}
+
+.scoreright_report {
+    float: right;
+    width: 80%;
+}
+
+.expdate{
+    width:100%;
+    background-color: rgb(102, 100, 100); 
+}
+.exptime{
+    height:169px;
+    background-color: rgb(238, 231, 231); 
+}
+
+.exptimeslot{
+    cursor: pointer;
+    float:left;
+    width: 20%;
+    height:80%;
+    background-color: rgb(248, 246, 246); 
+    box-sizing: border-box;
+    margin-right: 2%;
+    margin-left: 3%;
+    margin-top: 1%;
+}
+
+.exptimeslot:hover{
+    background-color: rgb(193, 228, 216);
+}
+
+
+.exptimeslot:active{
+    background-color: rgb(193, 228, 216);
+}
+.orderTime{
+    width:100%;
+    text-align: center;
+    /* margin-left: 10%; */
+    margin-top: 5%;
+    font-size: 120%;
+    font-weight: bold;
+    color: rgb(95, 120, 160);
+}
+
+.reportList {
+    padding: 10px;
+    margin: 10px 0;
+    background-color: #f9f9f9;
+    box-shadow: 5px 5px 5px 4px #d0d0d0;
+}
+.orderSituation {
+    margin-left: 10%;
+    font-size: 120%;
+    font-weight: bold;
+}
+
+.orderSituation1 {
+    margin-right: 10%;
+    font-size:120%;
+    font-weight: bold;
+}
+.ordernum {
+    font-size: 25px;
+    text-align: center;
+    margin-right: 3%;
+    margin-left: 4%;
+    font-weight: bold;
+    color: rgb(82, 202, 52);
+}
+
+.orderRecord {
+    font-size: 25px;
+    text-align: center;
+    font-weight: bold;
+    color: rgb(136, 143, 148);
+}
+
+.details {
+    text-align: center;
+    font-weight: bold;
+    color: rgb(212, 135, 34);
+}
+
+.right_report h2 {
+    width: 100%;
+    background-color: #ccc;
+    line-height: 50px;
+    text-indent: 1em;
+    margin-top: 0;
+}
+.device {
+    float:right;
+    width: 25%;
+    line-height: 40px;
+    background-color: #ccc;
+    font-size: large;
+    color: rgb(23, 36, 36);
+    text-indent: 1em;
+    margin-top: 0;
+    margin-right:10%;
+}
+
+.deviceNum {
+    font-size: 25px;
+    color: rgb(216, 32, 63);
+    text-indent: 1em;
+    margin-top: 0;
+    margin-right:5%;
+    margin-left:5%;
+}
+.report {
+    border: 1px solid #777;
+    width: 100%;
+    margin-top: 20px;
+    text-align: left;
+    box-sizing: border-box;
+    padding: 10px;
+}
+
+.instruction {
+    border: 1px solid #777;
+    width: 100%;
+    text-align: left;
+    box-sizing: border-box;
+    padding: 10px;
+}
+
+.report_fdiv {
+    font-size: 16px;
+    font-weight: bold;
+    line-height: 20px;
+    margin-bottom: 15px;
+}
+/* .repost_content {
+    font-size: 10px;
+    line-height: 35px;
+} */
+
+.report_fdiv img {
+    width: 20px;
+    height: 20px;
+}
+
+.report_fdiv img:last-child {
+    width: 10px;
+    height: 10px;
+}
+
+.autoscore,
+.teacherscore {
+    font-size: 30px;
+    font-weight: bold;
+    width: 2em;
+}
+/* .roles {
+    font-size: 15px;
+    text-align: center;
+    font-weight: bold;
+    color: rgb(136, 143, 148);
+} */
+.lastscore {
+    font-size: 50px;
+    color: #239c8a;
+}
+
+#remark .pull-left {
+    width: 80%;
+    text-align: left;
+}
+
+#remark textarea {
+    width: 85%;
+    height: 100px;
+}
+
+#remark .pull-right {
+    width: 20%;
+}
+
+#remark .pull-right .btn {
+    width: 80%;
+    height: 50px;
+    color: #ccc;
+    background-color: #239c4a;
+}
+
+#information .pull-left,
+#information .pull-right {
+    width: 50%;
+    box-sizing: border-box;
+    text-align: left;
+    padding-left: 5%;
+}
+
+#exp3patameter .pull-left,
+#exp3patameter .pull-right {
+    width: 50%;
+    box-sizing: border-box;
+    text-align: left;
+    padding-left: 5%;
+}
+#exp4patameter .pull-left,
+#exp4patameter .pull-right {
+    width: 50%;
+    box-sizing: border-box;
+    text-align: left;
+    padding-left: 5%;
+}
+#exp5patameter .pull-left,
+#exp5patameter .pull-right {
+    width: 50%;
+    box-sizing: border-box;
+    text-align: left;
+    padding-left: 5%;
+}
+#mind .report_fdiv img:last-child {
+    width: 20px;
+    height: 20px;
+}
+
+.report_button {
+    text-align: center;
+    border: none;
+}
+
+#buttonSubmit {
+    color: #ffffff;
+    background-color: #239c8a;
+}
+
+#buttonPreview {
+    left: 200px;
+    background-color: #e5ca2a;
+    width: 100px;
+}
+

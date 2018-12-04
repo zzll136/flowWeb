@@ -1,0 +1,262 @@
+<!DOCTYPE HTML>
+<html lang="en">
+<% include header%>
+
+    <head>
+        <title>
+                <%= title %>
+        </title>
+              
+        <link href="./images/favicon.ico" rel="shortcut icon" />
+        <link href="stylesheets/teacher.css" rel="stylesheet" type="text/css">
+        <link href="stylesheets/bootstrap-select.min.css" rel="stylesheet" type="text/css">
+        <link href="stylesheets/bootstrap.min.css" rel="stylesheet" type="text/css">
+        <link href="stylesheets/bootstrap-datepicker.css" rel="stylesheet" type="text/css">
+        <!--以上为导航栏-->
+        <style>
+            html {
+                height: 100%;
+                min-height: 950px;
+            }
+
+            body {
+                height: 100%;
+            }
+
+            #bottom {
+                position: absolute;
+                bottom: 0;
+            }
+        </style>
+    </head>
+
+    <body>
+        <div id="teacher_header_img"></div>
+        <div class="main">
+            <div class="apply_left">
+                <h2>实验使用申请</h2>
+                <br>
+                <form class="form-horizontal" role="form">
+                    <div class="form-group">
+                        <label for="" class="col-md-3">申请人：</label>
+                        <div class="col-sm-7">
+                            <input type="text" class="form-control" id="name" placeholder="姓名">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="" class="col-sm-3">工号：</label>
+                        <div class="col-sm-7">
+                            <input type="text" class="form-control" id="username" placeholder="工号/学号">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="" class="col-sm-3">所在学校：</label>
+                        <div class="col-sm-7">
+                            <input type="text" class="form-control" id="school">
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="" class="col-sm-3">学院：</label>
+                        <div class="col-sm-7">
+                            <input type="text" class="form-control" id="institute">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="" class="col-sm-3">使用课程：</label>
+                        <div class="col-sm-7">
+                            <input type="text" class="form-control" id="course">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="" class="col-sm-3">联系方式：</label>
+                        <div class="col-sm-7">
+                            <input type="text" class="form-control" id="phone" placeholder="联系方式">
+                        </div>
+
+                    </div>
+                    <div class="form-group">
+                        <label for="inputEmail3" class="col-sm-3">使用时间：</label>
+                        <div class="col-sm-3">
+                            <input type="text" id="startDate" name="startDate" class="form-control" placeholder="开始时间">
+                            <!-- <div class="input-group-addon">
+                                <span class="glyphicon glyphicon-th"></span>
+                            </div> -->
+                        </div>
+                        <div class="col-sm-3">
+                            <input type="text" id="endDate" name="endDate" class="form-control" placeholder="结束时间">
+                            <!-- <div class="input-group-addon">
+                                <span class="glyphicon glyphicon-th"></span>
+                            </div> -->
+                        </div>
+                        <div class="col-sm-3" style="margin-top:1%">
+                            <a href="javacript:void(0);" onclick="displayTime()">查看开放时间</a>
+                        </div>
+                    </div>
+                    <br>
+                    <div class="form-group">
+                        <input type="button" value="提交" class="btn btn-success" onclick="subApply()">
+                        <a class="btn btn-primary" style="margin-left:2%" href="/" role="button">返 回</a>
+                    </div>
+                </form>
+                <hr>
+            </div>
+            <div class="apply_right" id="expTime" style="display:none">
+                <h2>实验开放时间</h2>
+                <form role="form" style="font-size:16px">
+                    <br>
+                    <div class="form-group">
+                        <div class="input-group date">
+                            <label for="time">开始日期:</label>
+                            <br>
+                            <input type="text" class="form-control" value="<%=result[0].startDate%>" disabled="disabled">
+
+                            <!-- <div class="input-group-addon">
+                                            <span class="glyphicon glyphicon-th"></span>
+                                        </div> -->
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="input-group date">
+                            <label for="time">结束日期:</label>
+                            <br>
+                            <input type="text" class="form-control" value="<%=result[0].endDate%>" disabled="disabled">
+                            <!-- <div class="input-group-addon">
+                                <span class="glyphicon glyphicon-th"></span>
+                            </div> -->
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="input-group date">
+                            <label for="exptime">实验日:</label>
+                            <br>
+                            <div>
+                                <label class="checkbox-inline">
+                                    <input type="checkbox" id="exp1" name="exptime" value="1" disabled="disabled">周一
+                                </label>
+                                <label class="checkbox-inline">
+                                    <input type="checkbox" id="exp2" name="exptime" value="2" disabled="disabled">周二
+                                </label>
+                                <label class="checkbox-inline">
+                                    <input type="checkbox" id="exp3" name="exptime" value="3" disabled="disabled">周三
+                                </label>
+                                <label class="checkbox-inline">
+                                    <input type="checkbox" id="exp4" name="exptime" value="4" disabled="disabled">周四
+                                </label>
+                                <label class="checkbox-inline">
+                                    <input type="checkbox" id="exp5" name="exptime" value="5" disabled="disabled">周五
+                                </label>
+                                <label class="checkbox-inline">
+                                    <input type="checkbox" id="exp6" name="exptime" value="6" disabled="disabled">周六
+                                </label>
+                                <label class="checkbox-inline">
+                                    <input type="checkbox" id="exp0" name="exptime" value="0" disabled="disabled">周日
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="input-group date">
+                            <label for="reptime">维护日:</label>
+                            <br>
+                            <div>
+                                <label class="checkbox-inline">
+                                    <input type="checkbox" id="rep1" name="reptime" value="1" disabled="disabled">周一
+                                </label>
+                                <label class="checkbox-inline">
+                                    <input type="checkbox" id="rep2" name="reptime" value="2" disabled="disabled">周二
+                                </label>
+                                <label class="checkbox-inline">
+                                    <input type="checkbox" id="rep3" name="reptime" value="3" disabled="disabled">周三
+                                </label>
+                                <label class="checkbox-inline">
+                                    <input type="checkbox" id="rep4" name="reptime" value="4" disabled="disabled">周四
+                                </label>
+                                <label class="checkbox-inline">
+                                    <input type="checkbox" id="rep5" name="reptime" value="5" disabled="disabled">周五
+                                </label>
+                                <label class="checkbox-inline">
+                                    <input type="checkbox" id="rep6" name="reptime" value="6" disabled="disabled">周六
+                                </label>
+                                <label class="checkbox-inline">
+                                    <input type="checkbox" id="rep0" name="reptime" value="0" disabled="disabled">周日
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+                    <br>
+                </form>
+            </div>
+            <div class="clearfix"></div>
+        </div>
+        <% include footer%>
+            <script src="javascripts/bootstrap.js" type="text/javascript"></script>
+            <script src="javascripts/jquery-1.12.3.min.js" type="text/javascript"></script>
+            <script src="javascripts/bootstrap-select.min.js" type="text/javascript"></script>
+            <script src="javascripts/bootstrap.min.js" type="text/javascript"></script>
+            <script src="javascripts/bootstrap-datepicker.js" type="text/javascript"></script>
+            <script src="javascripts/bootstrap-datepicker.zh-CN.min.js" type="text/javascript"></script>
+            <script src="http://apps.bdimg.com/libs/vue/1.0.8/vue.min.js"></script>
+            <script>
+                function displayTime() {
+                    var a = document.getElementById("expTime");
+                    if (a.style.display == "none") a.style.display = "inline";
+                    else a.style.display = "none";
+                }
+                function subApply() {
+                    var name = $("#name").val();
+                    var username = $("#username").val();
+                    var school = $("#school").val();
+                    var institute = $("#institute").val();
+                    var course = $("#course").val();
+                    var phone = $("#phone").val();
+                    var startDate = $("#startDate").val();
+                    var endDate = $("#endDate").val();
+                    $.post('apply/subApply', {
+                        name: name,
+                        username: username,
+                        institute: institute,
+                        course: course,
+                        phone: phone,
+                        startDate: startDate,
+                        endDate: endDate,
+                        school: school
+                    }, function (data) {
+                        if (data == "1")
+                            alert("已申请成功，请等待短信通知");
+                    });
+                }
+                $('#startDate').datepicker({
+                    "autoclose": true, "format": "yyyy-mm-dd", "language": "zh-CN"
+                }).on('changeDate', function () {
+                    var startDate = $("#startDate").val();
+                    $("#endDate").datepicker('setStartDate', startDate);
+                    $("#startDate").datepicker('hide');
+                });
+                $('#endDate').datepicker({
+                    "autoclose": true, "format": "yyyy-mm-dd", "language": "zh-CN"
+                }).on('changeDate', function () {
+                    var endDate = $("#endDate").val();
+                    $("#startDate").datepicker('setEndDate', endDate);
+                    $("#endDate").datepicker('hide');
+                });
+                var t1 = '<%=result[0].expTime%>';
+                if (t1) {
+                    t1 = t1.substring(0, t1.length - 1);
+                    var expArray = t1.split(",");
+                    for (var i = 0; i < expArray.length; i++) {
+                        document.getElementById("exp" + expArray[i]).checked = true;
+                    }
+                }
+                var t2 = '<%=result[0].repTime%>';
+                if (t2) {
+                    t2 = t2.substring(0, t2.length - 1);
+                    var repArray = t2.split(",");
+                    for (var i = 0; i < repArray.length; i++) {
+                        document.getElementById("rep" + repArray[i]).checked = true;
+                    }
+                }
+
+            </script>
+
+</html>

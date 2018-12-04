@@ -1,0 +1,28 @@
+<!DOCTYPE HTML>
+<html lang="en" xmlns="http://www.w3.org/1999/html" style="text-align: center">
+<head>
+    <meta charset="UTF-8">
+</head>
+<script type="text/javascript">
+<%- locals.scriptText%>
+
+/* 超声波热能表计算函数（javascript）
+u = c*c/(2*L)*Dt;
+
+u   ---  流体流速
+c   ---  声速
+L   --- 管道上下游两对超声波发生器的距离
+Dt  --- 时差
+
+// 计算声速
+cs = 331.3 + 0.606 * temperature;
+
+function calculateFlowRateHM(Dt,temperatureHM){
+    const L = 20;
+    // 计算声速
+    var cs = 331.3 + 0.606 * temperatureHM;
+    return cs*cs/(2*L)*Dt;
+}
+*/
+</script>
+</html>

@@ -1,0 +1,148 @@
+<div id="bottom">
+	<div class="all">
+		<!-- <div class="b_text">
+			 <h5>介绍</h5> 
+			 <ul> 
+				 <li><a href="#">关于我们</a></li>
+				<li><a href="#">联系我们</a></li>
+				<li><a href="#">加入我们</a></li> 
+				 <li><a href="#">技术支持</a></li>
+			 </ul> 
+		</div>  -->
+		<!-- <div class="b_text">
+			<h5>合作</h5>
+			<ul>
+				<li><a href="#">新加课程</a></li>
+				<li><a href="#">高校合作</a></li>
+				<li><a href="#">友情链接</a></li>
+			</ul>
+		</div> -->
+		<div class="b_text">
+			<h5>介绍</h5>
+			<ul>
+				<li>
+					<a href="/#intro">关于我们</a>
+				</li>
+				<li>
+					<a href="/">联系我们</a>
+				</li>
+				<li>
+					<a href="/apply">高校申请合作</a>
+				</li>
+				<!-- <li><a href="/">课程演示</a></li> -->
+			</ul>
+		</div>
+		<div class="b_text">
+			<h5>使用</h5>
+			<ul>
+				<li>
+					<% if (locals.userrole ==='m'){ %>
+					<a href="/onlineExp/download">管理员下载</a>
+					<% } 
+					else { %> <a href="#">管理员下载</a>
+					<% } %>
+				</li>
+				<li>
+				    <% if (locals.userrole ==='t'){ %>
+						<a href="/onlineExp/download">老师下载</a>
+						<% } 
+						else { %> <a href="#">老师下载</a>
+						<% } %>
+				</li>
+				<li>
+					<% if (locals.userrole ==='s'){ %>
+					<a href="/onlineExp/download">学生下载</a>
+					<% } 
+					else { %> <a href="#">学生下载</a>
+					<% } %>
+				</li>
+			</ul>
+		</div>
+		<div class="b_text">
+			<h5>服务</h5>
+			<ul>
+				<li>
+					<a href="/reg">注册</a>
+				</li>
+				<li>
+					<a href="/#index_header_img">登录</a>
+				</li>
+				<li>
+					<a href="/#expDemo">实验演示</a>
+				</li>
+			</ul>
+		</div>
+		<div class="b_text">
+			<h5>快捷</h5>
+			<ul>
+				<% if (locals.userrole ==='s'){ %>
+					<li>
+						<a href="/stuOrder">实验预约</a>
+					</li>
+					<li>
+						<a href="/onlineExp">在线实验</a>
+					</li>
+					<li>
+						<a href="/subReport">实验报告</a>
+					</li>
+					<li>
+						<a href="/lookupReport">实验评分</a>
+					</li>
+					<% } %>
+						<% if (locals.userrole ==='t'){ %>
+							<li>
+								<a href="/stuOrder">实验预约</a>
+							</li>
+							<li>
+								<a href="/onlineExp">在线实验</a>
+							</li>
+							<li>
+								<a href="/regMessage">学生信息</a>
+							</li>
+							<li>
+								<a href="/reportMark">批改报告</a>
+							</li>
+							<% } %>
+								<% if (locals.userrole ==='m'){ %>
+									<li>
+										<a href="/exptime">实验时间</a>
+									</li>
+									<li>
+										<a href="/onlineExp">在线实验</a>
+									</li>
+									<li>
+										<a href="/listMessage">用户名单</a>
+									</li>
+									<li>
+										<a href="/new_orderMessage">预约信息</a>
+									</li>
+									<% } %>
+									<% if (!locals.userrole){ %>
+										<li>
+												<a href="/stuOrder">实验预约</a>
+											</li>
+											<li>
+												<a href="/onlineExp">在线实验</a>
+											</li>
+											<li>
+												<a href="/subReport">实验报告</a>
+											</li>
+											<li>
+												<a href="/lookupReport">实验评分</a>
+											</li>
+											<% } %>
+			</ul>
+		</div>
+		<!-- <div class="b_text">
+			<h5>学习路径</h5>
+			<ul>
+				<li><a href="#">原理介绍</a></li>
+				<li><a href="#">传感器介绍</a></li>
+				<li><a href="#">实验报告</a></li>
+				<li><a href="#">实验评分</a></li>
+			</ul>
+		</div> -->
+		<div class="clearfix"></div>
+	</div>
+	<div class="power">COPYRIGHT@2016-2018 东南大学检测技术研究所</div>
+</div>

@@ -1,0 +1,91 @@
+/*for index.css*/
+
+#index_header_img {
+    background: url(/images/index/banner1.jpg) no-repeat center;
+    background-size: cover;
+    margin: 0 auto;
+    width: 100%;
+    height:400px;
+}
+
+.log {
+    position: absolute;
+    right: 12%;
+    top: 150px;
+}
+
+.login {
+    width: 25ch;
+    height: 30px;
+    display: block;
+}
+
+/*********container部分****************/
+
+.banner-bottom-section {
+    margin: 25px auto;
+    position: relative;
+    width: 100%;
+}
+
+.setc {
+    float: left;
+    width: 25%;
+    text-align: center;
+}
+
+.setc>img {
+    width: 80%;
+}
+
+.text {
+    font-size: large;
+    text-indent: 2em;
+    width: 100%;
+}
+
+.text img {
+    float: left;
+    margin: 0 20px;
+    width: 15%;
+}
+
+.couse_text {
+    margin: 10px 8px;
+    margin-left: 10%;
+    text-align: left;
+}
+
+.couse_button {
+    text-align: right;
+    margin-right: 10%;
+}
+
+.couse_button img {
+    width: 20px;
+    height: 20px;
+}
+
+.couse_button button {
+    color: #FFFFFF;
+    border-radius: 20px;
+    background-color: #22BE42;
+}
+
+
+/* 高校合作部分*/
+
+.school {
+    margin: 10px auto;
+}
+
+.school>div {
+    margin-left: 38%;
+}
+
+.school img {
+    width: 35%;
+    height: 35%;
+    float: left;
+    margin-left: 10%;
+}

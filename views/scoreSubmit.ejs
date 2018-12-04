@@ -1,0 +1,223 @@
+<!DOCTYPE HTML>
+<!--未加入Bootstrap的两行链接-->
+<html lang="en">
+
+<% include header%>
+    <head>
+        <title>
+            <%= title %>
+        </title>
+        <link href="./images/favicon.ico" rel="shortcut icon" />
+        <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+        <link href="stylesheets/uploadreport.css" rel="stylesheet" type="text/css">
+        <link href="stylesheets/bootstrap.min.css" rel="stylesheet" type="text/css">
+    </head>
+    <body>
+        <div id="report_header_img"></div>
+        <!--右边文字-->
+        <div class="main clearfix">
+
+            <div class="right_report">
+                <h2>实验报告评分</h2>
+                <form>
+                    <div id="remark" class="report">
+                        <div class="pull-left">
+                            <!-- <input id="id" name="id" type="hidden" value="<%=result[0].ID%>" /> -->
+                            <p>
+                                自动评分：&nbsp;
+                                <span id="autoScore" class="autoscore">
+                                    <%=result[0].autoscore%>
+                                </span> &nbsp;分 &nbsp;&nbsp;&nbsp;&nbsp; 教师评分：&nbsp;
+                                <input id="teascore" class="teacherscore" name="teascore" type="number" value="<%=result[0].teascore%>" required></input> &nbsp;分
+                            </p>
+                            <span>教师评语: </span>
+                            <textarea id="comment" name="comment" required><%=result[0].comment%></textarea>
+                        </div>
+                        <div class="pull-right">
+                            <p>综合得分：
+                                <!-- <input id="score" class="autoscore" name="score" type="number" value="<%=result[0].score%>" required></input> &nbsp;分</p> -->
+                                <p>
+                                    <span id="score" class="lastscore">
+                                        <%=result[0].score%>
+                                    </span> 分</p>
+                                <div>
+                                    <button id="count" type="button" class="btn btn-primary" onclick="subScore('<%=result[0].userName%>','<%=result[0].school%>','<%=result[0].courseid%>')">提交评分</button>
+                                </div>
+                        </div>
+                        <div class="clearfix"></div>
+                    </div>
+                </form>
+                <div id="information" class="report">
+                    <div class="report_fdiv">
+                        <img src="images/svg/text.svg" alt="text图标">
+                        <span>学生资料</span>
+                        <img src="images/svg/required.svg" alt="必填图标">
+                    </div>
+                    <div class="pull-left">
+                        <p>实验名称：
+                            <span>
+                                <%=result[0].courseName%>
+                            </span>
+                        </p>
+                        <p>实验人：
+                            <span>
+                                <%=result[0].name%>
+                            </span>
+                        </p>
+                        <p>实验状态：
+                            <span>
+                                <% switch(result[0].status){
+                    case 0:%>未实验
+                                    <% break; %>
+                                        <% case 1:%>已实验（报告未提交）
+                                            <% break; %>
+                                                <% case 2:%>已完成
+                                                    <% break; %>
+                                                        <% } %>
+                            </span>
+                        </p>
+                    </div>
+                    <div class="pull-right">
+                        <p>实验时间：
+                            <span>
+                                <%=result[0].StartTime%>
+                            </span>
+                        </p>
+                        <p>学号：
+                            <span>
+                                <%=result[0].userName%>
+                            </span>
+                        </p>
+                        <p>实验结果：
+                            <span>
+                                <% if(result[0].repData) { %>已记录
+                                    <% }
+                    else { %> 未提交
+                                        <% } %>
+                            </span>
+                        </p>
+                    </div>
+                    <div class="clearfix"></div>
+                </div>
+
+                <!-- <div id="repTheory" class="report">
+        <div class="report_fdiv">
+            <img src="images/svg/text.svg" alt="text图标">
+            <span>实验原理</span>
+            <img src="images/svg/required.svg" alt="必填图标">
+        </div>
+            <div class="repost_content">
+                <%=result[0].repTheory%>
+            </div>
+    </div> -->
+
+                <!-- <div id="repData" class="report">
+        <div class="report_fdiv">
+            <img src="images/svg/text.svg" alt="text图标">
+            <span>实验数据</span>
+            <img src="images/svg/required.svg" alt="必填图标">
+        </div>
+        <div class="repost_content">
+            <%=result[0].repData%>
+        </div>
+    </div> -->
+
+                <!-- <div id="repConclusion" class="report">
+        <div class="report_fdiv">
+            <img src="images/svg/text.svg" alt="text图标">
+            <span>实验结论</span>
+            <img src="images/svg/required.svg" alt="必填图标">
+        </div>
+        <div class="repost_content">
+            <%=result[0].repConclusion%>
+        </div>
+    </div> -->
+
+                <!-- <div id="repMind" class="report">
+        <div class="report_fdiv">
+            <img src="images/svg/text.svg" alt="text图标">
+            <span>实验心得</span>
+            <img src="images/svg/choose.svg" alt="必填图标">
+        </div>
+        <div class="repost_content">
+            <%=result[0].repMind%>
+        </div>
+    </div> -->
+                <div class="report report_button">
+                    <% if (result[0].status==2){ %>
+                        <a href="/scoreSubmit/download?id=<%=result[0].ID%>" onclick="return confirm('确认下载该实验报告？')">
+                            <button id="download" class="btn btn-primary">下载报告</button>
+                        </a>
+                        <% }  %>
+                            &nbsp;&nbsp;
+                            <input type="button" class="btn btn-default" name="smt" value='预览实验报告' onclick="showreport('<%=result[0].ID%>')">
+                </div>
+
+            </div>
+            <div class="right_report" id="warn">
+                <iframe src="" width='100%' height="1000px" scrolling="no" frameborder='0' id="showpdf" style="display:none">
+                    This browser does not support PDFs. Please download the PDF to view it:
+                    <a href="/index.pdf">Download PDF</a>
+                </iframe>
+            </div>
+
+        </div>
+
+        <div class="clearfix"></div>
+
+        <!--底部导航栏-->
+        <% include footer%>
+
+            <script src="javascripts/jquery-1.12.3.min.js" type="text/javascript"></script>
+            <script src="javascripts/bootstrap.js" type="text/javascript"></script>
+            <script>
+
+                function showreport(id) {
+                    $.post('scoreSubmit/download', {
+                        id: id,
+                    }, function (data) {
+                        if (data.length == 0 || data == "null") {
+                            document.getElementById("warn").innerHTML = "未上传实验报告";
+                        }
+                        else {
+                            data = data.slice(8);
+                            console.log(data);
+                            document.getElementById("showpdf").src = data;
+                            document.getElementById("showpdf").style.display = "inline";
+                        }
+                        // var open=new ActiveXObject("SharePoint.OpenDocuments.2");
+                        // open.ViewDocument(data);
+                    })
+                }
+                function subScore(userName, school, courseid) {
+                    // $("#count").click(function (event) {
+                    var comment = document.getElementById("comment").value,
+                        autoScore = document.getElementById("autoScore").innerHTML,
+                        teascore = document.getElementById("teascore").value,
+                        // id = document.getElementById("id").value,
+                        score;
+                    score = autoScore * (1 / 2) + teascore * (1 / 2);
+                    if (score && teascore && comment) {
+                        $.post('scoreSubmit/count', {
+                            // id: id,
+                            courseid: courseid,
+                            userName: userName,
+                            school: school,
+                            comment: comment,
+                            score: score,
+                            teascore: teascore
+                        }, function (data) {
+                            if (data === '1') {
+                                alert('提交成功');
+                            }
+                            else {
+                                console.log(data);
+                                alert('错误：用户不存在！');
+                            }
+                        })
+                    }
+                }
+            </script>
+    </body>
+
+</html>

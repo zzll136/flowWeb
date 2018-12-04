@@ -1,0 +1,311 @@
+#teacher_header_img {
+    background: url(/images/common/report1.jpg) no-repeat center;
+    background-size:cover;
+    width: 100%;
+    height: 170px;
+}
+
+.left_report {
+    width: 25%;
+    float: left;
+    background-color: rgb(102, 102, 102);
+    border-radius: 5px;
+    box-shadow: 3px 3px #888;
+}
+
+.expdate{
+    width:100%;
+    background-color: rgb(252, 252, 252); 
+}
+
+.addright_report {
+    width: 25%;
+    float: right;
+    background-color: rgb(240, 247, 247);
+    border-radius: 5px;
+    box-shadow: 3px 3px rgb(205, 214, 235);
+}
+.expleft {
+    width:50%;
+    margin-left:5%;
+    float: left;
+}
+.expright {
+    /* margin-left:30%; */
+    width: 40%;
+    float: right;
+    background-color: rgb(240, 247, 247);
+    border-radius: 5px;
+    box-shadow: 3px 3px rgb(205, 214, 235);
+}
+
+.apply_left {
+    padding:1%;
+    margin-left:20%;
+    width: 40%;
+    float: left;
+    background-color: rgb(240, 247, 247);
+    border-radius: 5px;
+    box-shadow: 3px 3px rgb(205, 214, 235);
+}
+
+.apply_right {
+    margin-top:10%;
+    width: 30%;
+    float: right;
+    /* background-color: rgb(240, 247, 247); */
+    border-radius: 5px;
+    box-shadow: 3px 3px rgb(205, 214, 235);
+}
+.deviceNum {
+    font-size: 25px;
+    color: rgb(216, 32, 63);
+    text-indent: 1em;
+    margin-top: 0;
+    margin-right:3%;
+    margin-left:3%;
+}
+.device {
+    float:right;
+    width: 25%;
+    line-height: 40px;
+    background-color: #ccc;
+    font-size: 20px;
+    color: rgb(23, 36, 36);
+    text-indent: 1em;
+    margin-top: 0;
+    margin-right:10%;
+}
+.week {
+    font-size: 25px;
+    color: rgb(216, 32, 63);
+    text-indent: 1em;
+    margin-top: 0;
+    margin-right:5%;
+    margin-left:5%;
+}
+.expright_report {
+    margin-left:5%;
+    width: 25%;
+    float: left;
+    background-color: rgb(240, 247, 247);
+    border-radius: 5px;
+    box-shadow: 3px 3px rgb(205, 214, 235);
+}
+.listright_report {
+    margin-top: 4%;
+    width:37%;
+    float: right;
+    background-color: rgb(240, 247, 247);
+    border-radius: 5px;
+    box-shadow: 3px 3px rgb(205, 214, 235);
+}
+
+.left_report1 {
+    width: 25%;
+    float: left;
+}
+.addleft_report{
+    float: left;
+    width: 70%;
+}
+
+.listleft_report{
+    float: left;
+    width: 60%;
+}
+
+.no_do {
+    font-size: 18px;
+    margin-left:10%;
+    text-align: center;
+    font-weight: bold;
+    color: rgb(255, 0, 13);
+}
+
+.no_done {
+    font-size: 18px;
+    margin-left:10%;
+    text-align: center;
+    font-weight: bold;
+    color: rgb(255, 175, 2);
+}
+
+.done {
+    font-size: 18px;
+    margin-left:10%;
+    text-align: center;
+    font-weight: bold;
+    color: rgb(0, 107, 9);
+}
+
+.list_show{
+    position: absolute;
+    left: 57%;
+    /* right: 35%; */
+    top: 35%;
+    height:600px;
+    width:700px;
+    align: center;
+    overflow-x: hidden;
+    overflow-y: scroll;
+    background-color: rgba(255, 255, 255, 0.9);
+    /*初始状态都是隐藏*/
+    /* visibility: hidden; */
+    /* opacity: 0; */
+    /*首行缩进*/
+    /* text-indent: 2em; */
+}
+/* .subleft_report {
+    width: 25%;
+    float: left;
+    background-color: rgb(255, 255, 255); 
+    border-radius: 5px;
+}
+
+.leftup_report {
+    width: 100%;
+    float: left;
+    background-color: #666; 
+    border-radius: 5px;
+    box-shadow: 1px 1px #888; 
+}
+
+.leftdown_report {
+    margin-top: 15%;
+    float: left;
+    width: 100%;
+    background-color: rgb(241, 241, 241); 
+    border-radius: 5px;
+    box-shadow: 1px 1px #888; 
+}
+.instruction {
+    border: 1px solid #777;
+    width: 100%;
+    text-align: left;
+    box-sizing: border-box;
+    padding: 10px;
+} */
+.right_report {
+    float: right;
+    width: 70%;
+}
+
+.right_report1 {
+    float: right;
+    width: 80%;
+}
+
+.scoreleft_report {
+    margin-left: 10%;
+    float:left;
+    width: 80%;
+}
+
+.scoreleft_report h2 {
+    width: 100%;
+    background-color: #ccc;
+    line-height: 50px;
+    text-indent: 1em;
+    margin-top: 0;
+}
+.chooseright_report {
+    float: right;
+    width: 100%;
+    padding:0 10%;
+}
+.right_report1 h2 {
+    width: 100%;
+    background-color: #ccc;
+    line-height: 50px;
+    text-indent: 1em;
+    margin-top: 0;
+}
+
+.right_report h2 {
+    width: 100%;
+    background-color: #ccc;
+    line-height: 50px;
+    text-indent: 1em;
+    margin-top: 0;
+}
+
+.reportList {
+    padding: 15px;
+    margin: 10px 0;
+    border: 1px #2C2C2C solid;
+    background-color: #f9f9f9;
+    box-shadow: 5px 5px 5px 4px #d0d0d0;
+}
+
+.seedetails {
+    position: absolute;
+    left: 10%;
+    right: 10%;
+    top: 100px;
+    /* height: 420px; */
+    align: center;
+    overflow-x: hidden;
+    overflow-y: scroll;
+    background-color: rgba(231, 231, 231, 0.9);
+    /*初始状态都是隐藏*/
+    visibility: hidden;
+    opacity: 0;
+    text-indent: 2em;
+}
+
+.repeat_details {
+    position: absolute;
+    left: 64%;
+    right:1%;
+    top: 25%;
+    /* height: 420px; */
+    align: center;
+    overflow-x: hidden;
+    overflow-y: scroll;
+    background-color: rgba(127, 218, 202, 0.9);
+    /*初始状态都是隐藏*/
+    visibility: hidden;
+    opacity: 1;
+    text-indent: 2em;
+}
+div.one-line {
+    margin: 15px 0;
+}
+.edit_details {
+    padding: 15px;
+    margin: 10px 0;
+    border: 1px #2C2C2C solid;
+    background-color: #f9f9f9;
+    box-shadow: 5px 5px 5px 4px #d0d0d0;
+    position: absolute;
+    left: 10%;
+    top: 25%;
+    /* height: 420px; */
+    /* align: center; */
+    /*初始状态都是隐藏*/
+    opacity: 1;
+    z-index: 1000;
+}
+.expMessageCss{
+    padding: 8px;
+    margin: 10px 0;
+    background-color: #f9f9f9;
+    /* box-shadow: 5px 5px 5px 4px #d0d0d0; */
+}
+.headTop {
+    margin-bottom: 10px;
+}
+
+.headTop select {
+    margin-right: 45px;
+}
+
+.headTop button {
+    width: 80px;
+    border-radius: 15px;
+}
+
+.headTop div {
+    display: inline-block;
+}

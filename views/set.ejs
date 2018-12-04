@@ -1,0 +1,370 @@
+<!DOCTYPE>
+<html>
+
+<head>
+        <title>
+                <%= title %>
+              </title>
+          
+              <link href="./images/favicon.ico" rel="shortcut icon" />
+    <meta charset="utf=8">
+    <link href="/stylesheets/bootstrap.min.css" rel="stylesheet" type="text/css">
+    <link rel="stylesheet" type="text/css" href="/stylesheets/set.css">
+</head>
+
+<body>
+    <header>
+        <a href="/">
+            <img src="/images/common/timg.jpg" style="width:17%" alt="">
+        </a>
+        <div>
+            <% if (locals.username) { %>
+                <a href="/" style="color: #000; font-size: 1em;">主页</a>
+                <img src="/images/common/exit.png" alt="">
+                <a href="#" onclick="fun1()">安全退出</a>
+                <% } %>
+        </div>
+    </header>
+
+    <div class="pull-left left_part">
+        <!-- Nav tabs -->
+        <ul class="nav nav-tabs" role="tablist">
+            <li role="presentation">
+                <a href="#home" aria-controls="home" role="tab" data-toggle="tab" onclick="getmes()">个人资料</a>
+            </li>
+            <li role="presentation">
+                <a href="#profile" aria-controls="profile" role="tab" data-toggle="tab">修改密码</a>
+            </li>
+            <!-- <li role="presentation"><a href="#messages" aria-controls="messages" role="tab" data-toggle="tab">实验记录</a></li>
+    <li role="presentation"><a href="#settings" aria-controls="settings" role="tab" data-toggle="tab">设置</a></li> -->
+            <!-- <% if (locals.userrole ==='t') { %>
+        <li role="presentation"><a href="#homet" aria-controls="home" role="tab" data-toggle="tab">个人资料</a></li>
+        <% } %> -->
+        </ul>
+    </div>
+
+    <!-- Tab panes -->
+    <div class="tab-content pull-right right_part">
+        <!-- <div role="tabpanel" class="tab-pane active" id="home">
+        <button id="test" type="button" class='btn btn-success'>点击</button>-->
+        <!-- <p id='username'></p>
+        <p id='status0'></p>
+        <p id='status1'></p>
+        <p id='status2'></p>
+    </div> -->
+        <div role="tabpanel" class="tab-pane" id="profile">
+            <form>
+                <div class="one-line">
+                    <span class="one-line-left">当前密码：</span>
+                    <input type="password" name="password" value="">
+                    <span class="text-muted">当前密码强度符合要求：</span>
+                </div>
+                <div class="one-line">
+                    <span>新密码：</span>
+                    <input type="password" name="newpassword" value="">
+                    <span class="text-muted">密码长度至少8位；字符种类至少2种（(数字，大写字母，小写字母，标点符号）</span>
+                </div>
+                <div class="one-line">
+                    <span>新密码确认：</span>
+                    <input type="password" name="renewpassword" value="">
+                    <span class="text-muted">确认密码和新密码保持一致</span>
+                </div>
+                <div class="one-line">
+                    <span>验证码：</span>
+                    <input id="verifyWord" type="text" name="verifyCode" value="">
+                    <span id="verify">
+                    </span>
+                </div>
+                <div class="one-line">
+                    <span></span>
+                    <input id="changePassword" class="btn btn-success" type="submit"></input>
+                </div>
+            </form>
+        </div>
+        <div role="tabpanel" class="tab-pane" id="home">
+            <form>
+                <div class="one-line">
+                    <span>用户类型：</span>
+                    <input type="text" id="userType" name="userType" disabled="disabled"></input>
+                    <!-- <button class="set" type="button" class="btn btn-primary">修改</button> -->
+                    <!-- <input type="text" name="name" value=""> -->
+                </div>
+                <div class="one-line">
+                    <span>学校：</span>
+                    <input type="text" id="school" name="school" style="display:inline" disabled="disabled"></input>
+                    <!-- <select id="classid" class="form-control" style="width:120px; font-size: 16px;display:none">
+                        <option>控制1班</option>
+                        <option>控制2班</option>
+                        <option>控制3班</option>
+                    </select> -->
+                    <!-- <input type="text" id="organization" name="organization" disabled="disabled"></input> -->
+                    <!-- <button class="set" type="button" class="btn btn-primary">修改</button> -->
+                    <!-- <input type="text" name="newclass" value=""> -->
+                    <!-- <span class="text-muted">示例：选填1，2，3，控制1班写“1”即可</span> -->
+                </div>
+                <div class="one-line">
+                    <span>学号/工号：</span>
+                    <input type="text" id="userName" name="userName" disabled="disabled"></input>
+                    <!-- <button class="set" type="button" class="btn btn-primary">修改</button> -->
+                    <!-- <input type="text" name="name" value=""> -->
+                </div>
+                <div class="one-line">
+                    <span>班级：</span>
+                    <input type="text" id="class" name="class" disabled="disabled"></input>&nbsp;
+                    <a href="javacript:void(0);" class="text-danger" onclick="editClass()">修改</a>
+                    <a href="javacript:void(0);" class="text-success" onclick="subClass()">提交</a>
+                    <!-- <button class="set" type="button" class="btn btn-primary">修改</button> -->
+                    <!-- <input type="text" name="name" value=""> -->
+                </div>
+                <div class="one-line">
+                    <span>姓名：</span>
+                    <input type="text" id="name" name="name" disabled="disabled"></input>&nbsp;
+                    <a href="javacript:void(0);" class="text-danger" onclick="editName()">修改</a>
+                    <a href="javacript:void(0);" class="text-success" onclick="subName()">提交</a>
+                    <!-- <button class="set" type="button" class="btn btn-primary">修改</button> -->
+                    <!-- <input type="text" name="name" value=""> -->
+                </div>
+                <div class="one-line">
+                    <span>联系方式：</span>
+                    <input type="text" id="phone" name="phone" disabled="disabled"></input>&nbsp;
+                    <a href="javacript:void(0);" class="text-danger" onclick="editNumber()">修改</a>
+                    <a href="javacript:void(0);" class="text-success" onclick="subNumber()">提交</a>
+                </div>
+                <div class="one-line" style="display:none" id="identify_code">
+                    <span></span>
+                    <input id="checknum" name="checknum" style="width:auto" type="button" onclick="sendChecknum()" value="获取验证码" />
+                    <input id="num" name="num" type="text" style="width:auto" placeholder="输入验证码" required/>
+                </div>
+                <!-- <div class="one-line">
+                    <span></span>
+                    <button id="set" type="button" class="btn btn-info">修改</button>
+                    <button id="setmessage" type="button" class="btn btn-success">保存</button>
+                </div> -->
+            </form>
+        </div>
+
+        <!-- <div role="tabpanel" class="tab-pane" id="homet">
+            <form>
+                <div class="one-line">
+                    <span>姓名：</span>
+                    <input type="text" name="name" value="">
+                </div>
+                <div class="one-line">
+                        <span>联系方式：</span>
+                        <input type="text" name="phonenumber" value="">
+                    </div>
+                <div class="one-line">
+                    <span></span>
+                    <input id="setmessage" class="btn btn-success" type="submit"></input>
+                </div>
+            </form>
+        </div>
+
+        <!<div role="tabpanel" class="tab-pane" id="messages">3</div>
+    <div role="tabpanel" class="tab-pane" id="settings">4</div> -->
+    </div>
+    <script src="/javascripts/jquery-1.12.3.min.js"></script>
+    <script src="/javascripts/bootstrap.min.js"></script>
+    <script src="/javascripts/gVerify.js"></script>
+    <script>
+        function fun1() {
+            if (confirm("确认退出？")) { window.location.href = "/logout" }
+        }
+        //-----------------------------------个人资料的返回---------------------------------
+        function getmes() {
+            $.get('set/userinfomation', function (data) {
+                switch ('<%=locals.userrole%>') {
+                    case "m": var usertype = "管理员"; break;
+                    case "s": var usertype = "学生"; break;
+                    case "t": var usertype = "老师"; break;
+                }
+                //console.log(data);
+                document.getElementById("userType").value = usertype;
+                document.getElementById("school").value = data.school;
+                document.getElementById("userName").value = data.username;
+                document.getElementById("class").value = data.classname;
+                document.getElementById("phone").value = data.phonenumber;
+                document.getElementById("name").value = data.name;
+                // $('#organization').text(data.organization);
+                // $('#name').text(data.name);
+                // $('#phone').text(data.phonenumber);
+            })
+        };
+        // var a = Math.floor(Math.random() * (8999)) + 1000;
+        var a = 123456;
+        var count = 60; //间隔函数，1秒执行
+        var curCount;//当前剩余秒数
+        var constcode = "";
+        function SetRemainTime() {
+            if (curCount == 0) {
+                window.clearInterval(InterValObj);//停止计时器
+                $("#checknum").removeAttr("disabled");//启用按钮
+                $("#checknum").val("重新获取验证码");
+                constcode = "";//清除验证码。如果不清除，过时间后，输入收到的验证码依然有效
+            }
+            else {
+                curCount--;
+                $("#checknum").val("请在" + curCount + "秒内输入验证码");
+            }
+        };
+        function sendChecknum() {
+            var mobile = $("#phone").val();
+            var content = "您的验证码是：" + a + "。请不要把验证码泄露给其他人。";
+            var reg = /^[0-9]{11}$/g;
+            if (mobile == "") {
+                alert("手机号不能为空");
+                return;
+            }
+            if (!reg.exec(mobile)) {
+                alert("手机号应该是11位数字");
+                return;
+            }
+            curCount = count;
+            //设置button效果，开始计时
+            $("#checknum").attr("disabled", "true");
+            $("#checknum").val("请在" + curCount + "秒内输入验证码");
+            InterValObj = window.setInterval(SetRemainTime, 1000); //启动计时器，1秒执行一次
+            $.post('reg/send', {
+                mobile: mobile,
+                content: content
+            }, function (data) {
+                if (data === '1') {
+                    alert('验证码发送成功');
+                }
+                else {
+                    console.log(data);
+                    alert('错误：用户不存在！');
+                }
+            })
+        }
+        //--------------------------------修改密码-------------------------------------
+        // 初始化图形验证码
+        /*
+        只传一个id的时候，默认类型为数字和字母混合：“blend”
+        
+        也可传多个参数：number：纯数字类型，letter：纯字母类型
+        var verifyCode = new GVerify({
+                id:"container",
+                type:"number"
+        });
+        
+        verifyCode.refresh();刷新图形验证码
+        
+        verifyCode.validate(code);验证图形验证码，参数code为用户输入的验证码，返回值：正确：true,错误：false
+        */
+
+        // 处理密码修改
+        var verifyCode = new GVerify("verify");
+
+        $("#verify").click(function () {
+            verifyCode.refresh();
+        });
+
+        $("#changePassword").click(function (event) {
+            var verifyVal = $("#verifyWord").val();
+            var boolverfy = verifyCode.validate(verifyVal);
+            event.preventDefault();
+            if (boolverfy) {
+                var password = $('input[name="password"]').val(),
+                    newpassword = $('input[name="newpassword"]').val(),
+                    renewpassword = $('input[name="renewpassword"]').val();
+                console.log(password + '--' + newpassword + '----' + renewpassword);
+                if (newpassword === renewpassword) {
+                    $.post('set/updatePassword', {
+                        oldpassword: password,
+                        newpassword: newpassword
+                    }, function (data) {
+                        if (data === '1') {
+                            alert('密码修改成功');
+                        } else if (data === '0') {
+                            alert('密码错误，请重新输入');
+                        } else {
+                            console.log(data);
+                            alert('错误：用户不存在！');
+                        }
+                    })
+                }
+                else {
+                    alert('两次密码不一致');
+                }
+            }
+            else {
+                alert("验证码错误");
+            }
+        });
+
+        function editClass() {
+            $("#class").removeAttr("disabled");
+        }
+        function editName() {
+            $("#name").removeAttr("disabled");
+        }
+        function editNumber() {
+            $("#phone").removeAttr("disabled");
+            $("#identify_code").show();
+        }
+
+        function subClass() {
+            if (confirm("确认提交？")) {
+                var newclass = $('input[name="class"]').val();
+                var name = $('input[name="name"]').val();
+                $.post('set/setmessage', {
+                    newclass: newclass,
+                    name: name,
+                }, function (data) {
+                    if (data === '1') {
+                        alert('修改成功');
+                    }
+                    else {
+                        console.log(data);
+                        alert('错误：用户不存在！');
+                    }
+                })
+            }
+        }
+        function subName() {
+            if (confirm("确认提交？")) {
+                var newclass = $('input[name="class"]').val();
+                var name = $('input[name="name"]').val();
+                $.post('set/setmessage', {
+                    newclass: newclass,
+                    name: name,
+                }, function (data) {
+                    if (data === '1') {
+                        alert('修改成功');
+                    }
+                    else {
+                        console.log(data);
+                        alert('错误：用户不存在！');
+                    }
+                })
+            }
+        }
+        function subNumber() {
+            var phonenumber = $('input[name="phone"]').val();
+            var $checknum = $('#num'),
+                constcode = $.trim($checknum.val());
+            if (constcode != a) {
+                alert("验证码错误");
+                return false;
+            }
+            $.post('set/setnumber', {
+                phonenumber: phonenumber
+            }, function (data) {
+                if (data === '1') {
+                    alert('修改成功');
+                }
+                else if (data === 'phone_err') {
+                    alert('手机号已被占用');
+                }
+                else {
+                    console.log(data);
+                    alert('错误：用户不存在！');
+                }
+            })
+        }
+
+    </script>
+</body>
+
+</html>

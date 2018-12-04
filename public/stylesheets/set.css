@@ -1,0 +1,124 @@
+html {
+    padding: 0;
+    margin: 0;
+}
+
+body {
+    margin: 0 auto;
+    padding: 0;
+    font-family: Arial, Helvetica, sans-serif;
+    font-size: 14px;
+    width: 100%;
+    text-align: left;
+    position: relative;
+    min-width: 1320px;
+    overflow: "auto";
+}
+
+header {
+    width: 100%;
+    position: relative;
+    background-color: #f2f0f1;
+}
+
+header a img {
+    width: 20%;
+    height: 90px;
+}
+
+header>div {
+    position: absolute;
+    right: 10px;
+    top: 25px;
+    font-size: 25px;
+}
+
+header a {
+    color: #ddd;
+}
+
+.nav-tabs {
+    border-bottom: none;
+}
+
+.nav-tabs>li {
+    float: none;
+}
+
+.nav-tabs>li>a {
+    line-height: 2.0;
+    border-radius: 0;
+    margin: 0;
+    color: #75808a;
+    font-weight: bold;
+    text-align: center;
+}
+
+.nav-tabs>li.active>a,
+.nav-tabs>li.active>a:hover,
+.nav-tabs>li.active>a:focus {
+    border: none;
+}
+
+.left_part {
+    width: 17%;
+    height: 100%;
+    min-height: 600px;
+    background-color: #2f4050;
+}
+
+.left_part .nav {
+    margin-top: 50px;
+}
+
+.right_part {
+    width: 80%;
+    height: 100%;
+    min-height: 600px;
+}
+
+#profile form {
+    margin: 50px 10px 10px 50px;
+}
+
+div.one-line {
+    margin: 15px 0;
+}
+
+div.one-line span:first-child {
+    display: inline-block;
+    width: 150px;
+    text-align: right;
+    font-size: 1.1em;
+    font-weight: bold;
+    color: #454545;
+}
+
+div.one-line span:last-child {
+    display: inline-block;
+    text-align: left;
+    font-size: 0.9em;
+    margin-left: 8px;
+}
+
+div.one-line input {
+    width: 22em;
+    line-height: 30px;
+    border: 1px solid #d3c9ce;
+    border-radius: 3px;
+}
+
+div.one-line button {
+    width: 8em;
+    text-align: center;
+    line-height: 30px;
+    background-color: #18a689;
+}
+
+#verify {
+    width: 150px;
+    height: 40px;
+    display: inline-block;
+    position: relative;
+    top: 10px;
+}

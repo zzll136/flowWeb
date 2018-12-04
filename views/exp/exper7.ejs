@@ -1,0 +1,164 @@
+<!DOCTYPE HTML>
+<html lang="en" xmlns="http://www.w3.org/1999/html" style="text-align: center">
+
+<% include ../header%>
+
+    <% include ../expheader%>
+
+        <div id="CodeChartsAndTable">
+            <div id="codeArea">
+                <div>二次仪表代码编辑区</div>
+
+                <textarea class="text-area" id="virtualInstrumentCodeArea"></textarea>
+
+                <button id="buttonRunScript" class="btn-lg btn-default">提交代码</button>
+                <button id="buttonResetScript" class="btn-lg btn-default">重置代码</button>
+
+                <div class="scriptResult" style="top:150px">发射器时差</div>
+                <div class="scriptResult" style="top:180px">水温</div>
+                <div class="scriptResult" style="top:210px">二次仪表结果</div>
+                <div class="scriptResult" style="top:240px">实际瞬时流量</div>
+
+                <div id="labelTimeD" class="scriptResult"></div>
+                <div id="labelTempHM1" class="scriptResult"></div>
+                <div id="labelcalculateFlowRateHM" class="scriptResult"></div>
+                <div id="labelFlowRateHM1" class="scriptResult"></div>
+
+            </div>
+
+            <div id="divChartLevel">
+                <!--液位比较曲线-->
+            </div>
+
+            <div id="divDataRecord" style="position: absolute; margin-left:1100px; margin-top:20px; width:480px; height:300px;  background-color: #dddddd">
+                <h1 align="center" style="position:relative; font-size: 20px; top:-20px">实验数据记录</h1>
+                <div id="divDataTable" align="left" style="margin-left:20px; width: 65%; height:200px; overflow-y: scroll;">
+                    <table id="tableDataRecord" align="left" border="1" style="margin-left:0px; width: 100%;">
+                        <tr>
+                            <td align="center" style="font-weight: bolder">序号</td>
+                            <td align="center" style="font-weight: bolder">时间</td>
+                            <td align="center" style="font-weight: bolder">实际流量(m3/h)</td>
+                            <td align="center" style="font-weight: bolder">计算流量(m3/h)</td>
+                        </tr>
+                    </table>
+                </div>
+
+                <button id="buttonStartRecord" class="btn-lg btn-default" style="position: absolute; left:350px; top:50px; color: #222222">开始记录</button>
+                <button id="buttonClearRecord" class="btn-lg btn-default" style="position: absolute; left:350px; top:100px; color: #222222">清空表格</button>
+
+                <div style="position: absolute; left:350px; top:150px; font-size: 15px">采样间隔</div>
+                <input id="inputSampleInterval" onkeyup="recordIntervalChange()" type="text" value="1" style=" position:absolute; left:410px; top:150px; width:30px;font-family:inherit;border:2px solid #CCC;margin:0 5px;padding:0px;"
+                />
+                <div style="position:absolute; left:450px; top:150px; width:50px;">s</div>
+
+                <button id="buttonPauseGraph" class="btn-lg btn-default" style="position: absolute; left:350px; top:180px; color: #222222">暂停曲线</button>
+                <button id="buttonEndExperiment" class="btn-lg btn-default" style="position: absolute; left:350px; top:230px; color: #222222">保存数据</button>
+            </div>
+        </div>
+
+        <div style="z-index: 1000; position:relative">
+            <% include ../footer%>
+        </div>
+
+        <div id="experimentIntroduction" class="instrumentIntro" align="center" style="height: 500px; z-index: 999">
+            <h1>
+                实验简介
+            </h1>
+            <hr style="width: 700px; height:1px" />
+
+            <p align="left" class="instrumentIntroParagraph">
+                本次实验为涡街流量计验证实验，实验目的是使用电子秤作为校准源，对涡街流量计进行校准。
+            </p>
+            <h2 align="left" style="font-weight: bolder; font-size: 30px">实验原理</h2>
+            <p align="left" class="instrumentIntroParagraph">
+                基于质量法流量标定实验现场区组成如图所示，系统启动后，打开换向器2、关闭换向器1，控制器发送命令将电子秤计时清零，当管道中流量稳定后； 打开换向器1、关闭换向器2和泄流阀，流体流入称量容器中。计时一段时间后，读取流体的总质量，通过计算就可得知这段时间的平均流量，也可以实时记录测量过程中流量的动态变化曲线。
+                在使用质量法测量平均流量曲线的时间段内，实时读取被校流量仪表的流量曲线，通过对比算法可以对仪表测量精确性和稳定性进行评估。
+            </p>
+            <img src="/images/experiment0/1.png" ; width="500px" align="center" />
+            <h2 align="left" style="font-weight: bolder; font-size: 30px">实验内容</h2>
+            <p align="left" class="instrumentIntroParagraph">
+                在首页导航栏上点击，可以看到如下图所示界面。每个区域功能均已标注在图中。
+            </p>
+            <img src="/images/experiment0/2.png" ; width="500px" align="center" />
+            <p align="left" class="instrumentIntroParagraph">
+                实验开始前，先熟悉设备使用。控制面板区有阀门和变频器的开关，以及控制变频器频率的滑块。屏幕下方两个曲线区域实时显示质量和流量曲线。曲线图每隔1秒刷新一次。 如果需要临时暂停曲线图以便读取数据或者截图，可以按实验数据记录区右侧的“暂停曲线”按钮。
+            </p>
+            <p align="left" class="instrumentIntroParagraph">
+                首先打开阀门A，关闭其他两个阀门，将变频器设置为默认的30Hz。按下变频器启动开关并观察曲线图。此时可以发现，流量计曲线会升高并稳定在一个值附近。而质量曲线图会持续升高。
+            </p>
+            <p align="left" class="instrumentIntroParagraph">
+                按下数据表格区右侧的“开始记录”按钮，则数据表格会根据设置的采样间隔，定时将数据添加在表格中。采样间隔可调范围为1-10秒。开始记录数据后，开始按钮变为停止按钮。 此时再按一下，则停止记录数据。可以将数据选择复制至excel或者其他数据分析软件中，以便实验后的数据分析和保存。
+            </p>
+            <p align="left" class="instrumentIntroParagraph">
+                控制面板的“重置实验”按钮用于自动清空上容器的水。相当于取代了人为的阀门操作。清空完成时系统会发出提示。 控制面板的“开始实验”按钮用于自动开始实验步骤，也相当于取代了手工打开阀门及变频器。
+            </p>
+            <p align="left" class="instrumentIntroParagraph">
+                在熟悉设备后，即可正式开始实验。首先重置实验设备，清空数据表格。
+            </p>
+            <p align="left" class="instrumentIntroParagraph">
+                实验设备重置完成后，将变频器频率设置为20Hz，点击开始实验。此时折线图会自动清空。随后每隔1秒更新一次数据。选择好合适的数据采样时间间隔， 待涡街流量计曲线稳定时点击表格区的“开始记录”按钮，记录一组质量-流量数据。实验中要注意容器质量不能超过20kg，以避免溢出。如果容器质量达到20kg，
+                系统会发出警报并自动关闭水泵，打开出水阀门。
+            </p>
+            <p align="left" class="instrumentIntroParagraph">
+                20Hz的实验完成后，再以30Hz、40Hz和50Hz分别进行上述实验步骤，记录下3组数据。数据记录完成后，点击“结束实验”按钮，结束实验，并关闭页面。系统会自动记录本次实验的过程。
+            </p>
+
+            <h2 align="left" style="font-weight: bolder; font-size: 30px">实验数据分析</h2>
+            <p align="left" class="instrumentIntroParagraph">
+                实验数据分析可用Excel完成。实验中记录了4组质量-流量数据。将数据导入Excel。选中质量数据，计算每两个质量之间的差值。除以采样时间间隔，即可计算出质量法测得的标准流量。 将计算出的标准流量和涡街流量计的流量进行单位统一化，并且比较数据的差值。
+            </p>
+            <p align="left" class="instrumentIntroParagraph">
+                分析不同流量下标准流量和涡街流量计实测流量的关系，完成实验报告。
+            </p>
+        </div>
+
+        <iframe id="instrumentScript" name="instrumentScript" src="/experiment/instrumentScript7" style="display:none">
+            <p>你的浏览器不支持iframes。</p>
+        </iframe>
+
+        <script src="/socket.io/socket.io.js"></script>
+        <!-- <script type="text/javascript" src="/javascripts/jsmpeg.min.socket.js"></script> -->
+        <script type="text/javascript" src="/javascripts/exp/exper7.js"></script>
+        <script src="/javascripts/bootstrap.js"></script>
+        <!--液位比较曲线-->
+        <script type="text/javascript" src="/javascripts/chart/chartExper7.js"></script>
+        <script>
+            var role;
+            if ('<%=userrole%>' == "m") role = "m";
+            if ('<%=userrole%>' == "t") role = "t";
+            if ('<%=userrole%>' == "s") role = "s";
+            if ('<%=userrole%>' == "none") role = "n";
+            if (role == "m") {
+                document.getElementById("text").style.display = "inline";
+                document.getElementById("choosetable").style.display = "inline";
+                $.get('/experiment/getstatus', {
+                }, function (data) {
+                        var choose = $("#choose");
+                        for (var i = 0; i < data.length; i++) {
+                            if (data[i].status == 1)
+                                choose.append("<option value=" + i + ">" + data[i].tableid + "号实验桌</option>");
+                        }
+                    });
+            }
+            if (role == "s" || role == "t") {
+                var warnTime = new Date();
+                var warnMin = addZero(warnTime.getMinutes());
+                var min_rest = 59 - warnMin;
+                var tenWarn = min_rest - 10, threeWarn = min_rest - 3, oneWarn = min_rest - 1;
+                if (tenWarn > 0 && threeWarn > 0 && oneWarn > 0) {
+                    setTimeout(function () {
+                        alert('实验时间还有十分钟，请尽快完成,并保存数据');
+                    }, tenWarn * 60 * 1000);
+                    setTimeout(function () {
+                        alert('实验时间还有三分钟，三分钟后将强制关闭');
+                    }, threeWarn * 60 * 1000);
+                    setTimeout(function () {
+                        alert('实验时间到');
+                        window.location.href = location.href;
+                    }, oneWarn * 60 * 1000);
+                }
+            }
+        </script>
+        </body>
+
+</html>

@@ -1,0 +1,16 @@
+node_modules
+
+ffmpeg
+
+#忽略word文件
+*.docx
+
+public/fonts/
+public/images/
+
+# 忽略之前的sql文件
+flowrate.sql
+
+#忽略压缩文件
+*.min.js
+

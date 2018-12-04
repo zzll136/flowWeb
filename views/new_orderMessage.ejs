@@ -1,0 +1,293 @@
+<!DOCTYPE HTML>
+<!--未加入Bootstrap的两行链接-->
+<html lang="en">
+<% include header%>
+    <head>
+        <title>
+            <%= title %>
+        </title>
+        <link href="./images/favicon.ico" rel="shortcut icon" />
+        <link href="stylesheets/uploadreport.css" rel="stylesheet" type="text/css">
+        <link href="stylesheets/fileinput.min.css" rel="stylesheet" type="text/css">
+    </head>
+
+    <body>
+        <div id="report_header_img"></div>
+        <div class="main" style="margin-top:0">
+            <div class="stuleft_report1">
+                <div class="form-inline">
+                    <label for="year" style="font-size:medium">实验批次：</label>
+                    <select id="year_sel" class="form-control" style="width:60%;" name="year_sel">
+                        <% for(var d in year){%>
+                            <option style="font-size:medium" value="<%=year[d].year%>">
+                                <%=year[d].year%>
+                            </option>
+                            <%}%>
+                    </select>
+                </div>
+                <br>
+                <ul class="nav nav-pills nav-stacked stuleft_report" id="month">
+                    <li role="presentation" class="active">
+                        <a href="javascript:void(0)" id="-1">实验开放月份</a>
+                    </li>
+                    <% for(var d in monthArray){%>
+                        <li role="presentation">
+                            <!-- <a href="new_orderMessage?month=<%=monthArray[d]%>"> -->
+                            <a href="javascript:void(0)" id="<%=monthArray[d]%>">
+                                <%=monthArray[d]%>月份
+                                    <!-- <span class="caret"></span> -->
+                            </a>
+                        </li>
+                        <%}%>
+                </ul>
+            </div>
+
+            <div class="right_report">
+                <h2>实验开放日期
+                    <span style="font-size:medium;color:#CD5C5C;margin-left:2%;font-weight:bold">(红色：已预约满)</span>
+                    <span class="device">开放设备数:
+                        <span class="deviceNum">
+                            <%=deviceNum%>
+                        </span>台</span>
+                </h2>
+                <ul class="expdate nav nav-pills">
+                    <% for(var d in timeArray){%>
+                        <li id="date<%=d%>" role="presentation">
+                            <a href="javascript:void(0);" onclick="orderTime('<%=timeArray[d]%>')">
+                                <%=timeArray[d]%>
+                            </a>
+                        </li>
+                        <%}%>
+                </ul>
+                <div class="exptime">
+                    <div class="exptimeslot" onclick="seeDetails('08:00')" title="查看详情">
+                        <br>
+                        <div class="orderTime">时间段:08:00-09:00</div>
+                        <br>
+                        <span class="orderSituation">已有</span>
+                        <span class="ordernum" name="num"></span>
+                        <span class="orderSituation1">人预约</span>
+                        <br>
+                    </div>
+                    <div onclick="seeDetails('09:00')" class="exptimeslot" title="查看详情">
+                        <br>
+                        <div class="orderTime">时间段:09:00-10:00</div>
+                        <br>
+                        <span class="orderSituation">已有</span>
+                        <span class="ordernum" name="num"> </span>
+                        <span class="orderSituation1">人预约</span>
+                    </div>
+                    <div onclick="seeDetails('10:00')" class="exptimeslot" title="查看详情">
+                        <br>
+                        <div class="orderTime">时间段:10:00-11:00</div>
+                        </br>
+                        <br>
+                        <span class="orderSituation">已有</span>
+                        <span class="ordernum" name="num"></span>
+                        <span class="orderSituation1">人预约</span>
+
+                    </div>
+                    <div onclick="seeDetails('13:00')" class="exptimeslot" title="查看详情">
+                        <br>
+                        <div class="orderTime">时间段:13:00-14:00</div>
+                        <br>
+                        <span class="orderSituation">已有</span>
+                        <span class="ordernum" name="num"></span>
+                        <span class="orderSituation1">人预约</span>
+                    </div>
+                </div>
+                <br>
+                <div class="exptime">
+                    <div onclick="seeDetails('14:00')" class="exptimeslot" title="查看详情">
+                        <br>
+                        <div class="orderTime">时间段:14:00-15:00</div>
+
+                        <br>
+                        <span class="orderSituation">已有</span>
+                        <span class="ordernum" name="num"></span>
+                        <span class="orderSituation1">人预约</span>
+                    </div>
+                    <div onclick="seeDetails('15:00')" class="exptimeslot" title="查看详情">
+                        <br>
+                        <div class="orderTime">时间段:15:00-16:00</div>
+
+                        <br>
+                        <span class="orderSituation">已有</span>
+                        <span class="ordernum" name="num"></span>
+                        <span class="orderSituation1">人预约</span>
+                    </div>
+                    <div onclick="seeDetails('16:00')" class="exptimeslot" title="查看详情">
+                        <br>
+                        <div class="orderTime">时间段:16:00-17:00</div>
+
+                        <br>
+                        <span class="orderSituation">已有</span>
+                        <span class="ordernum" name="num"></span>
+                        <span class="orderSituation1">人预约</span>
+                    </div>
+                    <div onclick="seeDetails('17:00')" class="exptimeslot" title="查看详情">
+                        <br>
+                        <div class="orderTime">时间段:17:00-18:00</div>
+
+                        <br>
+                        <span class="orderSituation">已有</span>
+                        <span class="ordernum" name="num"></span>
+                        <span class="orderSituation1">人预约</span>
+                    </div>
+                </div>
+                <br>
+            </div>
+
+            <div class="right_report" id="orderdetails" style="display:none">
+                <div class="orderRecord">
+                    预约详情
+                </div>
+                <div>
+                    <table id="tabledetails" class="table table-hover table-bordered">
+                        <tr>
+                            <th style="width:50px;">序号</th>
+                            <th style="width:170px;">学号</th>
+                            <th style="width:120px;">姓名</th>
+                            <th style="width:100px;">学校</th>
+                            <th style="min-width:150px;">预约时间</th>
+                            <th style="width:200px;">状态</th>
+                            <!-- <th style="width:100px;">操作</th> -->
+                        </tr>
+                    </table>
+                </div>
+            </div>
+            <div class="clearfix"></div>
+        </div>
+        <% include footer%>
+            <script src="javascripts/jquery-1.12.3.min.js" type="text/javascript"></script>
+            <script src="javascripts/bootstrap.js" type="text/javascript"></script>
+            <script>
+                var url = window.location.search;
+                yearUrl = decodeURI(url.substring(url.indexOf('=') + 1, url.indexOf("&")));
+                // var Url=window.location.search.substr(1).split("&");
+                // var yearUrl=Url[0].substr(Url[0].indexOf("=")+1);
+                if (yearUrl)
+                    $("#year_sel").find("option[value=" + yearUrl + "]").attr("selected", true);
+                var date;
+                var date;
+                var timeFull = '<%=timeFull%>'.split(",");
+                var timeArray = '<%=timeArray%>'.split(",");
+                for (i = 0; i < timeArray.length; i++) {
+                    if (timeFull[i] == 1)
+                        document.getElementById("date" + i).style.backgroundColor = "#CD5C5C";
+                }
+                function orderTime(orderdate) {
+                    date = orderdate;
+                    $.post('new_orderMessage/orderTime', {
+                        date: date,
+                    }, function (data) {
+                        for (var i = 0; i < 8; i++) {
+                            document.getElementsByName("num")[i].innerHTML = 0;
+                        }
+                        for (var i = 0; i < data.length; i++) {
+                            if (data[i]) {
+                                switch (data[i].expertime) {
+                                    case "08:00": data[i].expertime = 0; break;
+                                    case "09:00": data[i].expertime = 1; break;
+                                    case "10:00": data[i].expertime = 2; break;
+                                    case "13:00": data[i].expertime = 3; break;
+                                    case "14:00": data[i].expertime = 4; break;
+                                    case "15:00": data[i].expertime = 5; break;
+                                    case "16:00": data[i].expertime = 6; break;
+                                    case "17:00": data[i].expertime = 7; break;
+                                }
+                                document.getElementsByName("num")[data[i].expertime].innerHTML = data[i].num;
+                            }
+                        }
+                        // var num_sum=0;
+                        // for (var i = 0; i < 8; i++) {
+                        //     num_sum=num_sum+Number(document.getElementsByName("num")[i].innerHTML);
+                        // }
+                        // var deviceNumber=Number('<%=deviceNum%>')*8;
+                        // if(num_sum>=deviceNumber)
+                        // $(this).attr("background-color","aquamarine");
+                        // ;
+                    });
+                }
+                function seeDetails(id) {
+                    // var str = window.location.search;
+                    // if (!str) alert("请选择实验");
+                    // else if (!date) alert("请选择实验日期");
+                    // else {
+                    var time = id;
+                    document.getElementById("orderdetails").style.display = "inline";
+                    $.post('new_orderMessage/getDetails', {
+                        date: date,
+                        time: time
+                    }, function (data) {
+                        var table_details = document.getElementById("tabledetails");
+                        $("#tabledetails tr:not(:first)").empty("");
+                        for (var i = 0; i < data.length; i++) {
+                            var tabrow = getdataRow(i + 1, data[i]);
+                            table_details.appendChild(tabrow);
+                        }
+                        $('tr').addClass("table-bordered");
+                        $('td').addClass("reportList");
+                    });
+                }
+                // }
+                function getdataRow(i, data) {
+                    var tr = document.createElement("tr");
+                    var td1 = document.createElement("td");
+                    td1.innerHTML = i;
+                    tr.appendChild(td1);
+                    var td2 = document.createElement("td");
+                    td2.innerHTML = data.userName;
+                    tr.appendChild(td2);
+                    var td3 = document.createElement("td");
+                    td3.innerHTML = data.name;
+                    tr.appendChild(td3);
+                    var td4 = document.createElement("td");
+                    // switch (data.organization) {
+                    //     case "1": data.organization = "控制1班"; break;
+                    //     case "2": data.organization = "控制2班"; break;
+                    //     case "3": data.organization = "控制3班"; break;
+                    // }
+                    td4.innerHTML = data.school;
+                    tr.appendChild(td4);
+                    var td5 = document.createElement("td");
+                    td5.innerHTML = data.ordertime.substring(0, 16);
+                    tr.appendChild(td5);
+                    var td6 = document.createElement("td");
+                    switch (data.doif) {
+                        case 0: data.doif = "失约"; break;
+                        case 1: data.doif = "按时完成实验"; break;
+                        case 2: data.doif = "迟到"; break;
+                        default: data.doif = "等待实验";
+                    }
+                    td6.innerHTML = data.doif;
+                    tr.appendChild(td6);
+
+                    // var delCell = document.createElement("td");
+                    // tr.appendChild(delCell);
+                    // var btnDel = document.createElement('input'); //创建一个input控件 
+                    // btnDel.setAttribute('type', 'button'); //type="button" 
+                    // btnDel.setAttribute('value', '短信通知');
+                    // btnDel.setAttribute('class', 'btn-default');
+                    // delCell.appendChild(btnDel);
+                    // var ordertimeid = data.id;
+                    // btnDel.setAttribute('onclick', 'del(' + ordertimeid + ')');
+                    return tr; //返回tr数据   
+                }
+                var month = -1;
+                $("#month").click(function (e) {
+                    var year = $("#year_sel").val();
+                    month = e.target.id;
+                    var str = "new_orderMessage?year=" + year + "&month=" + month;
+                    location.href = str;
+                })
+                $("#year_sel").change(function (e) {
+                    var year = $("#year_sel").val();
+                    var str = "new_orderMessage?year=" + year + "&month=" + month;
+                    location.href = str;
+
+                })
+            </script>
+    </body>
+
+</html>

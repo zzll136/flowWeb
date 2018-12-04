@@ -1,0 +1,510 @@
+#!/usr/bin/env node
+
+var app   = require('../app.js');
+var http  = require('http');
+var Exp   = require('../models/experiment.js');
+var Apply = require('../models/apply.js');
+/**
+ * Get port from environment and store in Express.
+ */
+var port = normalizePort(process.env.PORT || '3000');
+app.set('port', port);
+/**
+ * Create HTTP server.
+ */
+var server = http.createServer(app);
+//Socket.io 服务器建立
+var socketio = require('socket.io').listen(server);
+//var jsmpeg = new require('../jsmpeg.js')(socketio);
+
+// var startTime;
+// var json={};
+var clientalive;
+var webclientid;
+var getdataTimes=0;
+//var timeFlag = [0,0,0,0,0,0];
+//var connect_flag=[0,0,0,0,0,0];
+function updateNetSocket(tableid)
+{
+    var i =0;
+    for(;i<clientIDList.length;i++)
+    {
+        if(clientIDList[i] == tableid)
+            break;
+    }
+    netSocket =clientList[i];
+    clientalive=platformAlive[tableid];
+}
+
+socketio.sockets.on('connection', function (socket) {
+   
+    console.log('Client browser Socket.IO connected!');
+    socket.on('controlPump', function (tableid,frequency) {
+        updateNetSocket(tableid);
+        if (clientalive) {
+            //netSocket.write('{pump:' + frequency + "00"+ tableid + "}");
+            netSocket.write('{pump:' + frequency +"}");
+            console.log('Pump frequency sent...');
+        }
+    });
+    socket.on('startExperiment', function (tableid,frequency) {
+        updateNetSocket(tableid);
+        if (clientalive) {
+            // json["startExperiment"]=frequency;
+            // var str=JSON.stringify(json);
+            // netSocket.write(str);
+            //netSocket.write('startExperiment:' + frequency);
+            netSocket.write('{startExp:' + frequency + "}");
+            console.log('Starting experiment...');
+        }
+    });
+    socket.on('stopExperiment', function (tableid) {    
+        updateNetSocket(tableid);
+        if (clientalive) {
+            netSocket.write('{stopExp:0}');
+            console.log('Experiment stopped...');
+        }
+    });
+    socket.on('resetExperiment', function (tableid) {
+        updateNetSocket(tableid);
+        if (clientalive) {
+            netSocket.write('{reset:0}');
+            console.log('Experiment reset...');
+        }
+    });
+    // socket.on('disconnect', function () {
+    //     if(socket.request.headers.cookies){
+    //         var a=socket.request.cookies;
+    //     }
+    //     updateNetSocket(tableid);
+    //     console.log('Client browser Socket.IO disconnected!');
+    //     if (clientalive) {
+    //         netSocket.write('{stopExp:0}');
+    //     }
+    // });
+    // socket.on('connect_error', function () {
+    //     console.log('Client browser Socket.IO connect_error!');
+    //     if (clientalive) {
+    //         netSocket.write('{stopExp:0}');
+    //     }
+    // });
+    // socket.on('connect_timeout', function () {
+    //     console.log('Client browser Socket.IO connect_timeout');
+    //     if (clientalive) {
+    //         netSocket.write('{stopExp:0}');
+    //     }
+    // });
+    socket.on('controlValves', function (id, tableid, state) {
+        if (state) state = 1;
+        else state = 0;
+        updateNetSocket(tableid);
+        if (clientalive) {
+            switch (id.toUpperCase()) {
+                case 'IN':
+                   //netSocket.write('{valveIn:' + state + "00"+ tableid +"}");
+                    netSocket.write('{valveIn:' + state +"}");
+                    break;
+                case 'OUT':
+                    netSocket.write('{valveOut:' + state + "}");
+                    break;
+                case 'SIDE':
+                    netSocket.write('{valveSide:' + state + "}");
+                    break;
+            }
+        }
+    });
+    socket.on('getdata', function (tableid) {
+        console.log("getdataTimes"+  tableid + getdataTimes++);
+        websocket_flag[tableid]=0;
+        set_flag[tableid] = 0;
+        //console.log(datapack[tableid-1]);
+        if (datapack[tableid]!=null){
+        socket.emit("Data Pack", datapack[tableid].temperatureAir, datapack[tableid].ultrasonic, datapack[tableid].distance, datapack[tableid].flowRate,
+            datapack[tableid].totalFlow, datapack[tableid].weight, datapack[tableid].flowRateHM, datapack[tableid].totalFlowHM, datapack[tableid].temperatureWater,
+            datapack[tableid].valveIn, datapack[tableid].valveOut, datapack[tableid].valveSide, datapack[tableid].inverter);}
+    });
+   // console.log("重置参数成功！"+ connect_flag + set_flag);
+});
+var websocket_flag=[];
+var set_flag=[];
+setInterval(function () {
+    for (var i = 0; i < 6; i++) {
+        if (websocket_flag[i] < 10)
+            {websocket_flag[i]++;
+            console.log("flag"+i+"的值"+websocket_flag[i]+set_flag[i]);}
+        if (websocket_flag[i] > 4 && set_flag[i] == 0) {
+            Apply.setTableFree(i,function(err,result){
+            if (err) console.log('setTableFree err:' + err);
+            });
+            updateNetSocket(i);
+            if (clientalive) {
+                netSocket.write('{stopExp:0}');
+                console.log('网站客户端异常断网Experiment stopped...');
+            }
+            set_flag[i] = 1;
+        }
+}
+}, 3000);
+// var connect_flag=[0,0,0,0,0,0];
+// var set_flag=[0,0,0,0,0,0];
+// var time;
+// var time_span;
+// setInterval(function() {
+//     var setflag=0;
+//     time=Date.now();
+//     time_span=time-connect_flag[webclientid-1];
+//     if(connect_flag[webclientid-1]!=0 && time_span>2000 && setflag==0){
+//         console.log('webclient is out of experiment');
+//         updateNetSocket(webclientid);
+//         if (clientalive) {
+//             netSocket.write('{stopExp:0}');
+//             console.log('Experiment stopped...');
+//         }
+//         setflag=1;
+//     }
+// }, 3000);
+    // setInterval(function() {
+    //     //timeFlag.map(v=>v++);
+    //     if(webclientid!=7 && timeFlag[webclientid]<40)
+    //     timeFlag[webclientid]++;
+    //     if(webclientid && timeFlag[webclientid]==10){10
+    //         updateNetSocket(webclientid);
+    //         if (clientalive) {
+    //             netSocket.write('{stopExp:0}');
+    //             console.log('Experiment stopped...');
+    //         }
+    //     }
+    // }, 1000);
+    // socket.on('connect_test', function (tableid) {
+    //     timeFlag[tableid] = 0;
+    //     webclientid = tableid;
+    // });
+ 
+// });
+
+// socketio.sockets.on('disconnect', function() {
+//     console.log('Client browser Socket.IO disconnected!');
+//     netSocket.write('{stopExp:0}');  
+// });
+
+/**
+ * Listen on provided port, on all network interfaces.
+ */
+server.listen(port);
+server.on('error', onError);
+server.on('listening', onListening);
+// server.on('connection',onConnection);
+
+// function onConnection(client)
+// {
+//     console.log("client connect ! client IP:"+client.remoteAddress+"  port: "+client.remotePort);    
+//     clientList.push(client);
+// }
+/**
+ * Normalize a port into a number, string, or false.
+ */
+function normalizePort(val) {
+    var port = parseInt(val, 10);
+    if (isNaN(port)) {
+        // named pipe
+        return val;
+    }
+    if (port >= 0) {
+        // port number
+        return port;
+    }
+    return false;
+}
+
+/**
+ * Event listener for HTTP server "error" event.
+ */
+function onError(error) {
+    if (error.syscall !== 'listen') {
+        throw error;
+    }
+
+    var bind = typeof port === 'string' ?
+        'Pipe ' + port :
+        'Port ' + port;
+
+    // handle specific listen errors with friendly messages
+    switch (error.code) {
+        case 'EACCES':
+            console.error(bind + ' requires elevated privileges');
+            process.exit(1);
+            break;
+        case 'EADDRINUSE':
+            console.error(bind + ' is already in use');
+            process.exit(1);
+            break;
+        default:
+            throw error;
+    }
+}
+
+/**
+ * Event listener for HTTP server "listening" event.
+ */
+
+function onListening() {
+    var addr = server.address();
+    var bind = typeof addr === 'string' ?
+        'pipe ' + addr :
+        'port ' + addr.port;
+    // debug('Listening on ' + bind);
+}
+ 
+var net = require('net');
+var listenPort;
+listenPort = 6000;
+var clientList=[];
+var clientIDList=[];
+var platformAlive=[false,false,false,false,false,false];
+// for(var i=0;i<6;i++)
+// {
+//     platformAlive[i]=false;
+// }
+//var netSocketMap = new Map();
+var netSocket;//跟硬件连接的socket服务器
+var datapack={};
+// var socket_connect=0;
+var hardsocket_test=[0,0,0,0,0,0];
+var hardsocket_disflag=[0,0,0,0,0,0];
+//函数中的i均为实验桌的id号，不是顺序号
+setInterval(function () {
+    for (var i = 0; i < 6; i++) {
+        if(hardsocket_test[i]<10)
+        hardsocket_test[i]++;
+        if (hardsocket_test[i] > 3 && hardsocket_disflag[i] == 0) {
+            var id = clientIDList.indexOf(i);
+            // var socket_id=clientIDList[id];
+            if (id != -1) {
+                clientList.splice(id, 1);
+                clientIDList.splice(id, 1);
+            }
+            platformAlive[i] = false;
+            Apply.disconnectTable(i, function (err, result) {
+                if (err) console.log('insertTable err:' + err);
+            });
+            hardsocket_disflag[i] = 1;
+        }
+    }
+}, 3000);
+
+// datapack["6"]={"temperatureAir":0,"ultrasonic":0,"distance":0,"flowRate":0,"totalFlow":0,"weight":0,"flowRateHM":0,
+// "totalFlowHM":0,"temperatureWater":0,"valveIn":0,"valveOut":0,"valveSide":0,"inverter":0}
+var socketserver = net.createServer(function (socket) {
+    netSocket = socket;
+    // var state_copy=1;
+    // socket.write('{valveSide:' + state_copy + "}");
+    // socket.write('{valveIn:' + state_copy +"}");
+   console.log('connect: ' + socket.remoteAddress + ':' + socket.remotePort);
+    socket.setEncoding('binary');
+    //socket.write('Hello client!\r\n');
+    console.log('Connected to Platform...');
+    // platformAlive = true;
+    var n = 0;         
+    var hardsocket_conflag = [0, 0, 0, 0, 0, 0];                                                                      
+   
+    // var socket_id=clientList.indexOf(socket);
+    // socket_connect[socket_id]=1;
+    socket.on('data', function (data) {
+        // console.log('Data received from Platform');
+        // console.log('Series:' + n++);
+        console.log('received:\n' + data);
+        //console.log("platformAlive的值"+platformAlive);
+        //data = data + '';
+        //var words = data.split(",");
+        //console.log("socket的值"+socket);
+        var type, device_id;
+        var temperatureAir, ultrasonic, distance, flowRate, totalFlow, weight;
+        var temperatureWater, flowRateHM, totalFlowHM; //These are measurements of HeatMeter
+        var valveIn, valveOut, valveSide;
+        var inverter;
+        var code;
+        var hasif;
+        var dis=[365,375,380,380,375];
+        //先判断是否是错误提示数据包,若是,则直接触发错误提醒
+        // words.forEach(function (e, i, a) {
+        //     var item = e.split(":");
+        //     if (item[0] == "Error") {
+        //         socketio.emit("Error", item[1]);    
+        //         return;
+        //     }
+        // });
+        try { var s = JSON.parse(data); }
+        catch (e) {
+            console.log("receive data is not json");
+            return;
+        }
+        type = s["type"];
+        if (type == "data") {
+            temperatureAir = s["T1"];
+            ultrasonic = s["U1"];
+            flowRate = s["F1"];
+            totalFlow = s["F2"];
+            weight = s["W1"];
+            flowRateHM = s["F3"];
+            totalFlowHM = s["F4"];
+            temperatureWater = s["T2"];
+            valveIn = s["V1"];
+            valveOut = s["V2"];
+            valveSide = s["V3"];
+            inverter = s["I1"];
+            device_id = s["ID"];
+            distance = dis[device_id]-s["D1"];//桶中没水时的高度，这个值每个装备都不一样，要调试确定
+            if(distance<0) distance=0;
+    //    if(device_id==0) 
+    //    {console.log('Series:' + n++);
+    //    console.log('received:\n' + data);}
+            hardsocket_test[device_id]=0;
+            hardsocket_disflag[device_id]=0;
+
+            for (var a = 0; a < clientIDList.length; a++) {
+                if (clientIDList[a] == device_id){
+                    hasif = 1;
+                    break;}
+                hasif=0;
+            }
+
+            if (clientIDList.length == 0 || hasif == 0) {
+                clientIDList.push(device_id);
+                clientList.push(socket);
+                platformAlive[device_id] = true;
+            }
+            //console.log("hardsocket_conflag的值"+hardsocket_conflag);
+            if (hardsocket_conflag[device_id] == 0) {
+                Apply.insertTable(device_id ,function(err, result) {
+                    if (err) console.log('insertTable err:' + err);
+                    hardsocket_conflag[device_id] = 1;
+                    //console.log(result);
+                });
+            }
+            //netSocketMap.set(device_id,);
+            //netSocketMap.set(device_id,data);
+           //console.log(clientIDList);
+            datapack[device_id]={"temperatureAir":temperatureAir,"ultrasonic":ultrasonic,"distance":distance,"flowRate":flowRate,"totalFlow":totalFlow,"weight":weight,"flowRateHM":flowRateHM,
+            "totalFlowHM":totalFlowHM,"temperatureWater":temperatureWater,"valveIn":valveIn,"valveOut":valveOut,"valveSide":valveSide,"inverter":inverter}
+           //socketio.emit("device data", device_id);
+            //socketio.emit("Data Pack", temperatureAir, ultrasonic, distance, flowRate, totalFlow, weight, flowRateHM, totalFlowHM, temperatureWater, valveIn, valveOut, valveSide, inverter, device_id);
+           //socketio.emit("Data Pack", temperatureAir, ultrasonic, distance, flowRate, totalFlow, weight,  flowRateHM, totalFlowHM, temperatureWater, valveIn, valveOut, valveSide, inverter, device_id);
+        }
+        // else if (type == "code") {
+        //     code = s["code"];
+        //     device_id = s["ID"];
+        //     socketio.emit("Message Pack", code, device_id);
+        // }
+
+        // startTime = Date.now();
+        //不是错误包,按照正常数据处理
+        // words.forEach(function (e, i, a) {
+        //     var item = e.split(":");
+        // switch (item[0]) {
+        //     case "Temperature":
+        //         temperatureAir = item[1];
+        //         break;
+        //     case "Ultrasonic":
+        //         ultrasonic = item[1];
+        //         break;
+        //     case "Distance":
+        //         distance = item[1];
+        //         break;
+        //     case "FlowRate":
+        //         flowRate = item[1];
+        //         break;
+        //     case "TotalFlow":
+        //         totalFlow = item[1];
+        //         break;
+        //     case "Weight":
+        //         weight = item[1];
+        //         break;
+        //     case "FlowRateHM":
+        //         flowRateHM = item[1];
+        //         break;
+        //     case "TotalFlowHM":
+        //         totalFlowHM = item[1];
+        //         break;
+        //     case "TemperatureHM":
+        //         temperatureWater = item[1];
+        //         break;
+
+        //     case "ValveIn":
+        //         valveIn = item[1];
+        //         break;
+        //     case "ValveOut":
+        //         valveOut = item[1];
+        //         break;
+        //     case "ValveSide":
+        //         valveSide = item[1];
+        //         break;
+
+        //     case "Inverter":
+        //         inverter = item[1];
+        //         break;
+        // }
+        // });
+        // socketio.emit("Data Pack", temperatureAir, ultrasonic, distance, flowRate, totalFlow, weight,  flowRateHM, totalFlowHM, temperatureWater, valveIn, valveOut, valveSide, inverter, device_id);
+
+    });
+    //数据错误事件
+    socket.on('error', function (e) {
+        console.log('Error with connection to Platform!');
+        console.log(e);
+        // var id=clientList.indexOf(socket);
+        // var socket_id=clientIDList[id];
+        // platformAlive[socket_id-1] = false;
+        // Exp.disconnectTable(socket_id ,function(err, result) {
+        //     if (err) console.log('insertTable err:' + err);
+        // });
+    });
+    //客户端关闭事件
+    // socket.on('end', function (data) {
+    //     console.log(data);
+    //     console.log('Platform disconnected...');
+    //     console.log('Retry connecting...');
+    //     var id=clientList.indexOf(socket);
+    //     var socket_id=clientIDList[id];
+    //     clientList.splice(id,1);
+    //     clientIDList.splice(id,1);
+    //     platformAlive[socket_id-1] = false;
+    //     Exp.disconnectTable(socket_id ,function(err, result) {
+    //         if (err) console.log('insertTable err:' + err);
+    //     });
+    //    // platformAlive = false;
+    // });
+    socket.on('close', function (data) {
+        console.log(data);
+        console.log('Platform disconnected...');
+        console.log('Retry connecting...');
+        // var id=clientList.indexOf(socket);
+        // var socket_id=clientIDList[id];
+        // clientList.splice(id,1);
+        // clientIDList.splice(id,1);
+        // platformAlive[socket_id-1] = false;
+        // Exp.disconnectTable(socket_id ,function(err, result) {
+        //     if (err) console.log('insertTable err:' + err);
+        // });
+       // platformAlive = false;
+    });
+   //客户端不活动则触发关闭
+    // socket.setTimeout(9000);
+    // socket.on('timeout', () => {
+    //   console.log('socket timeout');
+    //   var socket_id=clientList.indexOf(socket);
+    //   clientList.splice(socket_id,1);
+    //   clientIDList.splice(socket_id,1);
+    //   platformAlive[socket_id] = false;
+    //   socket.end();
+    // });
+
+}).listen(listenPort);
+
+//服务器监听事件
+socketserver.on('listening', function () {
+    console.log("socketserver listening:" + server.address().port);
+});
+//服务器错误事件
+socketserver.on("error", function (exception) {
+    console.log("socketserver error:" + exception);
+});

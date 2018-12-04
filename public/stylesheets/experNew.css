@@ -1,0 +1,577 @@
+.exptitle {
+    font-size: 45px;
+    font-weight: bold;
+    color: #CCCCCC;
+    position: absolute;
+    left: 100px;
+    top: 90px;
+}
+.btn11{
+    padding:5px 10px;
+    font: size 13px;
+    line-height:2.2;
+    border-radius:3px}
+
+/*实时视频框*/
+
+#video-canvas {
+    cursor: Pointer;
+    -webkit-transition: all 0.5s ease-in-out;
+    -moz-transition: all 0.5s ease-in-out;
+    -ms-transition: all 0.5s ease-in-out;
+    -o-transition: all 0.5s ease-in-out;
+    transition: all 0.5s ease-in-out;
+}
+
+#liveVideo {
+    -webkit-transition: all 0.5s ease-in-out;
+    -moz-transition: all 0.5s ease-in-out;
+    -ms-transition: all 0.5s ease-in-out;
+    -o-transition: all 0.5s ease-in-out;
+    transition: all 0.5s ease-in-out;
+}
+
+
+/*警告弹框*/
+
+.warning {
+    position: absolute;
+    margin-left: 290px;
+    top: 200px;
+    height: 320px;
+    /*初始状态都是隐藏*/
+    visibility: hidden;
+    opacity: 0;
+}
+
+.p_warning {
+    position: relative;
+    font-size: 30px;
+    line-height: 40px;
+    font-weight: bolder;
+    margin: 0 auto
+}
+
+.tableFirstLine {
+    font-weight: bolder;
+}
+
+
+/*仪器介绍弹框*/
+
+.instrumentIntro {
+    position: absolute;
+    left: 25%;
+    right: 25%;
+    top: 100px;
+    height: 500px;
+    align: center;
+    overflow-x: hidden;
+    overflow-y: scroll;
+    background-color: rgba(255, 255, 255, 0.9);
+    /*初始状态都是隐藏*/
+    visibility: hidden;
+    opacity: 0;
+    /*淡入淡出效果*/
+    /*
+    -webkit-transition: opacity 0.2s ease-in-out;
+    -moz-transition: opacity 0.2s ease-in-out;
+    -ms-transition: opacity 0.2s ease-in-out;
+    -o-transition: opacity 0.2s ease-in-out;
+    transition: opacity 0.2s ease-in-out;
+    */
+    /*首行缩进*/
+    text-indent: 2em;
+}
+
+hr {
+    height: 1px;
+    border: 0;
+    border-top: 1px solid #333333;
+    margin: 1em 0;
+    padding: 0;
+}
+
+.instrumentIntroParagraph {
+    padding-left: 2%;
+    padding-right: 2%;
+}
+
+
+/***********************变频器拖动条***************************/
+
+.Slider input[type=range] {
+    -webkit-appearance: none;
+    position: absolute;
+    margin-top: 10px;
+    width: 150px;
+    height: 4px;
+    background: transparent;
+}
+
+
+/*条子*/
+
+.Slider input[type=range]:focus {
+    outline: none;
+}
+
+.Slider input[type=range]::-webkit-slider-runnable-track {
+    height: 5px;
+    cursor: pointer;
+    background: transparent;
+    border-radius: 0px;
+    border: 0px solid #000101;
+}
+
+
+/*滑块*/
+
+.Slider input[type=range]::-webkit-slider-thumb {
+    box-shadow: 0px 0px 0px #000000, 0px 0px 0px #0d0d0d;
+    border: 0px;
+    height: 0px;
+    width: 0px;
+    border-radius: 2px;
+    background: #cccccc;
+    cursor: pointer;
+    -webkit-appearance: none;
+    -webkit-transition: all 0.1s ease;
+    margin-top: 2px;
+}
+
+.Slider:hover #frequencySlider::-webkit-slider-thumb {
+    height: 10px;
+    width: 22px;
+    margin-top: -2px;
+    margin-left: 0px;
+}
+
+.Slider:active #frequencySlider::-webkit-slider-thumb {
+    height: 10px;
+    width: 22px;
+    margin-top: -2px;
+    margin-left: 0px;
+}
+
+.Slider .sRange {
+    background: rgba(200, 200, 200, 0.3);
+    width: 150px;
+    height: 2px;
+    position: absolute;
+    margin-top: 11px;
+}
+
+.Slider .sValidRange {
+    background: #EEEEEE;
+    width: 90px;
+    height: 2px;
+    position: absolute;
+    margin-top: 11px;
+}
+
+
+/****************************origin switch***********************************/
+
+.switch {
+    display: inline-block;
+    width: 60px;
+    height: 18px;
+    vertical-align: top;
+}
+
+.s1 {
+    position: absolute;
+    left: 1120px;
+    top: 283px;
+}
+
+.s2 {
+    position: absolute;
+    left: 1120px;
+    top: 305px;
+}
+
+.s3 {
+    position: absolute;
+    left: 1250px;
+    top: 283px;
+}
+
+.s4 {
+    position: absolute;
+    left: 1250px;
+    top: 305px;
+}
+
+.switch label {
+    font-size: 10px;
+    line-height: 16px;
+    color: #888888;
+    position: relative;
+    display: block;
+    padding: 1px;
+    border-radius: 8px;
+    height: 18px;
+    background-color: rgba(255, 255, 255, 0.3);
+    cursor: pointer;
+    -webkit-user-select: none;
+    -webkit-transition: all 0.2s ease;
+}
+
+.switch label::after {
+    content: '关闭';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    margin-top: -9px;
+    margin-left: -10px;
+    display: block;
+    border-radius: 8px;
+    width: 35px;
+    height: 18px;
+    background-color: rgba(255, 255, 255, 0.8);
+    box-shadow: 1px 1px 1px 1px rgba(0, 0, 0, 0.08);
+    -webkit-transform: translateX(-20px);
+    -webkit-transition: all 0.2s ease;
+}
+
+.switch input[type=checkbox] {
+    display: none;
+}
+
+.switch input[type=checkbox]:checked~label {
+    background-color: rgba(90, 200, 90, 0.8);
+}
+
+.switch input[type=checkbox]:checked~label::before {
+    -webkit-transform: scale(0, 0);
+}
+
+.switch input[type=checkbox]:checked~label::after {
+    content: '打开';
+    background-color: rgba(255, 255, 255, 1.0);
+    -webkit-transform: translateX(5px);
+}
+
+
+/*********************common*******************************/
+
+body {
+    margin: 0 auto;
+    width: 1580px;
+    text-align: left;
+}
+
+#experiment {
+    text-align: center;
+    background: url(/images/common/exp.png) no-repeat;
+    z-index: 99;
+    transform: translate(0, 0);
+    height: 609px;
+    width: 1580px;
+    position: relative;
+    margin: 0 auto;
+}
+
+.expTitle {
+    font-size: 45px;
+    font-weight: bold;
+    color: #eeeeee;
+    position: absolute;
+    left: 200px;
+    top: 40px;
+}
+
+#labelFlowRateVortex {
+    position: absolute;
+    left: 200px;
+    top: 167px;
+    color: #8dee9a;
+}
+
+#choosetable {
+    position: absolute;
+    left: 60px;
+    top: 167px;
+    color: #cccccc;
+}
+#text {
+    position: absolute;
+    left: 50px;
+    top: 130px;
+    color: #cccccc;
+}
+
+
+#labelTotalFlowVortex {
+    position: absolute;
+    left: 200px;
+    top: 182px;
+    color: #cccccc;
+}
+
+#labelFlowRateHM {
+    position: absolute;
+    left: 200px;
+    top: 237px;
+    color: #8dee9a;
+}
+
+#labelTotalFlowHM {
+    position: absolute;
+    left: 200px;
+    top: 252px;
+    color: #cccccc;
+}
+
+#labelTempHM {
+    position: absolute;
+    left: 200px;
+    top: 267px;
+    color: #cccccc;
+}
+
+#labelWaterLevel {
+    position: absolute;
+    left: 810px;
+    top: 87px;
+    color: #8dee9a;
+}
+
+#labelTempAir {
+    position: absolute;
+    left: 810px;
+    top: 102px;
+    color: #cccccc;
+}
+
+#labelWeight {
+    position: absolute;
+    left: 810px;
+    top: 287px;
+    color: #cccccc;
+}
+
+#labelFrequency {
+    position: absolute;
+    left: 300px;
+    top: 439px;
+    color: #8dee9a;
+}
+
+#labelFlowRateVortexSide {
+    position: absolute;
+    left: 1210px;
+    top: 475px;
+    color: #cccccc;
+}
+
+#labelFlowRateHMSide {
+    position: absolute;
+    left: 1210px;
+    top: 498px;
+    color: #cccccc;
+}
+
+#labelWaterLevelSide {
+    position: absolute;
+    left: 1210px;
+    top: 521px;
+    color: #cccccc;
+}
+
+#labelWeightSide {
+    position: absolute;
+    left: 1210px;
+    top: 544px;
+    color: #cccccc;
+}
+
+.Slider {
+    position: absolute;
+    left: 1150px;
+    top: 330px;
+}
+
+#labelFrequencySide {
+    position: absolute;
+    left: 1302px;
+    top: 333px;
+    white-space: nowrap;
+    color: #8dee9a;
+}
+
+#buttonStartExperiment {
+    position: absolute;
+    left: 1080px;
+    top: 355px;
+    color: #222222;
+}
+#buttonResetExperiment {
+    position: absolute;
+    left: 1210px;
+    top: 355px;
+    color: #222222;
+}
+#buttonEndExperiment {
+    position: absolute;
+    left: 1260px;
+    top: 355px;
+    color: #222222;
+}
+
+#buttonResetExperiment+div {
+    position: absolute;
+    left: 1360px;
+    top: 190px;
+    color: #eeeeee;
+    font-size: 25px;
+}
+
+#expLog {
+    text-align: left;
+    position: absolute;
+    left: 1360px;
+    top: 225px;
+    width: 200px;
+    height: 370px;
+    background-color: rgba(200, 200, 200, 0.5);
+    overflow-y: scroll;
+}
+
+#liveVideo {
+    text-align: center;
+    position: absolute;
+    left: 1053px;
+    top: 43px;
+}
+
+#video-canvas {
+    width: 293px;
+    height: 181px;
+}
+
+
+/*********************CodeChartsAndTable 代码编辑区域*****************************************/
+
+#CodeChartsAndTable {
+    width: 1580px;
+    height: 350px;
+    opacity: 50;
+}
+
+#codeArea {
+    position: absolute;
+    margin-left: 0px;
+    margin-top: 20px;
+    width: 500px;
+    height: 300px;
+}
+
+#codeArea div:first-child {
+    font-size: 20px;
+    font-weight: bold;
+    position: absolute;
+    left: 10px;
+    top: -10px;
+    width: 400px;
+    height: 20px;
+}
+
+#virtualInstrumentCodeArea {
+    position: absolute;
+    left: 10px;
+    top: 20px;
+    width: 400px;
+    height: 280px;
+}
+
+#buttonRunScript {
+    position: absolute;
+    left: 420px;
+    top: 20px;
+    width: 120px;
+    color: #222222;
+}
+
+#buttonResetScript {
+    position: absolute;
+    left: 420px;
+    top: 70px;
+    width: 120px;
+    color: #222222;
+}
+
+.scriptResult {
+    font-size: 14px;
+    font-weight: bold;
+    position: absolute;
+    left: 420px;
+    width: 150px;
+    height: 20px;
+}
+
+#labelDelay1 {
+    left: 520px;
+    top: 150px;
+}
+
+#labelTimeD {
+    left: 520px;
+    top: 150px;
+}
+
+#labelfreq {
+    left: 520px;
+    top: 150px;
+}
+
+#labelTemperature1 {
+    left: 520px;
+    top: 180px;
+}
+
+#labelTotalFlow1 {
+    left: 520px;
+    top: 180px;
+}
+
+#labelTempHM1 {
+    left: 520px;
+    top: 180px;
+}
+#labelCalculatedLevel {
+    left: 520px;
+    top: 210px;
+}
+
+#labelcalculateFlowRateHM {
+    left: 520px;
+    top: 210px;
+}
+
+#labelcalculateFlowRate {
+    left: 520px;
+    top: 210px;
+}
+#labelLevel1 {
+    left: 520px;
+    top: 240px;
+}
+
+#labelFlowRateHM1 {
+    left: 520px;
+    top: 240px;
+}
+#labelFlowRate {
+    left: 520px;
+    top: 240px;
+}
+#divChartLevel {
+    position: absolute;
+    margin-left: 600px;
+    margin-top: 20px;
+    width: 500px;
+    height: 300px;
+}

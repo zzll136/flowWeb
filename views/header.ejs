@@ -1,0 +1,116 @@
+<head>
+        <!--头部的内容-->
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+
+        <title>
+                <%= title %>
+        </title>
+
+        <link href="./images/favicon.ico" rel="shortcut icon" />
+        <!--title的图标-->
+
+        <link href="/stylesheets/bootstrap.min.css" rel="stylesheet">
+        <link href="/stylesheets/common.css" rel="stylesheet" type="text/css">
+
+        <script src="/javascripts/jquery-1.12.3.min.js"></script>
+</head>
+
+<body>
+        <div id="top">
+                <% if (locals.userrole ==='s'){ %>
+                        <li id="menuLesson" class="menu">
+                                <!-- <div class="menu_h">实验准备</div>
+                                <div class="list"> -->
+                                        <!-- <a class="menuItem" href="/expOrder" class="menu_h">实验预约</a> -->
+                                        <a class="menu_h" href="/stuOrder" class="menu_h">实验预约</a>
+                                        <!-- <a class="menuItem" href="/chooseTime" class="menu_h">实验信息</a> -->
+                                <!-- </div> -->
+                        </li>
+                        <li id="menuExp" class="menu">
+                                <a href="/onlineExp" class="menu_h">在线实验</a>
+                        </li>
+                        <li id="menuReport" class="menu">
+                                <div class="menu_h">实验报告 </div>
+                                <div class="list">
+                                        <a class="menuItem" href="/subReport">提交报告</a>
+                                        <!-- <a class="menuItem" href="/uploadReport">上传报告</a> -->
+                                        <a class="menuItem" href="/lookupReport">查看成绩</a>
+                                </div>
+                        </li>
+                        <li id="menuReport" class="menu">
+                                <a href="/set" class="menu_h">个人信息</a>
+                        </li>
+                        <% } %>
+                <% if (locals.userrole ==='t'){ %>
+                        <li id="menuLesson" class="menu">
+                                <div class="menu_h">实验演示</div>
+                                <div class="list">
+                                                <a class="menuItem" href="/stuOrder">实验预约</a>
+                                                <a class="menuItem" href="/onlineExp">在线实验</a>
+                                </div>
+                        </li>
+                        <li id="menuReport" class="menu">
+                                <div class="menu_h">学生信息</div>
+                                <div class="list">
+                                        <a class="menuItem" href="/regMessage">注册信息</a>
+                                        <a class="menuItem" href="/expMessage">实验情况</a>
+                                </div>
+                        </li>
+                        <li id="menuReport" class="menu">
+                                <div class="menu_h">实验报告</div>
+                                <div class="list">
+                                        <a class="menuItem" href="/reportMark">批改报告</a>
+                                        <a class="menuItem" href="/scoreTable">学生成绩</a>
+                                </div>
+                        </li>
+                        <li id="menuReport" class="menu">
+                                <a href="/set" class="menu_h">个人信息</a>
+                        </li>
+                        <% } %>
+                <% if (locals.userrole ==='m'){ %>
+                        <li id="menuLesson" class="menu">
+                                <div class="menu_h">实验设置</div>
+                                <div class="list">
+                                        <a class="menuItem" href="/exptime">实验开放时间</a>
+                                        <!-- <a class="menuItem" href="/addcourse">旧版本实验时间</a> -->
+                                        <a class="menuItem" href="/deviceDetails">设备详情</a>
+                                </div>
+                        </li> 
+                        <li id="menuReport" class="menu">
+                                <a href="/onlineExp" class="menu_h">在线实验</a>
+                        </li>
+                        <li id="menuReport" class="menu">
+                                <div class="menu_h">用户信息</div>
+                                <div class="list">
+                                        <a class="menuItem" href="/listMessage">用户名单</a>
+                                        <!-- <a class="menuItem" href="/orderMessage">预约信息</a> -->
+                                        <a class="menuItem" href="/new_orderMessage">预约信息</a>
+                                </div>
+                        </li>
+                        <li id="menuReport" class="menu">
+                                <a href="/set" class="menu_h">个人信息</a>
+                        </li>                           
+                <% } %>
+                <div id="userName">
+                        <% if (locals.username) { %>
+                                <a href="/" style="color: #ddd; font-size: 1em;">
+                                        <%= username %>
+                                </a>
+                                &nbsp;
+                                <a href="#" onclick="fun1()" style="color: #ddd; font-size: 1em;">安全退出</a>
+                                <% } %>
+                </div>
+                <!--回到主页链接-->
+                <a id="back_to_index" href="/" target="_blank">
+                        <div></div>
+                </a>
+                </div>
+        <script type="text/javascript">
+                function fun1() {
+                        if (confirm("确认退出？")) { window.location.href = "/logout" }
+                }
+        </script>
+</body>

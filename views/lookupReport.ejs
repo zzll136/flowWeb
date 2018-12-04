@@ -1,0 +1,502 @@
+<!DOCTYPE HTML>
+<!--未加入Bootstrap的两行链接-->
+<html lang="en">
+<% include header%>
+    <head>
+        <title>
+            <%= title %>
+        </title>
+        <link href="./images/favicon.ico" rel="shortcut icon" />
+        <link href="stylesheets/uploadreport.css" rel="stylesheet" type="text/css">
+    </head>
+    <body>
+        <div id="report_header_img"></div>
+        <!--右边文字-->
+        <div class="main" style="margin-top:0">
+            <ul class="nav nav-pills nav-stacked left_report">
+                <li role="presentation" class="active">
+                    <a href="#" id="courseshow"></a>
+                </li>
+                <li role="presentation" class="dropdown">
+                    <a class="dropdown-toggle" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">
+                        验证试验
+                        <span class="caret"></span>
+                    </a>
+                    <ul class="dropdown-menu">
+                        <li role="presentation">
+                            <a href="lookupReport?courseid=0">涡街流量计验证实验</a>
+                        </li>
+                        <li role="presentation">
+                            <a href="lookupReport?courseid=1">超声波流量计验证实验</a>
+                        </li>
+                        <li role="presentation">
+                            <a href="lookupReport?courseid=2">超声波液位计验证实验</a>
+                        </li>
+                    </ul>
+                </li>
+
+                <li role="presentation" class="dropdown">
+                    <a class="dropdown-toggle" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">
+                        综合实验
+                        <span class="caret"></span>
+                    </a>
+                    <ul class="dropdown-menu">
+                        <li role="presentation">
+                            <a href="lookupReport?courseid=3">涡街流量计综合实验</a>
+                        </li>
+                        <li role="presentation">
+                            <a href="lookupReport?courseid=4">超声波流量计综合实验</a>
+                        </li>
+                        <li role="presentation">
+                            <a href="lookupReport?courseid=5">超声波液位计综合实验</a>
+                        </li>
+                    </ul>
+                </li>
+
+                <li role="presentation" class="dropdown">
+                    <a class="dropdown-toggle" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">
+                        设计实验
+                        <span class="caret"></span>
+                    </a>
+                    <ul class="dropdown-menu">
+                        <li role="presentation">
+                            <a href="lookupReport?courseid=6">涡街流量计设计实验</a>
+                        </li>
+                        <li role="presentation">
+                            <a href="lookupReport?courseid=7">超声波流量计设计实验</a>
+                        </li>
+                        <li role="presentation">
+                            <a href="lookupReport?courseid=8">超声波流液位计设计实验</a>
+                        </li>
+                    </ul>
+                </li>
+            </ul>
+
+            <div class="right_report">
+                <h2>实验评分</h2>
+
+                <div id="information" class="report">
+                    <div class="report_fdiv">
+                        <img src="images/svg/text.svg" alt="text图标">
+                        <span>学生资料</span>
+                        <img src="images/svg/required.svg" alt="必填图标">
+                    </div>
+                    <div class="pull-left">
+                        <p>实验名称：
+                            <span>
+                                <%=result[0].courseName%>
+                            </span>
+                        </p>
+                        <p>实验人：
+                            <span>
+                                <%=result[0].name%>
+                            </span>
+                        </p>
+                        <p>实验状态：
+                            <span>
+                                <% switch(result[0].status){
+                                case 0:%>未实验
+                                    <% break; %>
+                                        <% case 1:%>已实验（报告未提交）
+                                            <% break; %>
+                                                <% case 2:%>已完成
+                                                    <% break; %>
+                                                        <% } %>
+                            </span>
+                        </p>
+                    </div>
+                    <div class="pull-right">
+                        <p>实验时间：
+                            <span>
+                                <% if(result[0].StartTime) { %>
+                                    <%=result[0].StartTime%>
+                                        <% } 
+                        else { %> 未实验
+                                            <% } %>
+
+                            </span>
+                        </p>
+                        <p>学号：
+                            <span>
+                                <%=result[0].userName%>
+                            </span>
+                        </p>
+                        <p>实验数据：
+                            <span>
+                                <% if(result[0].repData) { %>已记录
+                                    <% } 
+                            else { %> 未提交
+                                        <% } %>
+                            </span>
+                        </p>
+                    </div>
+                    <div class="clearfix"></div>
+                </div>
+                <div id="remark" class="report">
+                    <div class="pull-left">
+                        <p>
+                            自动评分：&nbsp;
+                            <span class="autoscore">
+                                <%=result[0].autoscore%>
+                            </span> &nbsp;分 &nbsp;&nbsp;&nbsp;&nbsp; 教师评分：&nbsp;
+                            <input class="teacherscore" readonly="readonly" type="number" value="<%=result[0].teascore%>"></input> &nbsp;分
+                        </p>
+                        <span>教师评语: </span>
+                        <textarea disabled style="resize:none;overflow-y:scroll;"><%=result[0].comment%></textarea>
+                    </div>
+                    <div class="pull-right">
+                        <p>最终得分：</p>
+                        <p>
+                            <span class="lastscore">
+                                <%=result[0].score%>
+                            </span> 分</p>
+                    </div>
+
+                    <div class="clearfix"></div>
+                </div>
+
+
+                <!-- <div id="theory" class="report">
+                <div class="report_fdiv">
+                    <img src="images/svg/text.svg" alt="text图标">
+                    <span>实验原理</span>
+                    <img src="images/svg/required.svg" alt="必填图标">
+                </div>
+                <div class="repost_content" style="height:100px; overflow-x: auto; overflow-y: auto;">
+                    <%=result[0].repTheory%>
+                </div>
+            </div> -->
+                <!-- 
+            <div id="data" class="report">
+                <div class="report_fdiv">
+                    <img src="images/svg/text.svg" alt="text图标">
+                    <input type="button" name="btn" value="实验数据" onclick="showTableContent()">
+                    <div class="repost_content" style="height:400px; overflow-x: auto; overflow-y: auto;">
+                        <table id="tableData" align="left" border="1" style="margin-left:0px; width: 95%;">
+                        </table>
+                    </div>
+                </div>
+            </div> -->
+
+                <!-- <div id="conclusion" class="report">
+                <div class="report_fdiv">
+                    <img src="images/svg/text.svg" alt="text图标">
+                    <span>实验结论</span>
+                    <img src="images/svg/required.svg" alt="必填图标">
+                </div>
+                <div class="repost_content" style="height:100px; overflow-x: auto; overflow-y: auto;">
+                    <%=result[0].repConclusion%>
+                </div>
+            </div> -->
+
+                <!-- <div id="mind" class="report">
+                <div class="report_fdiv">
+                    <img src="images/svg/text.svg" alt="text图标">
+                    <span>实验心得</span>
+                    <img src="images/svg/choose.svg" alt="必填图标">
+                </div>
+                <div class="repost_content" style="height:100px; overflow-x: auto; overflow-y: auto;">
+                    <%=result[0].repMind%>
+                </div>
+            </div> -->
+                <br>
+            </div>
+            <div class="right_report">
+                <div>
+                    <a href="javascript:void(0)" class="orderRecord">自动评分详情</a>
+                </div>
+                <br>
+                <div id="orderRecord">
+                    <table id="table" class="table table-hover table-bordered">
+                        <tr>
+                            <th style="width:50px;">1</th>
+                            <th style="width:100px;">预约情况</th>
+                            <th style="width:120px;">满分（10分）</th>
+                            <th style="min-width:150px;">
+                                <a href="javascript:void(0)" class="details" onclick="misstimes()">失约次数（
+                                    <%=score[0].misstimes%>)</a>
+                            </th>
+                            <th style="width:200px;">得分:
+                                <%=score[0].orderscore%>
+                            </th>
+                        </tr>
+                        <tr>
+                            <th style="width:50px;">2</th>
+                            <th style="width:100px;">实验次数</th>
+                            <th style="width:120px;">满分（10分）</th>
+                            <th style="width:75px;">
+                                <a href="javascript:void(0)" class="details" onclick="exptimes()">实验次数（
+                                    <%=(score[0].normaltimes+score[0].latetimes)%>）</a>
+                            </th>
+                            <th style="width:100px;">得分:
+                                <%=score[0].timescore%>
+                            </th>
+                        </tr>
+                        <tr>
+                            <th style="width:50px;">3</th>
+                            <th style="width:170px;">实验时长</th>
+                            <th style="width:120px;">满分（10分）</th>
+                            <th style="width:75px;">
+                                <a href="javascript:void(0)" class="details" onclick="exptimespan()">时长（
+                                    <%=score[0].timespan%>min）</a>
+                            </th>
+                            <th style="width:100px;">得分:
+                                <%=score[0].timespanscore%>
+                            </th>
+                        </tr>
+                        <tr>
+                            <th style="width:50px;">4</th>
+                            <th style="width:170px;">实验操作</th>
+                            <th style="width:120px;">满分（30分）</th>
+                            <th style="width:75px;">
+                                <a href="javascript:void(0)" class="details" onclick="edit()">操作记录</a>
+                            </th>
+                            <th style="width:100px;">得分:
+                                <%=score[0].operationScore%>
+                            </th>
+                        </tr>
+                        <tr>
+                            <th style="width:50px;">5</th>
+                            <th style="width:170px;">实验数据</th>
+                            <th style="width:120px;">满分（40分）</th>
+                            <th style="width:75px;">
+                                <a href="javascript:void(0)" class="details" onclick="data()">数据记录</a>
+                            </th>
+                            <th style="width:100px;">得分:
+                                <%=score[0].dataScore%>
+                            </th>
+                        </tr>
+                        <tr>
+                            <th style="width:50px;">总分</th>
+                            <th style="width:170px;">/</th>
+                            <th style="width:120px;">/</th>
+                            <th style="width:75px;">/</th>
+                            <th style="width:100px;">
+                                <%=result[0].autoscore%>
+                            </th>
+                        </tr>
+                    </table>
+                </div>
+                <div id="ordertimes" style="display:none">
+                    <h3>失约记录</h3>
+                    <table id="timestable" class="table table-hover table-bordered">
+                        <tr>
+                            <th style="width:70px;">序号</th>
+                            <th style="width:150px;">预约实验日期</th>
+                            <th style="width:75px;">时间段</th>
+                            <th style="min-width:150px;">预约时间</th>
+                            <th style="width:200px;">状态</th>
+                        </tr>
+                        <% for(var d in ordertimes){%>
+                            <% if(ordertimes[d].doif==0){%>
+                                <tr>
+                                    <td>
+                                        <%=Number(d)+Number(1)%>
+                                    </td>
+                                    <td>
+                                        <%=ordertimes[d].experdate%>
+                                    </td>
+                                    <td>
+                                        <%=ordertimes[d].expertime%>
+                                    </td>
+                                    <td>
+                                        <%=ordertimes[d].ordertime.substring(0, 16)%>
+                                    </td>
+                                    <td>失约</td>
+                                </tr>
+                                <%}%>
+                                    <%}%>
+                    </table>
+                </div>
+
+                <div id="lookexptimes" style="display:none">
+                    <h3>实验记录</h3>
+                    <table id="spantable" class="table table-hover table-bordered">
+                        <tr>
+                            <!-- <th style="width:70px;">序号</th> -->
+                            <th style="width:75px;">实验人</th>
+                            <th style="min-width:150px;">实验日期</th>
+                            <th style="width:200px;">实验时间段</th>
+                            <th style="width:200px;">状态</th>
+                        </tr>
+                        <% for(var d in ordertimes){%>
+                            <% if(ordertimes[d].doif==1||ordertimes[d].doif==2){%>
+                                <tr>
+                                    <td>
+                                        <%=result[0].userName%>
+                                    </td>
+                                    <td>
+                                        <%=ordertimes[d].experdate%>
+                                    </td>
+                                    <td>
+                                        <%=ordertimes[d].expertime%>
+                                    </td>
+                                    <td>
+                                        <% if(ordertimes[d].doif==1){%>
+                                            正常
+                                            <% } %>
+                                                <% if(ordertimes[d].doif==2){%>
+                                                    迟到
+                                                    <% } %>
+                                    </td>
+                                </tr>
+                                <%}%>
+                                    <%}%>
+
+                    </table>
+                </div>
+                <div id="exptimespan" style="display:none">
+                    <h3>时长记录</h3>
+                    <table id="spantable" class="table table-hover table-bordered">
+                        <tr>
+                            <th style="width:200px;">实验名称</th>
+                            <th style="width:75px;">实验人</th>
+                            <th style="min-width:180px;">实验开始时间</th>
+                            <th style="width:200px;">实验结束时间</th>
+                            <th style="width:200px;">实验状态</th>
+                        </tr>
+                        <tr>
+                            <td>
+                                <%=result[0].courseName%>
+                            </td>
+                            <td>
+                                <%=result[0].userName%>
+                            </td>
+                            <td>
+                                <% if(result[0].StartTime) { %>
+                                    <%=result[0].StartTime.substring(0,16)%>
+                                        <% } 
+                            else { %>
+                                            /
+                                            <% } %>
+                            </td>
+                            <td>
+                                <% if(result[0].endTime) { %>
+                                    <%=result[0].endTime.substring(0,16)%>
+                                        <% } 
+                        else { %>
+                                            /
+                                            <% } %>
+                            </td>
+                            <td>
+                                <% switch(result[0].status){
+                                        case 0:%>未实验
+                                    <% break; %>
+                                        <% case 1:%>已实验（报告未提交）
+                                            <% break; %>
+                                                <% case 2:%>已完成
+                                                    <% break; %>
+                                                        <% } %>
+                            </td>
+                        </tr>
+                    </table>
+                </div>
+                <div id="editRecord" style="display:none">
+
+                    <div>
+                        <h3>操作记录</h3>
+                        <textarea rows="3" cols="115" type="text" style="resize:none;overflow-y:scroll;font-size:medium;font-weight:bold"><%=exp[0].explog%></textarea>
+                    </div>
+                    <div>
+                        <h4>记录分析</h4>
+                        <textarea rows="3" cols="115" type="text" style="resize:none;overflow-y:scroll;font-size:medium;font-weight:bold"><%=score[0].explogRecord%></textarea>
+                    </div>
+                </div>
+                <div id="dataRecord" style="display:none">
+                    <h3>数据记录</h3>
+                    <div class="repost_content" style="height:200px; overflow-y: auto;">
+                        <table id="tableData" align="left" border="1" style="margin-left:0px; width: 100%;"></table>
+                    </div>
+                    <br>
+                    <h4>记录分析</h4>
+                    <textarea rows="3" cols="115" type="text" style="resize:none;overflow-y:scroll;font-size:medium;font-weight:bold"><%=score[0].dataRecord%></textarea>
+                </div>
+            </div>
+            <div class="clearfix"></div>
+
+        </div>
+        <!--底部导航栏-->
+        <% include footer%>
+            <script src="javascripts/jquery-1.12.3.min.js" type="text/javascript"></script>
+            <script src="javascripts/bootstrap.js" type="text/javascript"></script>
+            <script>
+                window.onload = function () {
+                    var url = window.location.href;
+                    var id = url.substring(url.length - 1, url.length);
+                    switch (id) {
+                        case "t":
+                            document.getElementById("courseshow").innerText = "实验选择";
+                            break;
+                        case "0":
+                            document.getElementById("courseshow").innerText = "涡街流量计验证实验";
+                            break;
+                        case "1":
+                            document.getElementById("courseshow").innerText = "超声波流量计验证实验";
+                            break;
+                        case "2":
+                            document.getElementById("courseshow").innerText = "超声波液位计验证实验";
+                            break;
+                        case "3":
+                            document.getElementById("courseshow").innerText = "涡街流量计综合实验";
+                            break;
+                        case "4":
+                            document.getElementById("courseshow").innerText = "超声波流量计综合实验";
+                            break;
+                        case "5":
+                            document.getElementById("courseshow").innerText = "超声波液位计综合实验";
+                            break;
+                        case "6":
+                            document.getElementById("courseshow").innerText = "涡街流量计设计实验";
+                            break;
+                        case "7":
+                            document.getElementById("courseshow").innerText = "超声波流量计设计实验";
+                            break;
+                        case "8":
+                            document.getElementById("courseshow").innerText = "超声波液位计设计实验";
+                            break;
+                    }
+
+                }
+                // function getscoreDetails() {
+                //     document.getElementById("orderRecord").style.display = "";
+                // }
+                function misstimes() {
+                    document.getElementById("ordertimes").style.display = "inline";
+                }
+
+                function exptimes() {
+                    document.getElementById("lookexptimes").style.display = "inline";
+
+                }
+                function exptimespan() {
+                    document.getElementById("exptimespan").style.display = "inline";
+                }
+                function edit() {
+                    document.getElementById("editRecord").style.display = "inline";
+                }
+                function data() {
+                    var a = '<%=exp[0].repData%>';
+                    console.log(a);
+                    var r = a.split(",");
+                    console.log(r);
+                    var col = 4;//这里为生成7列的表格 
+                    var lines = Math.ceil(r.length / col);//很关键的一步，这里为生成表格的行数  
+                    var str = "<table><tbody>";//表头  
+                    for (var j = 0; j < lines; j++) {//遍历表格行  
+                        str += "<tr>";
+                        for (var k = 0; k < col; k++) {//遍历表格列  
+                            str += "<td>";
+                            if (typeof r[k + j * col] == "undefined") { str += "&nbsp"; }
+                            else { str += r[k + j * col]; }
+                            str += "</td>";
+                        };//表格行结束  
+                        str += "</tr>";
+                    };
+                    str += "</tbody></table>";
+                    document.getElementById("tableData").innerHTML = str;
+                    document.getElementById("dataRecord").style.display = "inline";
+                }
+            </script>
+    </body>
+
+</html>

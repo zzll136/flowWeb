@@ -1,0 +1,56 @@
+.switch {
+    display: inline-block;
+    width: 60px;
+    height: 18px;
+    vertical-align: top;
+}
+
+.switch label {
+    font-size: 10px;
+    line-height: 16px;
+    color: #888888;
+    position: relative;
+    display: block;
+    padding: 1px;
+    border-radius: 8px;
+    height: 18px;
+    background-color: rgba(255, 255, 255, 0.3);
+    cursor: pointer;
+    -webkit-user-select: none;
+    -webkit-transition: all 0.2s ease;
+}
+
+.switch label::after {
+    content: '关闭';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    margin-top: -9px;
+    margin-left: -10px;
+    display: block;
+    border-radius: 8px;
+    width: 35px;
+    height: 18px;
+    background-color: rgba(255, 255, 255, 0.8);
+    box-shadow: 1px 1px 1px 1px rgba(0, 0, 0, 0.08);
+    -webkit-transform: translateX(-20px);
+    -webkit-transition: all 0.2s ease;
+}
+
+.switch input[type=checkbox] {
+    display: none;
+}
+
+.switch input[type=checkbox]:checked~label {
+    background-color: rgba(90, 200, 90, 0.8);
+}
+
+.switch input[type=checkbox]:checked~label::before {
+    -webkit-transform: scale(0, 0);
+}
+
+.switch input[type=checkbox]:checked~label::after {
+    content: '打开';
+    background-color: rgba(255, 255, 255, 1.0);
+    -webkit-transform: translateX(5px);
+}
