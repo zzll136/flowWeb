@@ -24,6 +24,7 @@ router.get('/', function (req, res) {
     Apply.getOpenYear(function (err, year) {
         if (err) console.log('getOpenYear err:' + err);
         var yearStr;
+        if(year){
         if(year.length)
         yearStr = year[0].year;
         Exp.getexpMessageByYear(req.session.school, yearStr, 1,function (err, result) {
@@ -31,7 +32,8 @@ router.get('/', function (req, res) {
             if (!result.length) var count = 0;
             else count = result[0].count;
             res.render('expMessage', { title: '实验情况', result: result, year: year,count:count });
-        });
+        });}
+        else res.end("页面加载异常");
     });}
     catch(e){
         console.log("学生实验情况页面getexpMessageByYear err");

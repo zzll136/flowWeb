@@ -9,8 +9,9 @@ router.get('/', function(req, res) {
     Apply.getopenTimeMessage(function(err, result) {
         if (err) console.log('getopenTimeMessage err:' + err);
         console.log('result的值',result);
+        if(result!=null){
         if(result.length==0) 
-        result[0]={"startDate":"目前还未设置实验时间","endDate":"目前还未设置实验时间","expTime":"","repTime":""}
+        result[0]={"startDate":"目前还未设置实验时间","endDate":"目前还未设置实验时间","expTime":"","repTime":""}}
         res.render('apply',{title:'申请使用',result:result});
     });}
     catch (e){

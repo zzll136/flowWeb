@@ -18,117 +18,7 @@ window.onunload = function () {
 };
 //-----------------misc event--------------------------------
 var tableid = 7;
-//开始实验,清空表格,打开进水阀,关闭出水阀/侧阀,开启变频器
-// $('#buttonStartExperiment').click(function (e) {
-//     if (experimentStatus == 0) //停止状态
-//     {
-//         var status;
-//         var expTime = new Date();
-//         var y = expTime.getFullYear();
-//         var m = addZero(expTime.getMonth() + 1);
-//         var d = addZero(expTime.getDate());
-//         var h = addZero(expTime.getHours());
-//         var min = addZero(expTime.getMinutes());
-//         var t = y + "-" + m + "-" + d;
-//         h = h + ":00";
-//         $.post('/experiment/judgeTime', {
-//             courseid: 3
-//         }, function (results) {
-//             var result_str = [];
-//             result_str = results.split(",");
-//             for (i = 0; i < result_str.length; i++) {
-//                 if (result_str[i] == t)
-//                     break;
-//             }
-//             if (i == result_str.length) alert("今天该实验不开放");
-//             else {
-//                 $.post('/experiment/judgeOrder', {
-//                     courseid: 3,
-//                     t: t,
-//                     h: h
-//                 }, function (time) {
-//                     if (time.num==0)
-//                         alert("未预约该时间段" + h + "的实验");
-//                     else if (min > 59) alert("已迟到20min以上，不能继续做实验");
-//                     else {
-//                         $.get('/experiment/courseInfo', function (result) {
-//                             if (result != "none") {
-//                                 for (var i = 0; i < result.length; i++) {
-//                                     if (result[i].courseID == 0)
-//                                         status = result[i].status;
-//                                 }
-//                                 switch (status) {
-//                                     case 0:
-//                                         if (confirm('你即将开始实验，继续请按确认'))
-//                                             break;
-//                                         else return;
-//                                     case 1:
-//                                         if (confirm('您已完成此实验,重做会覆盖之前的实验记录,继续请按确认。'))
-//                                             break;
-//                                         else return;
-//                                     case 2:
-//                                         alert('您已提交报告,不能重新进行此实验');
-//                                         return;
-//                                 }
-//                             }
-//                             $.post('/experiment/tableMatch', {
-//                                 courseid: 3
-//                             }, function (data) {
-//                                 tableid = data;
-//                                 if (tableid == 7) {
-//                                     alert("暂无空闲实验桌，请提前预约");
-//                                 }
-//                                 else {
-//                                     experimentStatus = 1; //1是运行状态，socket.emit('emitEvent',data),socket.on('emitEvent',function(data){});
-//                                     //Create_socket();
-//                                     socket.emit('startExperiment', tableid, document.getElementById('frequencySlider').value);
-//                                     chartWeight.series[0].remove();
-//                                     chartWeight.addSeries(createEmptySeries());
-//                                     chartVortex.series[0].remove();
-//                                     chartVortex.addSeries(createEmptySeries());
-//                                     time = 0;
-//                                     recordExpLog('开始实验');
-//                                     setButtonsByStatus();
-//                                     openCamera(tableid);
-//                                     //buttonSet();
-//                                 }
-//                             });
-//                         });
-//                     }
-//                 });
-//             }
-//         });
-//     }
-//     else if (experimentStatus == 1) {
-//         if (confirm('是否确认结束实验？')) {
-//             $.post('/experiment/tableFree', {
-//                 tableid: tableid
-//             }, function (data) { });
-//             // 运行状态
-//             experimentStatus = 0;
-//             socket.emit('stopExperiment', tableid);
-//             recordExpLog('结束实验');
-//             //closeCamera(tableid);
-//             // setButtonsByStatus();
-//             window.location.href = location.href;
-//         }
-//         // buttonSet();
-//     }
-//     else {
-//         // 重置后开始实验
-//         experimentStatus = 1; //1是运行状态，socket.emit('emitEvent',data),socket.on('emitEvent',function(data){});
-//         document.getElementById('frequencySlider').value = 30;
-//         socket.emit('startExperiment', tableid, document.getElementById('frequencySlider').value);
-//         chartWeight.series[0].remove();
-//         chartWeight.addSeries(createEmptySeries());
-//         chartVortex.series[0].remove();
-//         chartVortex.addSeries(createEmptySeries());
-//         time = 0;
-//         recordExpLog('重置后开始实验');
-//         setButtonsByStatus();
-//         //buttonSet();
-//     }
-// });
+
 
 //上传实验数据
 $('#buttonEndExperiment').click(function (e) {
@@ -155,19 +45,6 @@ $('#buttonEndExperiment').click(function (e) {
 });
 
 
-//重置实验,停止水泵,打开出水阀
-// $('#buttonResetExperiment').click(function (e) {
-//     if (experimentStatus == 0) {
-//         alert("请先点击开始实验");
-//         return false;
-//     }
-//     else {
-//         experimentStatus = 2;
-//         setButtonsByStatus();
-//         socket.emit('resetExperiment', tableid);
-//         recordExpLog('重置实验');
-//     }
-// });
 
 
 var isDrawingGraph = true;
@@ -279,19 +156,34 @@ socket.on("Data Pack", function (temperature, ultraTime, distance, flowRate, tot
     // // z?????????????????????????   pong监听什么
     // socket.emit('pong');
     // if(weightArray.length<=5){
+
+    //如果按照传统的最小二乘法计算斜率的话，由于单位是kg和ms 计算误差好大 而且换成m3和h时也不行
     var time_stamp = Date.now();
-    // weight=weight*3600;
+    // weight_copy=weight*3600;
     weightArray.push(Number(weight));
-    timeArray.push(parseInt(time_stamp));
-    if (weightArray.length == 7) {
+    timeArray.push(time_stamp);
+    if (weightArray.length == 11) {
         weightArray.splice(0, 1);
         timeArray.splice(0, 1);
-        // actualFlowrate=3.6*LeastSquare(timeArray,weightArray); 
+        // actualFlowrate=LeastSquare(timeArray,weightArray); 
         var a1=(weightArray[3] - weightArray[0]) * 3600 / (timeArray[3] - timeArray[0]);
         var a2=(weightArray[4] - weightArray[1]) * 3600 / (timeArray[4] - timeArray[1]);
         var a3=(weightArray[5] - weightArray[2]) * 3600 / (timeArray[5] - timeArray[2]);
-        actualFlowrate=(a1+a2+a3)/3;
+
+        var b1=(weightArray[2] - weightArray[0]) * 3600 / (timeArray[2] - timeArray[0]);
+        var b2=(weightArray[3] - weightArray[1]) * 3600 / (timeArray[3] - timeArray[1]);
+
+        var c1=(weightArray[5] - weightArray[0]) * 3600 / (timeArray[5] - timeArray[0]);
+        var c2=(weightArray[6] - weightArray[1]) * 3600 / (timeArray[6] - timeArray[1]);
+        var c3=(weightArray[7] - weightArray[2]) * 3600 / (timeArray[7] - timeArray[2]);
+        var c4=(weightArray[8] - weightArray[3]) * 3600 / (timeArray[8] - timeArray[3]);
+        var c5=(weightArray[9] - weightArray[4]) * 3600 / (timeArray[9] - timeArray[4]);
+
+        actualFlowrate=(c1+c2+c3+c4+c5)/5;
+        // actualFlowrate=(b1+b2)/2;
+        // actualFlowrate=(a1+a2+a3)/3;
         actualFlowrate=actualFlowrate.toFixed(3);
+       
     }
    console.log("weightArray的值"+weightArray);
    console.log("timeArray的值"+timeArray);

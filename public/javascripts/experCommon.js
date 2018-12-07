@@ -16,25 +16,13 @@ $(document).on("click", "#buttonStartExperiment", function (e) {
         var min = addZero(expTime.getMinutes());
         var t = y + "-" + m + "-" + d;
         h = h + ":00";
-        // $.post('/experiment/judgeTime', {
-        //     // courseid: 0
-        // }, function (results) {
-        //     var result_str = [];
-        //     result_str = results.split(",");
-        //     for (i = 0; i < result_str.length; i++) {
-        //         if (result_str[i] == t)
-        //             break;
-        //     }
-        //     if (i == result_str.length) alert("今天实验不开放");
-        //     else {
         if (role == "s") {
             $.post('/experiment/judgeOrder', {
                 t: t,
                 h: h
             }, function (time) {
-                if (time.num == 0)
-                    alert("未预约该时间段" + h + "的实验"); 
-                else if (min > 30) {alert("已迟到30min以上，不能继续做实验"); return;}
+                if (time.num == 0) { alert("未预约该时间段" + h + "的实验"); return; }
+                else if (min > 30 && time.doif == null) { alert("已迟到30min以上，不能继续做实验"); return; }
                 else {
                     $.post('/experiment/courseInfo', { orderYear: time.year }, function (result) {
                         if (result != "none") {
@@ -178,6 +166,8 @@ $(document).on("click", "#buttonStartExperiment", function (e) {
         chartReset();
         time = 0;
         recordExpLog('重置后开始实验');
+        isDrawingGraph = !isDrawingGraph;
+        document.getElementById("buttonPauseGraph").innerText = isDrawingGraph ? "暂停曲线" : "开始曲线";
         setButtonsByStatus();
         //buttonSet();
     }
@@ -194,6 +184,8 @@ $(document).on("click", "#buttonResetExperiment", function (e) {
     else {
         experimentStatus = 2;//设置为2 表示重置实验
         setButtonsByStatus();
+        isDrawingGraph = !isDrawingGraph;
+        document.getElementById("buttonPauseGraph").innerText = isDrawingGraph ? "暂停曲线" : "开始曲线";
         socket.emit('resetExperiment', tableid);
         recordExpLog('重置实验');
     }

@@ -93,42 +93,14 @@ User.getexp_timespanscore = function getexp_timespanscore(user_id, year, coursei
             var stu_a, stu_b;
             var sys_a, sys_b;
             if (result1[0].startTime && result1[0].endTime) {
-                var startTime = result1[0].startTime.substring(14, 16);
-                var endTime = result1[0].endTime.substring(14, 16);
-                timespan = endTime - startTime;
-                if (timespan < 20) timespanscore= 10;
-                else timespanscore = 30-timespan;
-                if (timespanscore < 0) timespanscore = 0;
-                // if (timespan < 20) timespanscore = 0.5 * timespan;
-                // else if (timespan < 30) timespanscore = 10;
-                // else timespanscore = 20 - 1 / 3 * timespan;
+                timespan = getTimeSpanscore(result1[0].startTime, result1[0].endTime)[0];
+                timespanscore = getTimeSpanscore(result1[0].startTime, result1[0].endTime)[1];
             }
             if (result1[0].explog) {
-                operationScore = 30;
-                var explogArray = result1[0].explog.split(">");
-                for (var i = 0; i < explogArray.length; i++) {
-                    var obj = explogArray[i].indexOf("<");
-                    explogArray[i] = explogArray[i].substring(obj + 1, explogArray[i].length);
-                }
-                console.log("该次实验的实验操作数组" + explogArray);
-                if (explogArray[2] != "关闭侧阀") {
-                    operationScore = operationScore - 2;
-                    explog_record = "开始实验后未及时关闭侧阀;"
-                }
-                for (var i = 0; i < explogArray.length; i++) {
-                    if (explogArray[i] == "打开侧阀") {
-                        operationScore = operationScore - 2;
-                        explog_record = explog_record + "实验中打开侧阀;"
-                    }
-                    if (explogArray[i] == "重置实验") {
-                        operationScore = operationScore - 2;
-                        explog_record = explog_record + "重置实验一次;"
-                    }
-                }
+                operationScore = getOperationscore(result1[0].explog)[0];
+                explog_record = getOperationscore(result1[0].explog)[1];
             }
             if (result1[0].repData) {
-
-                // console.log("result1[0].repData" + result1[0].repData);
                 if (courseid == 0 || courseid == 1 || courseid == 2) {
                     dataScore = 40;
                     var repdataArray = result1[0].repData.split(",");
@@ -145,10 +117,10 @@ User.getexp_timespanscore = function getexp_timespanscore(user_id, year, coursei
                     for (var j = 0; j < freq.length; j++) {
                         for (var i = 4; i < repdataArray.length; i++) {
                             if (repdataArray[i + 1] == freq[j]) {
-                                var data=repdataArray[i];
-                                console.log(Number(data.substring(data.length-2,data.length)));
-                                console.log(Number(data.substring(0,1)));
-                                repdataArray[i]=Number(data.substring(0,1))*60+Number(data.substring(data.length-2,data.length));
+                                var data = repdataArray[i];
+                                console.log(Number(data.substring(data.length - 2, data.length)));
+                                console.log(Number(data.substring(0, 1)));
+                                repdataArray[i] = Number(data.substring(0, 1)) * 60 + Number(data.substring(data.length - 2, data.length));
                                 time.push(repdataArray[i]);
                                 repdataArray[i + 2] = Number(repdataArray[i + 2]) * 3.6;
                                 weight.push(repdataArray[i + 2]);
@@ -159,9 +131,10 @@ User.getexp_timespanscore = function getexp_timespanscore(user_id, year, coursei
                         var parameterArray = parameter.split(";");
                         var sys_k = parameterArray[0];
                         var k = average(VortexFlow);
-                        if (Math.abs(sys_k - k) > 0.2)
-                            {dataScore = dataScore - 5;
-                            data_record=data_record+"变频器频率为"+freq[j]+"时，数据误差太大";}
+                        if (Math.abs(sys_k - k) > 0.2) {
+                            dataScore = dataScore - 5;
+                            data_record = data_record + "变频器频率为" + freq[j] + "时，数据误差太大";
+                        }
                     }
                 }
                 if (courseid == 3 || courseid == 4 || courseid == 5) {
@@ -221,9 +194,7 @@ User.getexp_timespanscore = function getexp_timespanscore(user_id, year, coursei
                     }
                 }
             }
-            // if(result1[0].exptimes_count==1) timescore = 10;
-            // else timescore = timescore - result1[0].exptimes_count * 2;
-            // if(timescore<0) timescore=0;
+            if (dataScore < 0) dataScore = 0;
             var insertscore_Sql = "UPDATE score SET timespan=?,timespanscore=?,operationScore=?,dataScore=?,explogRecord=?,dataRecord=?,stu_a=?,stu_b=?,sys_a=?,sys_b=? where user_id=? and year = ? and courseid= ? ";
             connection.query(insertscore_Sql, [timespan, timespanscore, operationScore, dataScore, explog_record, data_record, stu_a, stu_b, sys_a, sys_b, user_id, year, courseid], function (err, result2) {
                 if (err) {
@@ -234,14 +205,13 @@ User.getexp_timespanscore = function getexp_timespanscore(user_id, year, coursei
                 }
                 console.log("invoked[insertscore_Sql]");
                 console.log(result2);
-                //callback(err, results);
             });
             callback(err, result1);
         });
     });
 };
 
-//3计算各项得分，以及总分，写入数据库
+//3计算自动评分的值，并从数据库获取老师的评分，然后计算最终得分，写入数据库
 User.countAutoscore = function countAutoscore(user_id, year, courseid, callback) {
     pool.getConnection(function (err, connection) {
         var useDbSql = "USE " + DB_NAME;
@@ -253,22 +223,29 @@ User.countAutoscore = function countAutoscore(user_id, year, courseid, callback)
             console.log('USE succeed');
         });
         var countAutoscore_Sql = "select * from score where user_id=? and year=? and courseid=?";
-        connection.query(countAutoscore_Sql, [user_id, year,courseid], function (err, result) {
+        connection.query(countAutoscore_Sql, [user_id, year, courseid], function (err, result) {
             if (err) {
-                console.log("in ordertime table -- countAutoscore_Sql Error: " + err.message);
+                console.log("in score table -- countAutoscore_Sql Error: " + err.message);
             }
             var autoscore = result[0].orderscore + result[0].timescore + result[0].timespanscore + result[0].operationScore + result[0].dataScore;
-            var insertautoscore_Sql = "UPDATE experiment SET autoscore=? where user_id=? and year = ? and courseid= ? ";
-            connection.query(insertautoscore_Sql, [autoscore, user_id, year, courseid], function (err, results) {
+            var getTeascore_sql = "select teascore from experiment where user_id=? and courseid=? and year=?";
+            connection.query(getTeascore_sql, [user_id, courseid, year], function (err, result1) {
                 if (err) {
-                    console.log("change_Sql Error: " + err.message);
+                    console.log("getTeascore_sql Error: " + err.message);
                 }
-                if (!connection.isRelease) {
-                    connection.release();
-                }
-                console.log("invoked[insertautoscore]");
-                console.log(results);
-                //callback(err, results);
+                var score = autoscore * 0.5 + result1[0].teascore * 0.5;
+                var insertautoscore_Sql = "UPDATE experiment SET autoscore=?,score=? where user_id=? and year = ? and courseid= ? ";
+                connection.query(insertautoscore_Sql, [autoscore, score, user_id, year, courseid], function (err, results) {
+                    if (err) {
+                        console.log("change_Sql Error: " + err.message);
+                    }
+                    if (!connection.isRelease) {
+                        connection.release();
+                    }
+                    console.log("invoked[insertautoscore]");
+                    console.log(results);
+                    //callback(err, results);
+                });
             });
             callback(err, result);
         });
@@ -290,7 +267,7 @@ function LeastSquare(x, y) {
     }
     a = (t3 * (x.length) - t2 * t4) / (t1 * (x.length) - t2 * t2);
     b = (t1 * t4 - t2 * t3) / (t1 * x.length - t2 * t2);
-    return a+ ";" + b;
+    return a + ";" + b;
 }
 
 //求平均值的函数
@@ -301,4 +278,55 @@ function average(x) {
     }
     var x_average = (count / (x.length)).toFixed(4);
     return x_average;
+}
+//计算实验时长的得分
+function getTimeSpanscore(start, end) {
+    var result = [];
+    var startTime = start.substring(14, 16);
+    var endTime = end.substring(14, 16);
+    var timespan = endTime - startTime;
+    if (timespan < 20) timespanscore = 10;
+    else timespanscore = 30 - timespan;
+    if (timespanscore < 0) timespanscore = 0;
+    result.push(timespan);
+    result.push(timespanscore);
+    return result;
+}
+//计算实验操作的得分
+function getOperationscore(explog) {
+    var result = [];
+    var operationScore = 30;
+    var explog_record = "";
+    var explogArray = explog.split(">");
+    for (var i = 0; i < explogArray.length; i++) {
+        var obj = explogArray[i].indexOf("<");
+        explogArray[i] = explogArray[i].substring(obj + 1, explogArray[i].length);
+    }
+    console.log("该次实验的实验操作数组" + explogArray);
+    for (var i = 0; i < explogArray.length; i++) {
+        if (explogArray[i] == "打开侧阀") {
+            operationScore = operationScore - 1;
+            explog_record = explog_record + "实验中打开侧阀;"
+        }
+        if (explogArray[i] == "重置实验") {
+            operationScore = operationScore - 1;
+            explog_record = explog_record + "重置实验一次;"
+        }
+        if (explogArray[i] == "开启变频器,频率:") {
+            var j = i;
+            for (var m = 0; m < j; m++) {
+                var sw1Status = 0;
+                if (explogArray[m] == "打开进水阀") Sw1Status++;
+                else if (explogArray[m] == "关闭进水阀") Sw1Status--;
+            }
+            if (sw1Status == 0) {
+                operationScore = operationScore - 2;
+                explog_record = explog_record + "打开电机时,进入阀未打开;"
+            }
+        }
+    }
+    if (operationScore < 0) operationScore = 0;
+    result.push(operationScore);
+    result.push(explog_record);
+    return result;
 }

@@ -261,7 +261,7 @@ var socket = io.connect();
 var time = 0;
 var recordInterval = 1;
 var recordIntervalCounter = 1;
-var actuallevel = 0;
+var actualLevel = 0;
 var calculatedLevel = 0;
 var cs = 0;
 // const height = 400; // 传感器距离容器底部的高度
@@ -270,6 +270,7 @@ var cs = 0;
 var experimentStatus = 0; //实验状态,0:空闲(停止);1:正在实验;2:正在重置
 var warnflag = 0, warnflag2 = 0;
 var errorflag = [0, 0, 0, 0];
+var weightArray=[];
 setInterval(function () {
     if (experimentStatus != 0) {
         // var reqTime = Date.now();
@@ -280,8 +281,19 @@ setInterval(function () {
 socket.on("Data Pack", function (temperature, ultraTime, distance, flowRate, totalFlowVortex, weight, flowRateHM, totalFlowHM,temperatureWater, valveIn, valveOut, valveSide, inverter) {
     // // z?????????????????????????   pong监听什么
     // socket.emit('pong');
-    actualLevel = weight* 10000 /1244.1;
-    //这个值的计算时，算的桶的内直径为398mm,比较精确。
+    weightArray.push(Number(weight));
+    if (weightArray.length == 6) {
+        weightArray.splice(0, 1);
+         //这个值的计算时，算的桶的内直径为398mm,比较精确。
+        var l1=weightArray[0]*10000/1244.1;
+        var l2=weightArray[1]*10000/1244.1;
+        var l3=weightArray[2]*10000/1244.1;
+        var l4=weightArray[3]*10000/1244.1;
+        var l5=weightArray[4]*10000/1244.1;
+        actualLevel=(l1+l2+l3+l4+l5)/5;
+        actualLevel=actualLevel.toFixed(3);
+    }
+    // actualLevel = weight* 10000 /1244.1;
     calculatedLevel=distance;
     // 计算声速
     // cs = 331.3 + 0.606 * temperature;
@@ -479,7 +491,7 @@ socket.on("Data Pack", function (temperature, ultraTime, distance, flowRate, tot
                     cell.align = "center";
 
                     cell = row.insertCell(-1);
-                    cell.innerHTML = actualLevel.toFixed(2);
+                    cell.innerHTML = Number(actualLevel).toFixed(2);
                     cell.align = "center";
 
                     cell = row.insertCell(-1);

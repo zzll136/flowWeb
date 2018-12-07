@@ -271,7 +271,7 @@ User.newgetExpOrder = function newgetExpOrder(user_id, date, time, callback) {
             }
             console.log('USE succeed');
         });
-        var getExpOrder_sql = "select count(1) as num,year from new_ordertime where user_id=? and experdate=? and expertime=?";
+        var getExpOrder_sql = "select count(1) as num,doif,year from new_ordertime where user_id=? and experdate=? and expertime=?";
         connection.query(getExpOrder_sql, [user_id, date, time], function (err, result) {
             if (err) {
                 console.log("newgetExpOrder Error: " + err.message);

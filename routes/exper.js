@@ -519,12 +519,12 @@ router.post('/tableMatch', function (req, res) {
     var min = req.body.min;
     var date = req.body.t;
     var time = req.body.h;
-    switch (req.session.role) {
+    switch (req.session.userrole) {
         case 's': var usertype = "学生"; break;
         case 't': var usertype = ""; break;
     }
     try {
-        Apply.newdistributionTable(req.session.user_id,req.session.role, year, courseid, min, date, time, function (err, result) {
+        Apply.newdistributionTable(req.session.user_id,req.session.userrole, year, courseid, min, date, time, function (err, result) {
             if (err) console.log('distributionTable err:' + err);
             console.log(result);
             if (result == 7) {

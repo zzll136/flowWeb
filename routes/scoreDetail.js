@@ -33,9 +33,7 @@ router.get('/', function (req, res) {
         if (req.query.courseid != null)
             year = req.query.year;
     }
-    try{
-    Exp.getUserDataByYear(user_id, courseid, year, function (err, result) {
-        if (err) console.log('getUserData err:' + err);
+    try {
         Score.getOrdertimes(user_id, year, courseid, function (err, ordertimes) {
             if (err) console.log('getOrdertimes err:' + err);
             console.log('预约次数:' + ordertimes);
@@ -45,12 +43,15 @@ router.get('/', function (req, res) {
                 Score.countAutoscore(user_id, year, courseid, function (err, score) {
                     if (err) console.log('countAutoscore err:' + err);
                     console.log('查看实验报告的results:' + score);
-                    res.render('scoreDetail', { title: '查看实验成绩详情', result: result, ordertimes: ordertimes, exp: exp, score: score });
-                });
+                    Exp.getUserDataByYear(user_id, courseid, year, function (err, result) {
+                        if (err) console.log('getUserData err:' + err);
+                        res.render('scoreDetail', { title: '查看实验成绩详情', result: result, ordertimes: ordertimes, exp: exp, score: score });
+                    });
+                })
             })
-        })
-    });}
-    catch(e){
+        });
+    }
+    catch (e) {
         console.log("教师查看分数详情getUserDataByYear err");
         return res.end('页面加载异常');
     }

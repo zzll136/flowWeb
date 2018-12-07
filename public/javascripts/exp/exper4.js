@@ -280,16 +280,24 @@ socket.on("Data Pack", function (temperature, ultraTime, distance, flowRate, tot
     // // z?????????????????????????   pong监听什么
     // socket.emit('pong');
     var time_stamp = Date.now();
-    weightArray.push(weight);
+    weightArray.push(Number(weight));
     timeArray.push(time_stamp);
-    if (weightArray.length == 7) {
+    if (weightArray.length == 11) {
         weightArray.splice(0, 1);
         timeArray.splice(0, 1);
 
         var a1=(weightArray[3] - weightArray[0]) * 3600 / (timeArray[3] - timeArray[0]);
         var a2=(weightArray[4] - weightArray[1]) * 3600 / (timeArray[4] - timeArray[1]);
         var a3=(weightArray[5] - weightArray[2]) * 3600 / (timeArray[5] - timeArray[2]);
-        actualFlowrateHM=(a1+a2+a3)/3;
+
+        var c1=(weightArray[5] - weightArray[0]) * 3600 / (timeArray[5] - timeArray[0]);
+        var c2=(weightArray[6] - weightArray[1]) * 3600 / (timeArray[6] - timeArray[1]);
+        var c3=(weightArray[7] - weightArray[2]) * 3600 / (timeArray[7] - timeArray[2]);
+        var c4=(weightArray[8] - weightArray[3]) * 3600 / (timeArray[8] - timeArray[3]);
+        var c5=(weightArray[9] - weightArray[4]) * 3600 / (timeArray[9] - timeArray[4]);
+
+        // actualFlowrateHM=(a1+a2+a3)/3;
+        actualFlowrateHM=(c1+c2+c3+c4+c5)/5;
         actualFlowrateHM=actualFlowrateHM.toFixed(3);
 
         // actualFlowrateHM = LeastSquare(timeArray,weightArray)*3600;
