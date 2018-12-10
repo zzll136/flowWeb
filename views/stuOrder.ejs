@@ -87,9 +87,9 @@
                         <span class="orderSituation1">人预约</span>
 
                     </div>
-                    <div onclick="selectTime('13:00')" class="exptimeslot">
+                    <div onclick="selectTime('11:00')" class="exptimeslot">
                         <br>
-                        <div class="orderTime">时间段:13:00-14:00</div>
+                        <div class="orderTime">时间段:11:00-12:00</div>
 
                         <br>
                         <span class="orderSituation">已有</span>
@@ -99,9 +99,26 @@
                 </div>
                 <br>
                 <div class="exptime">
+                    <div onclick="selectTime('12:00')" class="exptimeslot">
+                        <br>
+                        <div class="orderTime">时间段:12:00-13:00</div>
+                        <br>
+                        <span class="orderSituation">已有</span>
+                        <span class="ordernum" name="num"></span>
+                        <span class="orderSituation1">人预约</span>
+                    </div>
+                    <div onclick="selectTime('13:00')" class="exptimeslot">
+                        <br>
+                        <div class="orderTime">时间段:13:00-14:00</div>
+                        <br>
+                        <span class="orderSituation">已有</span>
+                        <span class="ordernum" name="num"></span>
+                        <span class="orderSituation1">人预约</span>
+                    </div>
                     <div onclick="selectTime('14:00')" class="exptimeslot">
                         <br>
                         <div class="orderTime">时间段:14:00-15:00</div>
+
                         <br>
                         <span class="orderSituation">已有</span>
                         <span class="ordernum" name="num"></span>
@@ -115,13 +132,15 @@
                         <span class="ordernum" name="num"></span>
                         <span class="orderSituation1">人预约</span>
                     </div>
+                </div>
+                <br>
+                <div class="exptime">
                     <div onclick="selectTime('16:00')" class="exptimeslot">
                         <br>
                         <div class="orderTime">时间段:16:00-17:00</div>
-
                         <br>
                         <span class="orderSituation">已有</span>
-                        <span class="ordernum" name="num"></span>
+                        <span class="ordernum" name="num"> </span>
                         <span class="orderSituation1">人预约</span>
                     </div>
                     <div onclick="selectTime('17:00')" class="exptimeslot">
@@ -129,13 +148,48 @@
                         <div class="orderTime">时间段:17:00-18:00</div>
                         <br>
                         <span class="orderSituation">已有</span>
+                        <span class="ordernum" name="num"> </span>
+                        <span class="orderSituation1">人预约</span>
+                    </div>
+                    <div onclick="selectTime('18:00')" class="exptimeslot">
+                        <br>
+                        <div class="orderTime">时间段:18:00-19:00</div>
+                        <br>
+                        <span class="orderSituation">已有</span>
+                        <span class="ordernum" name="num"></span>
+                        <span class="orderSituation1">人预约</span>
+
+                    </div>
+                    <div onclick="selectTime('19:00')" class="exptimeslot">
+                        <br>
+                        <div class="orderTime">时间段:19:00-20:00</div>
+
+                        <br>
+                        <span class="orderSituation">已有</span>
                         <span class="ordernum" name="num"></span>
                         <span class="orderSituation1">人预约</span>
                     </div>
                 </div>
                 <br>
+                <div class="exptime">
+                    <div onclick="selectTime('20:00')" class="exptimeslot">
+                        <br>
+                        <div class="orderTime">时间段:20:00-21:00</div>
+                        <br>
+                        <span class="orderSituation">已有</span>
+                        <span class="ordernum" name="num"> </span>
+                        <span class="orderSituation1">人预约</span>
+                    </div>
+                    <div onclick="selectTime('21:00')" class="exptimeslot">
+                        <br>
+                        <div class="orderTime">时间段:21:00-22:00</div>
+                        <br>
+                        <span class="orderSituation">已有</span>
+                        <span class="ordernum" name="num"> </span>
+                        <span class="orderSituation1">人预约</span>
+                    </div>
+                </div>
             </div>
-
             <div class="right_report">
                 <div>
                     <a href="javascript:void(0)" class="orderRecord" onclick="getorderRecord()">预约记录</a>
@@ -200,7 +254,7 @@
                     $.post('stuOrder/orderTime', {
                         date: date,
                     }, function (data) {
-                        for (var i = 0; i < 8; i++) {
+                        for (var i = 0; i < 14; i++) {
                             document.getElementsByName("num")[i].innerHTML = 0;
                         }
                         for (var i = 0; i < data.length; i++) {
@@ -209,11 +263,17 @@
                                     case "08:00": data[i].expertime = 0; break;
                                     case "09:00": data[i].expertime = 1; break;
                                     case "10:00": data[i].expertime = 2; break;
-                                    case "13:00": data[i].expertime = 3; break;
-                                    case "14:00": data[i].expertime = 4; break;
-                                    case "15:00": data[i].expertime = 5; break;
-                                    case "16:00": data[i].expertime = 6; break;
-                                    case "17:00": data[i].expertime = 7; break;
+                                    case "11:00": data[i].expertime = 3; break;
+                                    case "12:00": data[i].expertime = 4; break;
+                                    case "13:00": data[i].expertime = 5; break;
+                                    case "14:00": data[i].expertime = 6; break;
+                                    case "15:00": data[i].expertime = 7; break;
+                                    case "16:00": data[i].expertime = 8; break;
+                                    case "17:00": data[i].expertime = 9; break;
+                                    case "18:00": data[i].expertime = 10; break;
+                                    case "19:00": data[i].expertime = 11; break;
+                                    case "20:00": data[i].expertime = 12; break;
+                                    case "21:00": data[i].expertime = 13; break;
                                 }
                                 document.getElementsByName("num")[data[i].expertime].innerHTML = data[i].num;
                             }

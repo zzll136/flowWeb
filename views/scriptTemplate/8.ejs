@@ -8,17 +8,16 @@
 //使用'%=   %'时,变量将被解释为Entity编码，导致脚本无法执行!
 // console.log('输出代码',scriptText);
 <%-locals.scriptText%>
-/* 超声波液位计算函数（javascript）
-function calculateLevel(timeDelay,temperature){
-    // timeDelay 为超声波传感器测得超声波时延，单位us
-    // temperature 为传感器返回的环境温度，单位摄氏度
-    const height = 400; // 传感器距离容器底部的高度
-    // 计算声速
-    var cs = 331.3 + 0.606 * temperature;
-    // 计算水面距离（单位mm）
-    var distance = cs * timeDelay / 1000 /2;
-    return height - distance; // 返回液位值
-}*/
-
+//超声波液位计算函数（javascript）
+// function calculateLevel(timeDelay,temperature){
+//     // timeDelay 为超声波传感器测得超声波时延，单位us
+//     // temperature 为传感器返回的环境温度，单位摄氏度
+//     const height = 380; // 传感器距离容器底部的高度
+//     // 计算声速
+//     var cs = 331.3 + 0.606 * temperature;
+//     // 计算水面距离（单位mm）
+//     var distance = cs * timeDelay / 1000 /2;
+//     return height - distance; // 返回液位值
+// }
 </script>
 </html>

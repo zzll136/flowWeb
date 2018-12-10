@@ -2,6 +2,7 @@
 <!--未加入Bootstrap的两行链接-->
 <html lang="en">
 <% include header%>
+
     <head>
         <title>
             <%= title %>
@@ -9,6 +10,7 @@
         <link href="./images/favicon.ico" rel="shortcut icon" />
         <link href="stylesheets/uploadreport.css" rel="stylesheet" type="text/css">
     </head>
+
     <body>
         <div id="report_header_img"></div>
         <!--右边文字-->
@@ -288,7 +290,7 @@
                             <th style="width:200px;">状态</th>
                         </tr>
                         <% for(var d in ordertimes){%>
-                            <% if(ordertimes[d].doif==0){%>
+                            <% if(ordertimes[d].doif==0 || ordertimes[d].doif==2){%>
                                 <tr>
                                     <td>
                                         <%=Number(d)+Number(1)%>
@@ -302,7 +304,14 @@
                                     <td>
                                         <%=ordertimes[d].ordertime.substring(0, 16)%>
                                     </td>
-                                    <td>失约</td>
+                                    <td>
+                                        <% if(ordertimes[d].doif==0){%>
+                                            失约
+                                            <% } %>
+                                                <% if(ordertimes[d].doif==2){%>
+                                                    迟到
+                                                    <% } %>
+                                    </td>
                                 </tr>
                                 <%}%>
                                     <%}%>
@@ -395,21 +404,22 @@
 
                     <div>
                         <h3>操作记录</h3>
-                        <textarea rows="3" cols="115" type="text" style="resize:none;overflow-y:scroll;font-size:medium;font-weight:bold"><%=exp[0].explog%></textarea>
+                        <textarea rows="6" cols="115" type="text" style="resize:vertical;overflow-y:scroll;font-size:medium;font-weight:bold"><%=exp[0].explog%></textarea>
                     </div>
                     <div>
                         <h4>失分原因</h4>
-                        <textarea rows="3" cols="115" type="text" style="resize:none;overflow-y:scroll;font-size:medium;font-weight:bold"><%=score[0].explogRecord%></textarea>
+                        <textarea rows="3" cols="115" type="text" style="resize:vertical;overflow-y:scroll;font-size:medium;font-weight:bold"><%=score[0].explogRecord%>
+                        </textarea>
                     </div>
                 </div>
                 <div id="dataRecord" style="display:none">
                     <h3>数据记录</h3>
-                    <div class="repost_content" style="height:200px; overflow-y: auto;">
+                    <div class="repost_content" style="height:200px; resize:vertical;overflow-y: auto;">
                         <table id="tableData" align="left" border="1" style="margin-left:0px; width: 100%;"></table>
                     </div>
                     <br>
                     <h4>失分原因</h4>
-                    <textarea rows="3" cols="115" type="text" style="resize:none;overflow-y:scroll;font-size:medium;font-weight:bold"><%=score[0].dataRecord%></textarea>
+                    <textarea rows="3" cols="115" type="text" style="resize:vertical;overflow-y:scroll;font-size:medium;font-weight:bold"><%=score[0].dataRecord%></textarea>
                 </div>
             </div>
             <div class="clearfix"></div>

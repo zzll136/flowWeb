@@ -5,28 +5,29 @@
 </head>
 <script type="text/javascript">
  <%- locals.scriptText%>
-/* 涡街流量计计算函数（javascript）
-每一列旋涡产生的频率f与旋涡发生体的形状流速u的关系
-fvsf = St*u/d;
-fvsf --- 每一列旋涡产生的频率
-St   --- 斯特罗哈尔数    0.2
-u    --- 流体的流速     
-d    --- 旋涡发生体的特征尺寸
+ //涡街流量计计算函数（javascript）
+//每一列旋涡产生的频率f与旋涡发生体的形状流速u的关系
+//fvsf = St*u/d;
+//fvsf --- 每一列旋涡产生的频率
+//St   --- 斯特罗哈尔数    0.2
+//u    --- 流体的流速     
+//d    --- 旋涡发生体的特征尺寸
 
-======旋涡发生体处的流通截面积，d/D < 0.3 时 ，可近似得到如下公式
-A = (pi*D*D/4)*(1-1.25*d/D)
+//======旋涡发生体处的流通截面积，d/D < 0.3 时 ，可近似得到如下公式
+//A = (pi*D*D/4)*(1-1.25*d/D)
 
-qvivsf = uA
+//qvivsf = uA
 
-A  --- 旋涡发生处的流通截面积
-D  --- 管道内径
-qvivsf  ---  体积流量
+// A  --- 旋涡发生处的流通截面积
+// D  --- 管道内径
+// qvivsf  ---  体积流量
 
-function calculateFlowRate(fvsf){
-    const St = 0.2;
-    const d  = 100;
-    return fvsf*d/St;
-}
-*/
+// function calculateFlowRate(fvsf){
+//     const St = 0.2;
+//     const d  = 0.014;
+//     const D=0.06;
+//     return (fvsf*d*D*D*Math.PI*(1-1.25*d/D))/4*St;
+// }
+
 </script>
 </html>

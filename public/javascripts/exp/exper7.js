@@ -304,6 +304,9 @@ var recordIntervalCounter = 1;
 var warnflag = 0, warnflag2 = 0;
 var experimentStatus = 0; //实验状态,0:空闲(停止);1:正在实验;2:正在重置
 var errorflag = [0, 0, 0, 0];
+const L=0.13;
+const D=0.02;
+
 setInterval(function () {
     if (experimentStatus != 0) {
         // var reqTime = Date.now();
@@ -311,14 +314,39 @@ setInterval(function () {
 
     }
 }, 1000);
+
+var weightArray=[];
+var timeArray=[];
+var actualFlowrateHM=0;
 socket.on("Data Pack", function (temperature, ultraTime, distance, flowRate, totalFlowVortex, weight, flowRateHM, totalFlowHM, temperatureWater,valveIn, valveOut, valveSide, inverter) {
     // distance = 'xxxx';
     //  1244.1是什么
     // actualLevel = weight * 10000 / 1244.1;
-    actualFlowRateHM = flowRateHM;
+    ultraFlowRateHM = flowRateHM;
     flowRateHM = 'xxxx';
+
+    var time_stamp = Date.now();
+    weightArray.push(Number(weight));
+    timeArray.push(time_stamp);
+    if (weightArray.length == 11) {
+        weightArray.splice(0, 1);
+        timeArray.splice(0, 1);
+
+        var a1=(weightArray[3] - weightArray[0]) * 3600 / (timeArray[3] - timeArray[0]);
+        var a2=(weightArray[4] - weightArray[1]) * 3600 / (timeArray[4] - timeArray[1]);
+        var a3=(weightArray[5] - weightArray[2]) * 3600 / (timeArray[5] - timeArray[2]);
+
+        var c1=(weightArray[5] - weightArray[0]) * 3600 / (timeArray[5] - timeArray[0]);
+        var c2=(weightArray[6] - weightArray[1]) * 3600 / (timeArray[6] - timeArray[1]);
+        var c3=(weightArray[7] - weightArray[2]) * 3600 / (timeArray[7] - timeArray[2]);
+        var c4=(weightArray[8] - weightArray[3]) * 3600 / (timeArray[8] - timeArray[3]);
+        var c5=(weightArray[9] - weightArray[4]) * 3600 / (timeArray[9] - timeArray[4]);
+        actualFlowrateHM=(c1+c2+c3+c4+c5)/5;
+        actualFlowrateHM=actualFlowrateHM.toFixed(3);
+    }
+
     cs = 331.3 + 0.606 * temperatureWater;
-    labelTimeD = 2 * 20 * actualFlowRateHM / (cs * cs);
+    labelTimeD = 8 *L * ultraFlowRateHM / ((Math.PI)*D*D*cs*cs);
     var vStr = $('#virtualInstrumentCodeArea').val();
     vStr = vStr.trim();
     if (!vStr) document.getElementById('labelcalculateFlowRateHM').innerHTML = '';
@@ -371,15 +399,15 @@ socket.on("Data Pack", function (temperature, ultraTime, distance, flowRate, tot
 
 
         //超声波流量计
-        document.getElementById('labelFlowRateHM').innerHTML = '瞬时流量:' + flowRateHM + ' m3/h';
-        document.getElementById('labelFlowRateHMSide').innerHTML = '瞬时流量:' + flowRateHM + ' m3/h';
+        document.getElementById('labelFlowRateHM').innerHTML = '瞬时流量:' + calculateFlowRateHM + ' m3/h';
+        document.getElementById('labelFlowRateHMSide').innerHTML = '瞬时流量:' + calculateFlowRateHM + ' m3/h';
         document.getElementById('labelTotalFlowHM').innerHTML = '累积流量:' + totalFlowHM + ' m3';
         document.getElementById('labelTempHM').innerHTML = '水温:' + temperatureWater + ' C';
 
-        document.getElementById("USFlowDigit1").src = "/images/LCD/" + parseInt(flowRateHM % 10) + ".png";
-        document.getElementById("USFlowDigit2").src = "/images/LCD/" + parseInt((flowRateHM * 10) % 10) + ".png";
-        document.getElementById("USFlowDigit3").src = "/images/LCD/" + parseInt((flowRateHM * 100) % 10) + ".png";
-        document.getElementById("USFlowDigit4").src = "/images/LCD/" + parseInt((flowRateHM * 1000) % 10) + ".png";
+        document.getElementById("USFlowDigit1").src = "/images/LCD/" + parseInt(calculateFlowRateHM % 10) + ".png";
+        document.getElementById("USFlowDigit2").src = "/images/LCD/" + parseInt((calculateFlowRateHM * 10) % 10) + ".png";
+        document.getElementById("USFlowDigit3").src = "/images/LCD/" + parseInt((calculateFlowRateHM * 100) % 10) + ".png";
+        document.getElementById("USFlowDigit4").src = "/images/LCD/" + parseInt((calculateFlowRateHM * 1000) % 10) + ".png";
 
         document.getElementById("USFlowTempDigit1").src = "/images/LCD/" + parseInt((temperatureWater / 10) % 10) + ".png";
         document.getElementById("USFlowTempDigit2").src = "/images/LCD/" + parseInt((temperatureWater) % 10) + ".png";
@@ -541,25 +569,25 @@ socket.on("Data Pack", function (temperature, ultraTime, distance, flowRate, tot
 // });
 
 //-------------------------------------Pump controlling------------------------------
-var sw4Status = 0;
-$('#sw4').click(function () {
-    if (experimentStatus == 0) {
-        alert("请先点击开始实验");
-        return false;
-    }
-    else {
-        sw4Status = 1;
-        if (document.getElementById('sw4').checked)
-            socket.emit('controlPump', tableid, document.getElementById('frequencySlider').value);
-        else
-            socket.emit('controlPump', tableid, 0);
-        recordExpLog(document.getElementById('sw4').checked ? ('开启变频器,频率:' + document.getElementById('frequencySlider').value + 'Hz') : '关闭变频器');
-    }
-})
-$('#frequencySlider').change(function () {
-    updateFrequencyValue();
-    if (document.getElementById('sw4').checked) {
-        socket.emit('controlPump', tableid, document.getElementById('frequencySlider').value);
-        recordExpLog('调节变频器频率:' + document.getElementById('frequencySlider').value + 'Hz');
-    }
-})
+// var sw4Status = 0;
+// $('#sw4').click(function () {
+//     if (experimentStatus == 0) {
+//         alert("请先点击开始实验");
+//         return false;
+//     }
+//     else {
+//         sw4Status = 1;
+//         if (document.getElementById('sw4').checked)
+//             socket.emit('controlPump', tableid, document.getElementById('frequencySlider').value);
+//         else
+//             socket.emit('controlPump', tableid, 0);
+//         recordExpLog(document.getElementById('sw4').checked ? ('开启变频器,频率:' + document.getElementById('frequencySlider').value + 'Hz') : '关闭变频器');
+//     }
+// })
+// $('#frequencySlider').change(function () {
+//     updateFrequencyValue();
+//     if (document.getElementById('sw4').checked) {
+//         socket.emit('controlPump', tableid, document.getElementById('frequencySlider').value);
+//         recordExpLog('调节变频器频率:' + document.getElementById('frequencySlider').value + 'Hz');
+//     }
+// })

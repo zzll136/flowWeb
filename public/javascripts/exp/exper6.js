@@ -334,16 +334,44 @@ var recordIntervalCounter = 1;
 var warnflag = 0, warnflag2 = 0;
 var experimentStatus = 0; //实验状态,0:空闲(停止);1:正在实验;2:正在重置
 var errorflag = [0, 0, 0, 0];
+const St=0.2;
+const D=0.06;
+const d=0.014;
+
 setInterval(function () {
     if (experimentStatus != 0) {
         // var reqTime = Date.now();
         socket.emit('getdata', tableid);
     }
 }, 1000);
+var weightArray=[];
+var timeArray=[];
+var actualFlowrate=0;
 socket.on("Data Pack", function (temperature, ultraTime, distance, flowRate, totalFlowVortex, weight, flowRateHM, totalFlowHM, temperatureWater,valveIn, valveOut, valveSide, inverter) {
-    actualFlowRate = flowRate;
+    vortexFlowRate = flowRate;
+    var time_stamp = Date.now();
+    weightArray.push(Number(weight));
+    timeArray.push(time_stamp);
+    if (weightArray.length == 11) {
+        weightArray.splice(0, 1);
+        timeArray.splice(0, 1);
+        var a1=(weightArray[3] - weightArray[0]) * 3600 / (timeArray[3] - timeArray[0]);
+        var a2=(weightArray[4] - weightArray[1]) * 3600 / (timeArray[4] - timeArray[1]);
+        var a3=(weightArray[5] - weightArray[2]) * 3600 / (timeArray[5] - timeArray[2]);
+
+        var b1=(weightArray[2] - weightArray[0]) * 3600 / (timeArray[2] - timeArray[0]);
+        var b2=(weightArray[3] - weightArray[1]) * 3600 / (timeArray[3] - timeArray[1]);
+
+        var c1=(weightArray[5] - weightArray[0]) * 3600 / (timeArray[5] - timeArray[0]);
+        var c2=(weightArray[6] - weightArray[1]) * 3600 / (timeArray[6] - timeArray[1]);
+        var c3=(weightArray[7] - weightArray[2]) * 3600 / (timeArray[7] - timeArray[2]);
+        var c4=(weightArray[8] - weightArray[3]) * 3600 / (timeArray[8] - timeArray[3]);
+        var c5=(weightArray[9] - weightArray[4]) * 3600 / (timeArray[9] - timeArray[4]);
+        actualFlowrate=(c1+c2+c3+c4+c5)/5;
+        actualFlowrate=actualFlowrate.toFixed(3);
+    }
     flowRate = 'xxxx';
-    freq = 0.2 * actualFlowRate / 100;
+    freq = 4*vortexFlowRate*St / (Math.Pi*D*D*d*(1-1.25*d/D));
     var vStr = $('#virtualInstrumentCodeArea').val();
     vStr = vStr.trim();
     if (!vStr) document.getElementById('labelcalculateFlowRate').innerHTML = '';
@@ -377,20 +405,20 @@ socket.on("Data Pack", function (temperature, ultraTime, distance, flowRate, tot
         //虚拟仪表区,比验证实验多的部分
         document.getElementById('labelfreq').innerHTML = freq.toFixed(5) + ' Hz';
         document.getElementById('labelTotalFlow1').innerHTML = totalFlowHM.toFixed(3) + 'm3';
-        document.getElementById('labelFlowRate').innerHTML = actualFlowRate.toFixed(3) + ' m3/h';
+        document.getElementById('labelFlowRate').innerHTML = calculateFlowRate.toFixed(3) + ' m3/h';
 
         //电子秤
         document.getElementById('labelWeight').innerHTML = '质量:' + weight + ' kg';
         document.getElementById('labelWeightSide').innerHTML = '质量:' + weight + ' kg';
         //涡街流量计
-        document.getElementById('labelFlowRateVortex').innerHTML = '瞬时流量:' + flowRate + ' m3/h';
+        document.getElementById('labelFlowRateVortex').innerHTML = '瞬时流量:' + calculateFlowRate + ' m3/h';
         document.getElementById('labelFlowRateVortexSide').innerHTML = '瞬时流量:' + flowRate + ' m3/h';
         document.getElementById('labelTotalFlowVortex').innerHTML = '累积流量:' + totalFlowVortex + ' m3';
 
-        document.getElementById("VortexFlowDigit1").src = "/images/LCD/" + parseInt(actualFlowRate % 10) + ".png";
-        document.getElementById("VortexFlowDigit2").src = "/images/LCD/" + parseInt((actualFlowRate * 10) % 10) + ".png";
-        document.getElementById("VortexFlowDigit3").src = "/images/LCD/" + parseInt((actualFlowRate * 100) % 10) + ".png";
-        document.getElementById("VortexFlowDigit4").src = "/images/LCD/" + parseInt((actualFlowRate * 1000) % 10) + ".png";
+        document.getElementById("VortexFlowDigit1").src = "/images/LCD/" + parseInt(calculateFlowRate % 10) + ".png";
+        document.getElementById("VortexFlowDigit2").src = "/images/LCD/" + parseInt((calculateFlowRate * 10) % 10) + ".png";
+        document.getElementById("VortexFlowDigit3").src = "/images/LCD/" + parseInt((calculateFlowRate * 100) % 10) + ".png";
+        document.getElementById("VortexFlowDigit4").src = "/images/LCD/" + parseInt((calculateFlowRate * 1000) % 10) + ".png";
 
 
         //超声波流量计
@@ -595,25 +623,25 @@ socket.on("Data Pack", function (temperature, ultraTime, distance, flowRate, tot
 //     }
 // });
 //-------------------------------------Pump controlling------------------------------
-var sw4Status = 0;
-$('#sw4').click(function () {
-    if (experimentStatus == 0) {
-        alert("请先点击开始实验");
-        return false;
-    }
-    else {
-        sw4Status = 1;
-        if (document.getElementById('sw4').checked)
-            socket.emit('controlPump', tableid, document.getElementById('frequencySlider').value);
-        else
-            socket.emit('controlPump', tableid, 0);
-        recordExpLog(document.getElementById('sw4').checked ? ('开启变频器,频率:' + document.getElementById('frequencySlider').value + 'Hz') : '关闭变频器');
-    }
-});
-$('#frequencySlider').change(function () {
-    updateFrequencyValue();
-    if (document.getElementById('sw4').checked) {
-        socket.emit('controlPump', tableid, document.getElementById('frequencySlider').value);
-        recordExpLog('调节变频器频率:' + document.getElementById('frequencySlider').value + 'Hz');
-    }
-})
+// var sw4Status = 0;
+// $('#sw4').click(function () {
+//     if (experimentStatus == 0) {
+//         alert("请先点击开始实验");
+//         return false;
+//     }
+//     else {
+//         sw4Status = 1;
+//         if (document.getElementById('sw4').checked)
+//             socket.emit('controlPump', tableid, document.getElementById('frequencySlider').value);
+//         else
+//             socket.emit('controlPump', tableid, 0);
+//         recordExpLog(document.getElementById('sw4').checked ? ('开启变频器,频率:' + document.getElementById('frequencySlider').value + 'Hz') : '关闭变频器');
+//     }
+// });
+// $('#frequencySlider').change(function () {
+//     updateFrequencyValue();
+//     if (document.getElementById('sw4').checked) {
+//         socket.emit('controlPump', tableid, document.getElementById('frequencySlider').value);
+//         recordExpLog('调节变频器频率:' + document.getElementById('frequencySlider').value + 'Hz');
+//     }
+// })

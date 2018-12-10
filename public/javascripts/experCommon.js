@@ -575,7 +575,7 @@ $(document).on("click", "#liveVideo", function (e) {
 
     }
 });
-var sw1Status = 0, sw2Status = 0, sw3Status = 0;
+var sw1Status = 0, sw2Status = 0, sw3Status = 0,sw4Status = 0;
 // 记录按键的动作 socket.emit发送命令和数据，另一端用socket.on接收
 $(document).on("click", "#sw1", function (e) {
     if (experimentStatus == 0) {
@@ -615,6 +615,34 @@ $(document).on("click", "#sw3", function (e) {
     }//阀门B
 });
 
+
+$(document).on("click", "#sw4", function (e) {
+// $('#sw4').click(function () {
+    if (experimentStatus == 0) {
+        alert("请先点击开始实验");
+        return false;
+    }
+    else if (experimentStatus == 2) {
+        alert("请先点击开始实验");
+        return false;
+    }
+    else {
+        sw4Status = 1;
+        if (document.getElementById('sw4').checked)
+            socket.emit('controlPump', tableid, document.getElementById('frequencySlider').value);
+        else
+            socket.emit('controlPump', tableid, 0);
+        recordExpLog(document.getElementById('sw4').checked ? ('开启变频器,频率:' + document.getElementById('frequencySlider').value + 'Hz') : '关闭变频器');
+    }
+});
+
+$('#frequencySlider').change(function () {
+    updateFrequencyValue();
+    if (document.getElementById('sw4').checked) {
+        socket.emit('controlPump', tableid, document.getElementById('frequencySlider').value);
+        recordExpLog('调节变频器频率:' + document.getElementById('frequencySlider').value + 'Hz');
+    }
+})
 function updateFrequencyValue() {
     //改变滑动条外观
     document.getElementById("sValidRange").style.width = document.getElementById("frequencySlider").value * 3 + "px";

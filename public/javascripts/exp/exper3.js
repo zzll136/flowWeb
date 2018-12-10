@@ -185,9 +185,9 @@ socket.on("Data Pack", function (temperature, ultraTime, distance, flowRate, tot
         actualFlowrate=actualFlowrate.toFixed(3);
        
     }
-   console.log("weightArray的值"+weightArray);
-   console.log("timeArray的值"+timeArray);
-   console.log("actualFlowrate的值"+actualFlowrate);
+//    console.log("weightArray的值"+weightArray);
+//    console.log("timeArray的值"+timeArray);
+//    console.log("actualFlowrate的值"+actualFlowrate);
     if (true) {
         if (weight !== -1)
             errorflag[0] = 0;
@@ -449,25 +449,25 @@ socket.on("Data Pack", function (temperature, ultraTime, distance, flowRate, tot
 
 //-----------------------------------punp controlling
 //Pump controlling
-var sw4Status = 0;
-$('#sw4').click(function () {
-    if (experimentStatus == 0) {
-        alert("请先点击开始实验");
-        return false;
-    }
-    else {
-        sw4Status = 1;
-        if (document.getElementById('sw4').checked)
-            socket.emit('controlPump', tableid, document.getElementById('frequencySlider').value);
-        else
-            socket.emit('controlPump', tableid, 0);
-        recordExpLog(document.getElementById('sw4').checked ? ('开启变频器,频率:' + document.getElementById('frequencySlider').value + 'Hz') : '关闭变频器');
-    }
-})
-$('#frequencySlider').change(function () {
-    updateFrequencyValue();
-    if (document.getElementById('sw4').checked) {
-        socket.emit('controlPump', tableid, document.getElementById('frequencySlider').value);
-        recordExpLog('调节变频器频率:' + document.getElementById('frequencySlider').value + 'Hz');
-    }
-}) 
+// var sw4Status = 0;
+// $('#sw4').click(function () {
+//     if (experimentStatus == 0) {
+//         alert("请先点击开始实验");
+//         return false;
+//     }
+//     else {
+//         sw4Status = 1;
+//         if (document.getElementById('sw4').checked)
+//             socket.emit('controlPump', tableid, document.getElementById('frequencySlider').value);
+//         else
+//             socket.emit('controlPump', tableid, 0);
+//         recordExpLog(document.getElementById('sw4').checked ? ('开启变频器,频率:' + document.getElementById('frequencySlider').value + 'Hz') : '关闭变频器');
+//     }
+// })
+// $('#frequencySlider').change(function () {
+//     updateFrequencyValue();
+//     if (document.getElementById('sw4').checked) {
+//         socket.emit('controlPump', tableid, document.getElementById('frequencySlider').value);
+//         recordExpLog('调节变频器频率:' + document.getElementById('frequencySlider').value + 'Hz');
+//     }
+// }) 

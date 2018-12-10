@@ -16,13 +16,15 @@ Dt  --- 时差
 
 // 计算声速
 cs = 331.3 + 0.606 * temperature;
-
-function calculateFlowRateHM(Dt,temperatureHM){
-    const L = 20;
-    // 计算声速
-    var cs = 331.3 + 0.606 * temperatureHM;
-    return cs*cs/(2*L)*Dt;
-}
 */
+// function calculateFlowRateHM(Dt,temperatureHM){
+//     const L = 0.13;
+//     const D = 0.02;
+//     // 计算声速
+//     var cs = 331.3 + 0.606 * temperatureHM;
+//     var u=cs*cs*Dt/(2*L);
+//     var q=Math.PI*D*D*u/4;
+//     return q;
+// }
 </script>
 </html>
