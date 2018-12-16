@@ -10,7 +10,7 @@ function User(user) { //创建User对象
 
 module.exports = User;
 
-//1向exper表插入实验数据表，并将list_id值传入exper表
+//1向exper表插入实验数据表
 User.insertExperData = function insertExperData(user_id, year, callback) {
     pool.getConnection(function (err, connection) {
         var useDbSql = "USE " + DB_NAME;
@@ -117,9 +117,9 @@ User.getCourseStatusbyYear = function getCourseStatusbyYear(user_id, year, callb
 };
 
 //4保存按钮，向数据库写入实验日志和实验数据
-User.setUserCourseLog = function setUserCourseLog(user_id, year, courseID, log, expdata, status, startTime, endTime, callback) {
+User.setUserCourseLog = function setUserCourseLog(user_id, year, courseID, log, expdata, status, startTime, endTime, code,callback) {
     pool.getConnection(function (err, connection) {
-        var setUserCourseLog_Sql = "update experiment set explog=?,status=?,repdata=?,startTime=?,endTime=? where user_id=? and year=? and courseID=?";
+        var setUserCourseLog_Sql = "update experiment set explog=?,status=?,repdata=?,startTime=?,endTime=?,code=? where user_id=? and year=? and courseID=?";
         var useDbSql = "USE " + DB_NAME;
         connection.query(useDbSql, function (err) { //使用回调函数的参数connection来查询数据库
             if (err) {
@@ -128,7 +128,7 @@ User.setUserCourseLog = function setUserCourseLog(user_id, year, courseID, log, 
             }
             console.log('USE succeed');
         });
-        connection.query(setUserCourseLog_Sql, [log, status, expdata, startTime, endTime, user_id, year, courseID], function (err, result) {
+        connection.query(setUserCourseLog_Sql, [log, status, expdata, startTime, endTime,code, user_id, year, courseID], function (err, result) {
             if (err) {
                 console.log("setUserCourseLog Error: " + err.message);
                 callback(err, null);
@@ -576,3 +576,39 @@ User.getUserDataByYear = function getUserDataByYear(user_id, courseid, year, cal
         });
     });
 };
+
+//18 保存按钮后，还向数据记录表格添加数据
+User.setCourseRecord = function setCourseRecord(user_id, year, courseID, log, expdata, tableid, startTime, endTime,code, callback) {
+    pool.getConnection(function (err, connection) {
+        var useDbSql = "USE " + DB_NAME;
+        connection.query(useDbSql, function (err) { //使用回调函数的参数connection来查询数据库
+            if (err) {
+                console.log("USE Error: " + err.message);
+                return;
+            }
+            console.log('USE succeed');
+        });
+        var getCourseRecord_Sql = "select * from experRecord where user_id=? and year=? and courseID=? and startTime = ?";
+        connection.query(getCourseRecord_Sql, [user_id, year, courseID, startTime], function (err, result) {
+            if (err) {
+                console.log("setCourseRecord Error: " + err.message);
+                callback(err, null);
+            }
+            if (!result.length)
+                 var setCourseRecord_Sql = "insert into experRecord(code,tableID,expLog,repData,startTime,endTime,user_id,year,courseID) values(?,?,?,?,?,?,?,?,?)";
+            else var setCourseRecord_Sql = "update experRecord set code=?,tableID=?,explog=?,repdata=?,startTime=?,endTime=? where user_id=? and year=? and courseID=?";
+            connection.query(setCourseRecord_Sql, [code,tableid, log, expdata, startTime, endTime, user_id, year, courseID], function (err, result) {
+                if (err) {
+                    console.log("setCourseRecord Error: " + err.message);
+                    callback(err, null);
+                }
+                if (!connection.isRelease) {
+                    connection.release();
+                }
+                console.log("invoked[setUserCourseLog]");
+                console.log('the result is:', result);
+                callback(err, result);
+            });
+        });
+    });
+}

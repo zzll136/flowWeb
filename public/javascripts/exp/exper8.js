@@ -219,11 +219,11 @@ $('#buttonEndExperiment').click(function (e) {
             type: 'POST',
             async: false,
             url: '/experiment/8',
-            data: 'expdata=' + getTableContent('tableDataRecord') + '&log=' + document.getElementById('expLog').innerText,
+            data: 'expdata=' + getTableContent('tableDataRecord') + '&log=' + document.getElementById('expLog').innerText+ '&tableid='+tableid+ '&year='+year+'&code=' + encodeURIComponent($('#virtualInstrumentCodeArea').val()),
             success: function (data) {
-                if (data.affectedRows != 0)
-                    alert('上传成功');
-                else if (data.affectedRows == 0) alert('用户不存在数据表');
+                if (data=="none")
+                    alert('用户不存在数据表');
+                else if (data.affectedRows!= 0) alert('上传成功');
             },
             error: function (data) {
                 alert('上传失败');
@@ -276,7 +276,7 @@ $('#buttonClearRecord').click(function (e) {
         cell.style = "font-weight: bolder";
 
         cell = row.insertCell(-1);
-        cell.innerHTML = "超声波液位(mm)";
+        cell.innerHTML = "计算液位(mm)";
         cell.align = "center";
         cell.style = "font-weight: bolder";
 
@@ -373,12 +373,12 @@ socket.on("Data Pack", function (temperature, ultraTime, distance, flowRate, tot
 
 
         //电子秤
-        document.getElementById('labelWeight').innerHTML = '质量:' + weight + ' kg';
-        document.getElementById('labelWeightSide').innerHTML = '质量:' + weight + ' kg';
+        document.getElementById('labelWeight').innerHTML = '质量:' + weight.toFixed(3) + ' kg';
+        document.getElementById('labelWeightSide').innerHTML = '质量:' + weight.toFixed(3) + ' kg';
         //涡街流量计
-        document.getElementById('labelFlowRateVortex').innerHTML = '瞬时流量:' + flowRate + ' m3/h';
-        document.getElementById('labelFlowRateVortexSide').innerHTML = '瞬时流量:' + flowRate + ' m3/h';
-        document.getElementById('labelTotalFlowVortex').innerHTML = '累积流量:' + totalFlowVortex + ' m3';
+        document.getElementById('labelFlowRateVortex').innerHTML = '瞬时流量:' + flowRate.toFixed(3) + ' m3/h';
+        document.getElementById('labelFlowRateVortexSide').innerHTML = '瞬时流量:' + flowRate.toFixed(3) + ' m3/h';
+        document.getElementById('labelTotalFlowVortex').innerHTML = '累积流量:' + totalFlowVortex.toFixed(3) + ' m3';
 
         document.getElementById("VortexFlowDigit1").src = "/images/LCD/" + parseInt(flowRate % 10) + ".png";
         document.getElementById("VortexFlowDigit2").src = "/images/LCD/" + parseInt((flowRate * 10) % 10) + ".png";
@@ -387,10 +387,10 @@ socket.on("Data Pack", function (temperature, ultraTime, distance, flowRate, tot
 
 
         //超声波流量计
-        document.getElementById('labelFlowRateHM').innerHTML = '瞬时流量:' + flowRateHM + ' m3/h';
-        document.getElementById('labelFlowRateHMSide').innerHTML = '瞬时流量:' + flowRateHM + ' m3/h';
-        document.getElementById('labelTotalFlowHM').innerHTML = '累积流量:' + totalFlowHM + ' m3';
-        document.getElementById('labelTempHM').innerHTML = '水温:' + temperatureWater + ' C';
+        document.getElementById('labelFlowRateHM').innerHTML = '瞬时流量:' + flowRateHM.toFixed(3) + ' m3/h';
+        document.getElementById('labelFlowRateHMSide').innerHTML = '瞬时流量:' + flowRateHM.toFixed(3) + ' m3/h';
+        document.getElementById('labelTotalFlowHM').innerHTML = '累积流量:' + totalFlowHM.toFixed(3) + ' m3';
+        document.getElementById('labelTempHM').innerHTML = '水温:' + temperatureWater.toFixed(3) + ' C';
 
         document.getElementById("USFlowDigit1").src = "/images/LCD/" + parseInt(flowRateHM % 10) + ".png";
         document.getElementById("USFlowDigit2").src = "/images/LCD/" + parseInt((flowRateHM * 10) % 10) + ".png";
@@ -404,8 +404,8 @@ socket.on("Data Pack", function (temperature, ultraTime, distance, flowRate, tot
         ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
         //超声波液位计
-        document.getElementById('labelWaterLevel').innerHTML = '液位:' + distance + ' mm';
-        document.getElementById('labelWaterLevelSide').innerHTML = '液位:' + distance + ' mm';
+        document.getElementById('labelWaterLevel').innerHTML = '液位:' + calculatedLevel + ' mm';
+        document.getElementById('labelWaterLevelSide').innerHTML = '液位:' + calculatedLevel + ' mm';
         document.getElementById('labelTempAir').innerHTML = '气温:' + temperature + ' C';
         ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 

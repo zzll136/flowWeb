@@ -6,7 +6,7 @@
 window.onbeforeunload = function () {
     return 1; //阻止意外关闭实验页
 }
-//窗口关闭时,使用ajax上传实验日志
+//窗口关闭时,使用ajax释放实验桌
 window.onunload = function () {
     recordExpLog('退出实验');
     $.ajax({
@@ -196,11 +196,11 @@ $('#buttonEndExperiment').click(function (e) {
             type: 'POST',
             async: false,
             url: '/experiment/6',
-            data: 'expdata=' + getTableContent('tableDataRecord') + '&log=' + document.getElementById('expLog').innerText,
+            data: 'expdata=' + getTableContent('tableDataRecord') + '&log=' + document.getElementById('expLog').innerText+ '&tableid='+tableid+ '&year='+year+'&code=' + encodeURIComponent($('#virtualInstrumentCodeArea').val()),
             success: function (data) {
-                if (data.affectedRows != 0)
-                    alert('上传成功');
-                else if (data.affectedRows == 0) alert('用户不存在数据表');
+                if (data=="none")
+                    alert('用户不存在数据表');
+                else if (data.affectedRows!= 0) alert('上传成功');
             },
             error: function (data) {
                 alert('上传失败');
@@ -344,9 +344,11 @@ setInterval(function () {
         socket.emit('getdata', tableid);
     }
 }, 1000);
+
 var weightArray=[];
 var timeArray=[];
 var actualFlowrate=0;
+
 socket.on("Data Pack", function (temperature, ultraTime, distance, flowRate, totalFlowVortex, weight, flowRateHM, totalFlowHM, temperatureWater,valveIn, valveOut, valveSide, inverter) {
     vortexFlowRate = flowRate;
     var time_stamp = Date.now();
@@ -371,7 +373,7 @@ socket.on("Data Pack", function (temperature, ultraTime, distance, flowRate, tot
         actualFlowrate=actualFlowrate.toFixed(3);
     }
     flowRate = 'xxxx';
-    freq = 4*vortexFlowRate*St / (Math.Pi*D*D*d*(1-1.25*d/D));
+    freq = 4*vortexFlowRate*St / (3.14*D*D*d*(1-1.25*d/D));
     var vStr = $('#virtualInstrumentCodeArea').val();
     vStr = vStr.trim();
     if (!vStr) document.getElementById('labelcalculateFlowRate').innerHTML = '';
@@ -379,7 +381,8 @@ socket.on("Data Pack", function (temperature, ultraTime, distance, flowRate, tot
         //运行虚拟二次仪表
         try {
             calculateFlowRate = instrumentScript.calculateFlowRate(freq);
-            document.getElementById('labelcalculateFlowRate').innerHTML = calculateFlowRate.toFixed(3) + ' m3/h';
+            calculateFlowRate=calculateFlowRate.toFixed(3);
+            document.getElementById('labelcalculateFlowRate').innerHTML = calculateFlowRate + ' m3/h';
         } catch (e) {
             console.log(e.toString());
             document.getElementById('labelcalculateFlowRate').innerHTML = '运行错误';
@@ -403,17 +406,17 @@ socket.on("Data Pack", function (temperature, ultraTime, distance, flowRate, tot
         if (errorflag[1] == 75)
             VortexError();
         //虚拟仪表区,比验证实验多的部分
-        document.getElementById('labelfreq').innerHTML = freq.toFixed(5) + ' Hz';
+        document.getElementById('labelfreq').innerHTML = freq.toFixed(2) + ' Hz';
         document.getElementById('labelTotalFlow1').innerHTML = totalFlowHM.toFixed(3) + 'm3';
-        document.getElementById('labelFlowRate').innerHTML = calculateFlowRate.toFixed(3) + ' m3/h';
+        document.getElementById('labelFlowRate').innerHTML = actualFlowrate+ ' m3/h';
 
         //电子秤
-        document.getElementById('labelWeight').innerHTML = '质量:' + weight + ' kg';
-        document.getElementById('labelWeightSide').innerHTML = '质量:' + weight + ' kg';
+        document.getElementById('labelWeight').innerHTML = '质量:' + weight.toFixed(3) + ' kg';
+        document.getElementById('labelWeightSide').innerHTML = '质量:' + weight.toFixed(3) + ' kg';
         //涡街流量计
         document.getElementById('labelFlowRateVortex').innerHTML = '瞬时流量:' + calculateFlowRate + ' m3/h';
-        document.getElementById('labelFlowRateVortexSide').innerHTML = '瞬时流量:' + flowRate + ' m3/h';
-        document.getElementById('labelTotalFlowVortex').innerHTML = '累积流量:' + totalFlowVortex + ' m3';
+        document.getElementById('labelFlowRateVortexSide').innerHTML = '瞬时流量:' + calculateFlowRate + ' m3/h';
+        document.getElementById('labelTotalFlowVortex').innerHTML = '累积流量:' + totalFlowVortex.toFixed(3) + ' m3';
 
         document.getElementById("VortexFlowDigit1").src = "/images/LCD/" + parseInt(calculateFlowRate % 10) + ".png";
         document.getElementById("VortexFlowDigit2").src = "/images/LCD/" + parseInt((calculateFlowRate * 10) % 10) + ".png";
@@ -422,10 +425,10 @@ socket.on("Data Pack", function (temperature, ultraTime, distance, flowRate, tot
 
 
         //超声波流量计
-        document.getElementById('labelFlowRateHM').innerHTML = '瞬时流量:' + flowRateHM + ' m3/h';
-        document.getElementById('labelFlowRateHMSide').innerHTML = '瞬时流量:' + flowRateHM + ' m3/h';
-        document.getElementById('labelTotalFlowHM').innerHTML = '累积流量:' + totalFlowHM + ' m3';
-        document.getElementById('labelTempHM').innerHTML = '水温:' + temperatureWater + ' C';
+        document.getElementById('labelFlowRateHM').innerHTML = '瞬时流量:' + flowRateHM.toFixed(3) + ' m3/h';
+        document.getElementById('labelFlowRateHMSide').innerHTML = '瞬时流量:' + flowRateHM.toFixed(3) + ' m3/h';
+        document.getElementById('labelTotalFlowHM').innerHTML = '累积流量:' + totalFlowHM.toFixed(3) + ' m3';
+        document.getElementById('labelTempHM').innerHTML = '水温:' + temperatureWater.toFixed(3) + ' C';
 
         document.getElementById("USFlowDigit1").src = "/images/LCD/" + parseInt(flowRateHM % 10) + ".png";
         document.getElementById("USFlowDigit2").src = "/images/LCD/" + parseInt((flowRateHM * 10) % 10) + ".png";
@@ -441,7 +444,7 @@ socket.on("Data Pack", function (temperature, ultraTime, distance, flowRate, tot
         //超声波液位计
         document.getElementById('labelWaterLevel').innerHTML = '液位:' + distance + ' mm';
         document.getElementById('labelWaterLevelSide').innerHTML = '液位:' + distance + ' mm';
-        document.getElementById('labelTempAir').innerHTML = '气温:' + temperature + ' C';
+        document.getElementById('labelTempAir').innerHTML = '气温:' + temperature.toFixed(3)+ ' C';
         ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
         // if (valveIn == '1' && lastSW1) document.getElementById('sw1').checked = true;
@@ -529,7 +532,7 @@ socket.on("Data Pack", function (temperature, ultraTime, distance, flowRate, tot
         };
         //记录数据只有在刷新曲线过程中才能进行
         if (isDrawingGraph) {
-            chartLevel.series[0].addPoint([time, Number(actualFlowRate)], true, false);
+            chartLevel.series[0].addPoint([time, Number(actualFlowrate)], true, false);
             chartLevel.series[1].addPoint([time, Number(calculateFlowRate)], true, false);
 
             time += 1000;
@@ -555,11 +558,11 @@ socket.on("Data Pack", function (temperature, ultraTime, distance, flowRate, tot
                     cell.align = "center";
 
                     cell = row.insertCell(-1);
-                    cell.innerHTML = actualFlowRate;
+                    cell.innerHTML = actualFlowrate;
                     cell.align = "center";
 
                     cell = row.insertCell(-1);
-                    cell.innerHTML = calculateFlowRate.toFixed(1);
+                    cell.innerHTML = calculateFlowRate;
                     cell.align = "center";
 
                     document.getElementById("divDataTable").scrollTop = cell.offsetTop;

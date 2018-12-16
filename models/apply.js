@@ -492,7 +492,7 @@ User.insertTable = function insertTable(tableid, callback) {
             }
             console.log('USE succeed');
         });
-        var insertTable_sql = "update tablestatus set status=1 where tableid=? and status=0";
+        var insertTable_sql = "update tablestatus set status=1 where tableid=?";
         connection.query(insertTable_sql, [tableid], function (err, result) {
             if (err) {
                 console.log("insertTable Error: " + err.message);

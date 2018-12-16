@@ -2,6 +2,7 @@
 <!--未加入Bootstrap的两行链接-->
 <html lang="en">
 <% include header%>
+
     <head>
         <title>
             <%= title %>
@@ -10,6 +11,7 @@
         <link href="stylesheets/uploadreport.css" rel="stylesheet" type="text/css">
         <link href="stylesheets/fileinput.min.css" rel="stylesheet" type="text/css">
     </head>
+
     <body>
         <div id="report_header_img"></div>
         <!--右边文字-->
@@ -40,7 +42,7 @@
 
                         <li role="presentation" class="dropdown">
                             <a class="dropdown-toggle" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">
-                            综合实验
+                                综合实验
                                 <span class="caret"></span>
                             </a>
                             <ul class="dropdown-menu">
@@ -147,7 +149,7 @@
                     </div>
                     <div class="clearfix"></div>
                 </div>
-                <div id="exp3patameter" class="report" style="display:none">
+                <div id="exp3patameter" class="report">
                     <div class="report_fdiv">
                         <img src="images/svg/text.svg" alt="text图标">
                         <span>校准曲线参数</span>
@@ -155,7 +157,7 @@
                     </div>
                     <div class="pull-left">
                         <p>曲线坐标轴x轴：
-                            <span>
+                            <span id="x">
                                 实际流量值
                             </span>
                         </p>
@@ -168,7 +170,6 @@
                         <p style="font-size: 16px;font-Weight:bold">参数填写：(保留小数点后三位)
                             <div class="form-inline" style="font-size: 17px;font-Weight:bold">
                                 y=
-
                                 <input type="text" id="a" name="a" class="form-control" style="width:100px" placeholder="a" /> x+
                                 <!-- <input type="text" id="a" name="a" class="form-control" style="width:100px" placeholder="a"  onchange="if(/\D/.test(this.value)){alert('只能输入数字，小数点最多保留三位');this.value='';}">  -->
                                 <!-- <input type="text" id="b" name="b" class="form-control" style="width:100px" placeholder="b" onkeyup= "if(/^d*(?:.d{0,2})?$/.test(this.value)){alert('只能输入数字,小数点后只能保留两位');this.value='';}" /> -->
@@ -179,14 +180,14 @@
                     </div>
                     <div class="pull-right">
                         <p>曲线坐标轴y轴：
-                            <span>
+                            <span id="y">
                                 涡街流量计流量值
                             </span>
                         </p>
                     </div>
                     <div class="clearfix"></div>
                 </div>
-                <div id="exp4patameter" class="report" style="display:none">
+                <!-- <div id="exp4patameter" class="report" style="display:none">
                     <div class="report_fdiv">
                         <img src="images/svg/text.svg" alt="text图标">
                         <span>校准曲线参数</span>
@@ -221,8 +222,8 @@
                         </p>
                     </div>
                     <div class="clearfix"></div>
-                </div>
-                <div id="exp5patameter" class="report" style="display:none">
+                </div> -->
+                <!-- <div id="exp5patameter" class="report" style="display:none">
                     <div class="report_fdiv">
                         <img src="images/svg/text.svg" alt="text图标">
                         <span>校准曲线参数</span>
@@ -257,7 +258,7 @@
                         </p>
                     </div>
                     <div class="clearfix"></div>
-                </div>
+                </div> -->
                 <div class="report">
                     <div class="report_fdiv">
                         <img src="images/svg/text.svg" alt="text图标">
@@ -286,8 +287,7 @@
                         <label style="font-size:20px;">上传实验报告:</label>
                         <input id="thumbnail" name="thumbnail" type="file">
                     </div>
-                    <input type="button" class="btn btn-default" style="font-size:15px" value='预览实验报告' onclick="showreport('<%=result[0].id%>')">
-
+                    <input id="viewfile" type="button" class="btn btn-default" style="font-size:15px" value='预览实验报告' onclick="showreport('<%=result[0].id%>')">
                 </form>
             </div>
             <div class="right_report" id="warn">
@@ -359,9 +359,12 @@
                 // }
                 // return (true);
                 window.onload = function () {
-                    if ('<%=result[0].teascore%>' && '<%=result[0].teascore%>' != '0')
+                    if ('<%=result[0].teascore%>' && '<%=result[0].teascore%>' != '0') //表明老师已经批改
                         document.getElementById("showfile").style.display = "none";
-
+                    else if('<%=result[0].status%>'=='0')  //老师未批改且用户没有做实验
+                    { document.getElementById("showfile").style.display = "none";
+                      document.getElementById("viewfile").style.display = "none";
+                    }
                     var url = window.location.href;
                     var id = url.substring(url.length - 1, url.length);
                     switch (id) {
@@ -379,15 +382,16 @@
                             break;
                         case "3":
                             document.getElementById("courseshow").innerText = "涡街流量计综合实验";
-                            document.getElementById("exp3patameter").style.display = "block";
+                            // document.getElementById("exp3patameter").style.display = "block";
                             break;
                         case "4":
                             document.getElementById("courseshow").innerText = "超声波流量计综合实验";
-                            document.getElementById("exp4patameter").style.display = "block";
+                            document.getElementById("y").innerText  = "超声波流量计流量值";
                             break;
                         case "5":
                             document.getElementById("courseshow").innerText = "超声波液位计综合实验";
-                            document.getElementById("exp5patameter").style.display = "block";
+                            document.getElementById("x").innerText  = "实际液位值";
+                            document.getElementById("y").innerText  = "超声波液位计液位值";
                             break;
                         case "6":
                             document.getElementById("courseshow").innerText = "涡街流量计设计实验";
@@ -399,7 +403,6 @@
                             document.getElementById("courseshow").innerText = "超声波液位计设计实验";
                             break;
                     }
-
                 }
                 /* $('#buttonSubmit').click(function(e)
                  {
@@ -441,9 +444,10 @@
                         validateInitialCount: true,
                         previewFileIcon: "<iclass='glyphicon glyphicon-king'></i>",
                         //msgFilesTooMany: "选择上传的文件数量({n}) 超过允许的最大数值{m}！",
-                    }).on("fileuploaded", function (data) {
-                        if (data.response) { alert('处理成功'); }
-                        if (data == "finished") { alert('处理成功'); }
+                    }).on("fileuploaded", function (event, data, previewId, index) {
+                        // if (data.response) { alert('处理成功'); }
+                        // if (data == "finished") { alert('处理成功'); }
+                        console.log(data);
                     });
 
                 function subparameter() {

@@ -2,7 +2,7 @@ window.onload = function () {
     updateFrequencyValue();
     recordExpLog('进入实验');
 }
-
+var year;
 $(document).on("click", "#buttonStartExperiment", function (e) {
     // $('#buttonStartExperiment').click(function (e) {
     if (experimentStatus == 0) //目前是停止实验的状态，现在要开始实验
@@ -24,6 +24,7 @@ $(document).on("click", "#buttonStartExperiment", function (e) {
                 if (time.num == 0) { alert("未预约该时间段" + h + "的实验"); return; }
                 else if (min > 30 && time.doif == null) { alert("已迟到30min以上，不能继续做实验"); return; }
                 else {
+                    year=time.year;
                     $.post('/experiment/courseInfo', { orderYear: time.year }, function (result) {
                         if (result != "none") {
                             for (var i = 0; i < result.length; i++) {

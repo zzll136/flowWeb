@@ -114,7 +114,7 @@ socketio.sockets.on('connection', function (socket) {
         }
     });
     socket.on('getdata', function (tableid) {
-        console.log("getdataTimes"+  tableid + getdataTimes++);
+        // console.log("getdataTimes"+  tableid + getdataTimes++);
         websocket_flag[tableid]=0;
         set_flag[tableid] = 0;
         //console.log(datapack[tableid-1]);
@@ -285,7 +285,7 @@ setInterval(function () {
             }
             platformAlive[i] = false;
             Apply.disconnectTable(i, function (err, result) {
-                if (err) console.log('insertTable err:' + err);
+                if (err) console.log('disconnectTable err:' + err);
             });
             hardsocket_disflag[i] = 1;
         }

@@ -58,7 +58,6 @@ router.get('/download', function (req, res) {
     }
 });
 
-
 router.post('/getList', function (req, res) {
     var year = req.body.year,
         status = req.body.status;

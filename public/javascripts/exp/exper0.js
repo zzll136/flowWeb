@@ -21,6 +21,8 @@ var tableid = 7;
 //开始实验,清空表格,打开进水阀,关闭出水阀/侧阀,开启变频器
 
 //上传实验数据
+
+//上传实验数据
 $('#buttonEndExperiment').click(function (e) {
     if (experimentStatus == 0) {
         alert("请先点击开始实验");
@@ -31,15 +33,18 @@ $('#buttonEndExperiment').click(function (e) {
             type: 'POST',
             async: false,
             url: '/experiment/0',
-            data: 'expdata=' + getTableContent('tableDataRecord') + '&log=' + document.getElementById('expLog').innerText,
+            data: 'expdata=' + getTableContent('tableDataRecord') + '&log=' + document.getElementById('expLog').innerText + '&tableid='+tableid+ '&year='+year,
             success: function (data) {
-                if (data.affectedRows != 0)
-                    alert('上传成功');
-                else if (data.affectedRows == 0) alert('用户不存在数据表');
+                if (data=="none")
+                    alert('用户不存在数据表');
+                else if (data.affectedRows!= 0) alert('上传成功');
             },
             error: function (data) {
                 alert('上传失败');
             }
+            // error:function(jqXHR, textStatus, errorThrown){
+            // alert('error ' + textStatus + " " + errorThrown);
+            // }
         });
     }
 });
@@ -81,6 +86,7 @@ $('#buttonClearRecord').click(function (e) {
         alert("请先点击开始实验");
         return false;
     }
+
     else {
         recordingIndex = 0;
         //清除试验数据的所有内容，jquery的empty函数，清除被选元素的所有内容

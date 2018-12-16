@@ -198,11 +198,11 @@ $('#buttonEndExperiment').click(function (e) {
             type: 'POST',
             async: false,
             url: '/experiment/7',
-            data: 'expdata=' + getTableContent('tableDataRecord') + '&log=' + document.getElementById('expLog').innerText,
+            data: 'expdata=' + getTableContent('tableDataRecord') + '&log=' + document.getElementById('expLog').innerText+ '&tableid='+tableid+ '&year='+year+'&code=' + encodeURIComponent($('#virtualInstrumentCodeArea').val()),
             success: function (data) {
-                if (data.affectedRows != 0)
-                    alert('上传成功');
-                else if (data.affectedRows == 0) alert('用户不存在数据表');
+                if (data=="none")
+                    alert('用户不存在数据表');
+                else if (data.affectedRows!= 0) alert('上传成功');
             },
             error: function (data) {
                 alert('上传失败');
@@ -346,7 +346,7 @@ socket.on("Data Pack", function (temperature, ultraTime, distance, flowRate, tot
     }
 
     cs = 331.3 + 0.606 * temperatureWater;
-    labelTimeD = 8 *L * ultraFlowRateHM / ((Math.PI)*D*D*cs*cs);
+    labelTimeD = 8 *L * ultraFlowRateHM / (3.14*D*D*cs*cs);
     var vStr = $('#virtualInstrumentCodeArea').val();
     vStr = vStr.trim();
     if (!vStr) document.getElementById('labelcalculateFlowRateHM').innerHTML = '';
@@ -354,7 +354,8 @@ socket.on("Data Pack", function (temperature, ultraTime, distance, flowRate, tot
     else {
         try {
             calculateFlowRateHM = instrumentScript.calculateFlowRateHM(labelTimeD, temperatureWater);
-            document.getElementById('labelcalculateFlowRateHM').innerHTML = calculateFlowRateHM.toFixed(3) + ' m3/h';
+            calculateFlowRateHM=calculateFlowRateHM.toFixed(3);
+            document.getElementById('labelcalculateFlowRateHM').innerHTML = calculateFlowRateHM+ ' m3/h';
         } catch (e) {
             console.log(e.toString());
             document.getElementById('labelcalculateFlowRateHM').innerHTML = '运行错误';
@@ -380,17 +381,17 @@ socket.on("Data Pack", function (temperature, ultraTime, distance, flowRate, tot
             VortexError();
 
         //虚拟仪表区,比验证实验多的部分
-        document.getElementById('labelTimeD').innerHTML = labelTimeD.toFixed(5) + ' us';
+        document.getElementById('labelTimeD').innerHTML = labelTimeD.toFixed(5) + ' s';
         document.getElementById('labelTempHM1').innerHTML = temperatureWater.toFixed(1) + ' ℃';
-        document.getElementById('labelFlowRateHM1').innerHTML = actualFlowRateHM.toFixed(3) + ' m3/h';
+        document.getElementById('labelFlowRateHM1').innerHTML = actualFlowrateHM + ' m3/h';
 
         //电子秤
-        document.getElementById('labelWeight').innerHTML = '质量:' + weight + ' kg';
-        document.getElementById('labelWeightSide').innerHTML = '质量:' + weight + ' kg';
+        document.getElementById('labelWeight').innerHTML = '质量:' + weight.toFixed(3) + ' kg';
+        document.getElementById('labelWeightSide').innerHTML = '质量:' + weight.toFixed(3)+ ' kg';
         //涡街流量计
-        document.getElementById('labelFlowRateVortex').innerHTML = '瞬时流量:' + flowRate + ' m3/h';
-        document.getElementById('labelFlowRateVortexSide').innerHTML = '瞬时流量:' + flowRate + ' m3/h';
-        document.getElementById('labelTotalFlowVortex').innerHTML = '累积流量:' + totalFlowVortex + ' m3';
+        document.getElementById('labelFlowRateVortex').innerHTML = '瞬时流量:' + flowRate.toFixed(3)+ ' m3/h';
+        document.getElementById('labelFlowRateVortexSide').innerHTML = '瞬时流量:' + flowRate.toFixed(3) + ' m3/h';
+        document.getElementById('labelTotalFlowVortex').innerHTML = '累积流量:' + totalFlowVortex.toFixed(3) + ' m3';
 
         document.getElementById("VortexFlowDigit1").src = "/images/LCD/" + parseInt(flowRate % 10) + ".png";
         document.getElementById("VortexFlowDigit2").src = "/images/LCD/" + parseInt((flowRate * 10) % 10) + ".png";
@@ -401,8 +402,8 @@ socket.on("Data Pack", function (temperature, ultraTime, distance, flowRate, tot
         //超声波流量计
         document.getElementById('labelFlowRateHM').innerHTML = '瞬时流量:' + calculateFlowRateHM + ' m3/h';
         document.getElementById('labelFlowRateHMSide').innerHTML = '瞬时流量:' + calculateFlowRateHM + ' m3/h';
-        document.getElementById('labelTotalFlowHM').innerHTML = '累积流量:' + totalFlowHM + ' m3';
-        document.getElementById('labelTempHM').innerHTML = '水温:' + temperatureWater + ' C';
+        document.getElementById('labelTotalFlowHM').innerHTML = '累积流量:' + totalFlowHM.toFixed(3) + ' m3';
+        document.getElementById('labelTempHM').innerHTML = '水温:' + temperatureWater.toFixed(3) + ' C';
 
         document.getElementById("USFlowDigit1").src = "/images/LCD/" + parseInt(calculateFlowRateHM % 10) + ".png";
         document.getElementById("USFlowDigit2").src = "/images/LCD/" + parseInt((calculateFlowRateHM * 10) % 10) + ".png";
@@ -418,7 +419,7 @@ socket.on("Data Pack", function (temperature, ultraTime, distance, flowRate, tot
         //超声波液位计
         document.getElementById('labelWaterLevel').innerHTML = '液位:' + distance + ' mm';
         document.getElementById('labelWaterLevelSide').innerHTML = '液位:' + distance + ' mm';
-        document.getElementById('labelTempAir').innerHTML = '气温:' + temperature + ' C';
+        document.getElementById('labelTempAir').innerHTML = '气温:' + temperature.toFixed(3)+ ' C';
         ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
         // if (valveIn == 'on' && lastSW1) document.getElementById('sw1').checked = true;
@@ -518,8 +519,8 @@ socket.on("Data Pack", function (temperature, ultraTime, distance, flowRate, tot
 
         //记录数据只有在刷新曲线过程中才能进行
         if (isDrawingGraph) {
-            if(actualFlowRateHM >=0 && actualFlowRateHM <= 3 && calculateFlowRateHM >=0 && calculateFlowRateHM <= 3){
-            chartLevel.series[0].addPoint([time, Number(actualFlowRateHM)], true, false);
+            if(actualFlowrateHM >=0 && actualFlowrateHM <= 3 && calculateFlowRateHM >=0 && calculateFlowRateHM <= 3){
+            chartLevel.series[0].addPoint([time, Number(actualFlowrateHM)], true, false);
             chartLevel.series[1].addPoint([time, Number(calculateFlowRateHM)], true, false);
             time += 1000;
             var min = parseInt(time / 60000);
@@ -544,11 +545,11 @@ socket.on("Data Pack", function (temperature, ultraTime, distance, flowRate, tot
                     cell.align = "center";
 
                     cell = row.insertCell(-1);
-                    cell.innerHTML = actualFlowRateHM;
+                    cell.innerHTML = actualFlowrateHM;
                     cell.align = "center";
 
                     cell = row.insertCell(-1);
-                    cell.innerHTML = calculateFlowRateHM.toFixed(1);
+                    cell.innerHTML = calculateFlowRateHM;
                     cell.align = "center";
 
                     document.getElementById("divDataTable").scrollTop = cell.offsetTop;

@@ -114,12 +114,13 @@ User.getexp_timespanscore = function getexp_timespanscore(user_id, year, coursei
                             freq.push(repdataArray[i]);
                     }
                     for (var j = 0; j < freq.length; j++) {
-                        for (var i = 4; i < repdataArray.length; i++) {
+                        for (var i = 4; i < repdataArray.length; i=i+4) {
                             if (repdataArray[i + 1] == freq[j]) {
                                 var data = repdataArray[i];
-                                console.log(Number(data.substring(data.length - 2, data.length)));
-                                console.log(Number(data.substring(0, 1)));
-                                repdataArray[i] = Number(data.substring(0, 1)) * 60 + Number(data.substring(data.length - 2, data.length));
+                                var ge=Number(data.substring(1, 2));
+                                var shi=Number(data.substring(0, 1));
+                                var miao=Number(data.substring(data.length - 2, data.length));
+                                repdataArray[i] = (shi*10+ge)*60+miao;
                                 time.push(repdataArray[i]);
                                 repdataArray[i + 2] = Number(repdataArray[i + 2]) * 3.6;
                                 weight.push(repdataArray[i + 2]);
@@ -127,20 +128,25 @@ User.getexp_timespanscore = function getexp_timespanscore(user_id, year, coursei
                             }
                         }
                         // var parameter = LeastSquare1(time, weight);
+                        if(time.length && weight.length){
                         var parameter = LeastSquare2(time, weight);
                         var parameterArray = parameter.split(";");
-                        sys_a = parameterArray[0];
-                        sys_b = parameterArray[1];
+                        sys_a = Number(parameterArray[0]).toFixed(2);
+                        sys_b = Number(parameterArray[1]).toFixed(2);
                         var k = average(VortexFlow);
                         if (Math.abs(sys_a - k) > 0.2) {
                             dataScore = dataScore - 5;
-                            data_record = data_record + "变频器频率为" + freq[j] + "时，数据误差太大;";
+                            data_record = data_record + "变频器频率为" + freq[j] + "时,水体积_时间曲线为y="+sys_a+"*x+("+sys_b+"),数据误差太大;";
                         }
                         else if (Math.abs(sys_a - k) > 0.1) {
                             dataScore = dataScore - 2;
-                            data_record = data_record + "变频器频率为" + freq[j] + "时，数据误差较大;";
+                            data_record = data_record + "变频器频率为" + freq[j] + "时，水体积_时间曲线为y="+sys_a+"*x+("+sys_b+")数据误差较大;";
                         }
-                    }
+                        else data_record = data_record + "变频器频率为" + freq[j] + "时，水体积_时间曲线为y="+sys_a+"*x+("+sys_b+")数据良好;";
+                        time=[];
+                        weight=[];
+                        VortexFlow=[];
+                    }}
                 }
                 if (courseid == 2) {
                     dataScore = 40;
@@ -156,24 +162,26 @@ User.getexp_timespanscore = function getexp_timespanscore(user_id, year, coursei
                     // console.log(freq);
                     // for (var j = 0; j < freq.length; j++) {
                         for (var i = 4; i < repdataArray.length; i++) {
-                            if (repdataArray[i + 1] == freq[j]) {
+                            // if (repdataArray[i + 1] == freq[j]) {
                                 actualLevel.push(repdataArray[i + 2]);
                                 ultrasonicLevel.push(repdataArray[i + 3]);
-                            }
+                            // }
                         }
                         // var parameter = LeastSquare1(actualLevel, ultrasonicLevel);
+                        if(actualLevel.length && ultrasonicLevel.length){
                         var parameter = LeastSquare2(actualLevel, ultrasonicLevel);
                         var parameterArray = parameter.split(";");
-                        sys_a = parameterArray[0];
-                        sys_b = parameterArray[1];
+                        sys_a = Number(parameterArray[0]).toFixed(2);
+                        sys_b = Number(parameterArray[1]).toFixed(2);
                         if (Math.abs(sys_a-1)>0.2) {
                             dataScore = dataScore - 5;
-                            data_record = data_record + "变频器频率为" + freq[j] + "时，数据误差太大;";
+                            data_record = data_record + "变频器频率为" + freq[j] + "时，超声波液位_实际液位曲线为y="+sys_a+"*x+("+sys_b+"),数据误差太大;";
                         }
                         else if (Math.abs(sys_a-1)>0.1) {
                             dataScore = dataScore - 2;
-                            data_record = data_record + "变频器频率为" + freq[j] + "时，数据误差较大;";
+                            data_record = data_record + "变频器频率为" + freq[j] + "时，超声波液位_实际液位曲线为y="+sys_a+"*x+("+sys_b+"),数据误差较大;";
                         }
+                        else data_record = data_record + "变频器频率为" + freq[j] + "时，超声波液位_实际液位曲线为y="+sys_a+"*x+("+sys_b+"),数据良好;";}
                     // }
                 }
                 if (courseid == 3 || courseid == 4 || courseid == 5) {
@@ -187,6 +195,7 @@ User.getexp_timespanscore = function getexp_timespanscore(user_id, year, coursei
                     }
                     //最小二乘法
                     // var parameter = LeastSquare1(actFlow, VortexFlow);
+                    if(actFlow.length && VortexFlow.length){
                     var parameter = LeastSquare2(actFlow, VortexFlow);
                     console.log("parameter的值" + parameter);
                     var parameterArray = parameter.split(";");
@@ -194,7 +203,7 @@ User.getexp_timespanscore = function getexp_timespanscore(user_id, year, coursei
                     sys_a = Number(sys_a).toFixed(4);
                     sys_b = parameterArray[1];
                     sys_b = Number(sys_b).toFixed(4);
-                    console.log("线性方程y=" + sys_a + "*x+" + sys_b);
+                    console.log("线性方程y=" + sys_a + "*x+" + sys_b);}
                     stu_a = result1[0].stu_a;
                     stu_b = result1[0].stu_b;
                     if(Math.abs(sys_a-1)>0.2){ dataScore -= 5;data_record += "由实验数据得到的校准曲线，斜率的误差值偏大;";}
@@ -243,6 +252,7 @@ User.getexp_timespanscore = function getexp_timespanscore(user_id, year, coursei
                     }
                     //最小二乘法
                     // var parameter = LeastSquare1(actFlow, VortexFlow);
+                    if(actLevel.length && ultrasonicLevel.length){
                     var parameter = LeastSquare2(actLevel, ultrasonicLevel);
                     var parameterArray = parameter.split(";");
                     sys_a = Number(parameterArray[0]).toFixed(4);
@@ -261,6 +271,7 @@ User.getexp_timespanscore = function getexp_timespanscore(user_id, year, coursei
                         data_record = data_record + "数据曲线的线性极差;";
                     }
                 }
+            }
             }
             if (dataScore < 0) dataScore = 0;
             var insertscore_Sql = "UPDATE score SET timespan=?,timespanscore=?,operationScore=?,dataScore=?,explogRecord=?,dataRecord=?,stu_a=?,stu_b=?,sys_a=?,sys_b=? where user_id=? and year = ? and courseid= ? ";

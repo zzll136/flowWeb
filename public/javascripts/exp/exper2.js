@@ -140,11 +140,11 @@ $('#buttonEndExperiment').click(function (e) {
             type: 'POST',
             async: false,
             url: '/experiment/2',
-            data: 'expdata=' + getTableContent('tableDataRecord') + '&log=' + document.getElementById('expLog').innerText,
+            data: 'expdata=' + getTableContent('tableDataRecord') + '&log=' + document.getElementById('expLog').innerText+ '&tableid='+tableid+ '&year='+year,
             success: function (data) {
-                if (data.affectedRows != 0)
-                    alert('上传成功');
-                else if (data.affectedRows == 0) alert('用户不存在数据表');
+                if (data=="none")
+                alert('用户不存在数据表');
+            else if (data.affectedRows!= 0) alert('上传成功');
             },
             error: function (data) {
                 alert('上传失败');

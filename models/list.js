@@ -105,7 +105,7 @@ User.saveListMessage = function saveListMessage(listfrom, school, usertype, year
         //     saveListMessage_Sql=saveListMessage_Sql+",(?,?,?,?,?,"+name[i]+","+username[i]+")";
         // }
         // connection.query(saveListMessage_Sql, [listfrom, school, usertype,year,classname], function (err, result) {
-        var repeat_sql = "select b.* from list as a left join userinfo as b on a.username=b.username\
+        var repeat_sql = "select b.* from userinfo as b left join list as a on a.username=b.username\
          and a.school=b.school where a.usertype='学生' and a.username in(?) and a.school=?;"
         connection.query(repeat_sql, [username, school], function (err, results) {
             if (err) {

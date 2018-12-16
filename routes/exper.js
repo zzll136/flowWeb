@@ -206,16 +206,27 @@ router.post('/0', function (req, res) {
     var courseid = 0;
     var log = req.body.log;
     var expdata = req.body.expdata;
-    var a = log.indexOf("<");
-    var startTime = log.substring(0, a);
-    //var b=log.indexOf("结束实验");
+    var tableid = req.body.tableid;
+    var year = req.body.year;
+    var code;
+    // var a = log.charAt("<");
+    // var a = log.charAt("<");
+    // var a = log.indexOf("<");
+    // var startTime1 = log.substring(0, a);
+    var startTime = log.substring(27,46);
     var endTime = new Date();
     var status = 1;
     try {
-        Exp.setUserCourseLog(req.session.user_id, year, courseid, log, expdata, status, startTime, endTime, function (err, result) {
-            if (err) console.log('setUserCourseLog err:' + err);
-            res.send(result);
-        });
+        if (req.session.userrole == "s") {
+            Exp.setCourseRecord(req.session.user_id, year, courseid, log, expdata, tableid, startTime, endTime, code,function (err, results) {
+                if (err) console.log('setCourseRecord err:' + err);
+                    Exp.setUserCourseLog(req.session.user_id, year, courseid, log, expdata, status, startTime, endTime,code, function (err, result) {
+                        if (err) console.log('setUserCourseLog err:' + err);
+                        res.send(result);
+                    });
+            });
+        }
+        else res.send("none");
     }
     catch (e) {
         console.log("上传实验数据setUserCourseLog err");
@@ -227,15 +238,23 @@ router.post('/1', function (req, res) {
     var courseid = 1;
     log = req.body.log;
     var expdata = req.body.expdata;
-    var a = log.indexOf("<");
-    var startTime = log.substring(0, a);
+    var tableid = req.body.tableid;
+    var year = req.body.year;
+    var code;
+    var startTime = log.substring(27,46);
     var endTime = new Date();
     var status = 1;
     try {
-        Exp.setUserCourseLog(req.session.user_id, year, courseid, log, expdata, status, startTime, endTime, function (err, result) {
-            if (err) console.log('setUserCourseLog err:' + err);
-            res.send(result);
-        });
+        if (req.session.userrole == "s") {
+            Exp.setCourseRecord(req.session.user_id, year, courseid, log, expdata, tableid, startTime, endTime,code, function (err, results) {
+                if (err) console.log('setCourseRecord err:' + err);
+                    Exp.setUserCourseLog(req.session.user_id, year, courseid, log, expdata, status, startTime, endTime,code, function (err, result) {
+                        if (err) console.log('setUserCourseLog err:' + err);
+                        res.send(result);
+                    });
+            });
+        }
+        else res.send("none");
     }
     catch (e) {
         console.log("上传实验数据setUserCourseLog err");
@@ -247,15 +266,23 @@ router.post('/2', function (req, res) {
     var courseid = 2;
     var log = req.body.log;
     var expdata = req.body.expdata;
-    var a = log.indexOf("<");
-    var startTime = log.substring(0, a);
+    var tableid = req.body.tableid;
+    var code;
+    var year = req.body.year;
+    var startTime = log.substring(27,46);
     var endTime = new Date();
     var status = 1;
     try {
-        Exp.setUserCourseLog(req.session.user_id, year, courseid, log, expdata, status, startTime, endTime, function (err, result) {
-            if (err) console.log('setUserCourseLog err:' + err);
-            res.send(result);
-        });
+        if (req.session.userrole == "s") {
+            Exp.setCourseRecord(req.session.user_id, year, courseid, log, expdata, tableid, startTime, endTime,code, function (err, results) {
+                if (err) console.log('setCourseRecord err:' + err);
+                    Exp.setUserCourseLog(req.session.user_id, year, courseid, log, expdata, status, startTime, endTime, code,function (err, result) {
+                        if (err) console.log('setUserCourseLog err:' + err);
+                        res.send(result);
+                    });
+            });
+        }
+        else res.send("none");
     }
     catch (e) {
         console.log("上传实验数据setUserCourseLog err");
@@ -267,15 +294,23 @@ router.post('/3', function (req, res) {
     var courseid = 3;
     var log = req.body.log;
     var expdata = req.body.expdata;
-    var a = log.indexOf("<");
-    var startTime = log.substring(0, a);
+    var tableid = req.body.tableid;
+    var code;
+    var year = req.body.year;
+    var startTime = log.substring(27,46);
     var endTime = new Date();
     var status = 1;
     try {
-        Exp.setUserCourseLog(req.session.user_id, year, courseid, log, expdata, status, startTime, endTime, function (err, result) {
-            if (err) console.log('setUserCourseLog err:' + err);
-            res.send(result);
-        });
+        if (req.session.userrole == "s") {
+            Exp.setCourseRecord(req.session.user_id, year, courseid, log, expdata, tableid, startTime, endTime,code, function (err, results) {
+                if (err) console.log('setCourseRecord err:' + err);
+                    Exp.setUserCourseLog(req.session.user_id, year, courseid, log, expdata, status, startTime, endTime,code, function (err, result) {
+                        if (err) console.log('setUserCourseLog err:' + err);
+                        res.send(result);
+                    });
+            });
+        }
+        else res.send("none");
     }
     catch (e) {
         console.log("上传实验数据setUserCourseLog err");
@@ -287,15 +322,23 @@ router.post('/4', function (req, res) {
     var courseid = 4;
     var log = req.body.log;
     var expdata = req.body.expdata;
-    var a = log.indexOf("<");
-    var startTime = log.substring(0, a);
+    var tableid = req.body.tableid;
+    var code;
+    var year = req.body.year;
+    var startTime = log.substring(27,46);
     var endTime = new Date();
     var status = 1;
     try {
-        Exp.setUserCourseLog(req.session.user_id, year, courseid, log, expdata, status, startTime, endTime, function (err, result) {
-            if (err) console.log('setUserCourseLog err:' + err);
-            res.send(result);
-        });
+        if (req.session.userrole == "s") {
+            Exp.setCourseRecord(req.session.user_id, year, courseid, log, expdata, tableid, startTime, endTime, code,function (err, results) {
+                if (err) console.log('setCourseRecord err:' + err);
+                    Exp.setUserCourseLog(req.session.user_id, year, courseid, log, expdata, status, startTime, endTime,code, function (err, result) {
+                        if (err) console.log('setUserCourseLog err:' + err);
+                        res.send(result);
+                    });
+            });
+        }
+        else res.send("none");
     }
     catch (e) {
         console.log("上传实验数据setUserCourseLog err");
@@ -307,15 +350,23 @@ router.post('/5', function (req, res) {
     var courseid = 5;
     var log = req.body.log;
     var expdata = req.body.expdata;
-    var a = log.indexOf("<");
-    var startTime = log.substring(0, a);
+    var code;
+    var tableid = req.body.tableid;
+    var year = req.body.year;
+    var startTime = log.substring(27,46);
     var endTime = new Date();
     var status = 1;
     try {
-        Exp.setUserCourseLog(req.session.user_id, year, courseid, log, expdata, status, startTime, endTime, function (err, result) {
-            if (err) console.log('setUserCourseLog err:' + err);
-            res.send(result);
-        });
+        if (req.session.userrole == "s") {
+            Exp.setCourseRecord(req.session.user_id, year, courseid, log, expdata, tableid, startTime, endTime,code, function (err, results) {
+                if (err) console.log('setCourseRecord err:' + err);
+                    Exp.setUserCourseLog(req.session.user_id, year, courseid, log, expdata, status, startTime, endTime,code, function (err, result) {
+                        if (err) console.log('setUserCourseLog err:' + err);
+                        res.send(result);
+                    });
+            });
+        }
+        else res.send("none");
     }
     catch (e) {
         console.log("上传实验数据setUserCourseLog err");
@@ -327,15 +378,23 @@ router.post('/6', function (req, res) {
     var courseid = 6;
     var log = req.body.log;
     var expdata = req.body.expdata;
-    var a = log.indexOf("<");
-    var startTime = log.substring(0, a);
+    var tableid = req.body.tableid;
+    var code = decodeURIComponent(req.body.code);
+    var year = req.body.year;
+    var startTime = log.substring(27,46);
     var endTime = new Date();
     var status = 1;
     try {
-        Exp.setUserCourseLog(req.session.user_id, year, courseid, log, expdata, status, startTime, endTime, function (err, result) {
-            if (err) console.log('setUserCourseLog err:' + err);
-            res.send(result);
-        });
+        if (req.session.userrole == "s") {
+            Exp.setCourseRecord(req.session.user_id, year, courseid, log, expdata, tableid, startTime, endTime, code,function (err, results) {
+                if (err) console.log('setCourseRecord err:' + err);
+                    Exp.setUserCourseLog(req.session.user_id, year, courseid, log, expdata, status, startTime, endTime,code, function (err, result) {
+                        if (err) console.log('setUserCourseLog err:' + err);
+                        res.send(result);
+                    });
+            });
+        }
+        else res.send("none");
     }
     catch (e) {
         console.log("上传实验数据setUserCourseLog err");
@@ -346,16 +405,24 @@ router.post('/6', function (req, res) {
 router.post('/7', function (req, res) {
     var courseid = 7;
     var log = req.body.log;
+    var tableid = req.body.tableid;
     var expdata = req.body.expdata;
-    var a = log.indexOf("<");
-    var startTime = log.substring(0, a);
+    var code = decodeURIComponent(req.body.code);
+    var year = req.body.year;
+    var startTime = log.substring(27,46);
     var endTime = new Date();
     var status = 1;
     try {
-        Exp.setUserCourseLog(req.session.user_id, year, courseid, log, expdata, status, startTime, endTime, function (err, result) {
-            if (err) console.log('setUserCourseLog err:' + err);
-            res.send(result);
-        });
+        if (req.session.userrole == "s") {
+            Exp.setCourseRecord(req.session.user_id, year, courseid, log, expdata, tableid, startTime, endTime, code,function (err, results) {
+                if (err) console.log('setCourseRecord err:' + err);
+                    Exp.setUserCourseLog(req.session.user_id, year, courseid, log, expdata, status, startTime, endTime, code,function (err, result) {
+                        if (err) console.log('setUserCourseLog err:' + err);
+                        res.send(result);
+                    });
+            });
+        }
+        else res.send("none");
     }
     catch (e) {
         console.log("上传实验数据setUserCourseLog err");
@@ -366,16 +433,24 @@ router.post('/7', function (req, res) {
 router.post('/8', function (req, res) {
     var courseid = 8;
     var log = req.body.log;
+    var tableid = req.body.tableid;
     var expdata = req.body.expdata;
-    var a = log.indexOf("<");
-    var startTime = log.substring(0, a);
+    var code = decodeURIComponent(req.body.code);
+    var year = req.body.year;
+    var startTime = log.substring(27,46);
     var endTime = new Date();
     var status = 1;
     try {
-        Exp.setUserCourseLog(req.session.user_id, year, courseid, log, expdata, status, startTime, endTime, function (err, result) {
-            if (err) console.log('setUserCourseLog err:' + err);
-            res.send(result);
-        });
+        if (req.session.userrole == "s") {
+            Exp.setCourseRecord(req.session.user_id, year, courseid, log, expdata, tableid, startTime, endTime, code,function (err, results) {
+                if (err) console.log('setCourseRecord err:' + err);
+                    Exp.setUserCourseLog(req.session.user_id, year, courseid, log, expdata, status, startTime, endTime, code,function (err, result) {
+                        if (err) console.log('setUserCourseLog err:' + err);
+                        res.send(result);
+                    });
+            });
+        }
+        else res.send("none");
     }
     catch (e) {
         console.log("上传实验数据setUserCourseLog err");
@@ -413,10 +488,11 @@ router.post('/updateScript6', function (req, res) {
 });
 
 router.get('/instrumentScript6', function (req, res) {
-    if (matchMaliciousCode(scriptText6) == 1) {return;}
-    else{
-    res.locals.scriptText = scriptText6;
-    res.render('scriptTemplate/6');}
+    if (matchMaliciousCode(scriptText6) == 1) { return; }
+    else {
+        res.locals.scriptText = scriptText6;
+        res.render('scriptTemplate/6');
+    }
 });
 
 router.post('/updateScript7', function (req, res) {
@@ -433,10 +509,11 @@ router.post('/updateScript7', function (req, res) {
 });
 
 router.get('/instrumentScript7', function (req, res) {
-    if (matchMaliciousCode(scriptText7) == 1) {return;}
-    else{
-    res.locals.scriptText = scriptText7;
-    res.render('scriptTemplate/7');}
+    if (matchMaliciousCode(scriptText7) == 1) { return; }
+    else {
+        res.locals.scriptText = scriptText7;
+        res.render('scriptTemplate/7');
+    }
 });
 
 //更新二次仪表程序脚本
@@ -456,11 +533,12 @@ router.post('/updateScript8', function (req, res) {
 
 //浏览器请求虚拟仪器脚本
 router.get('/instrumentScript8', function (req, res) {
-    if (matchMaliciousCode(scriptText8) == 1) {return;}
-    else{
-    res.locals.scriptText = scriptText8;
-    console.log('script8-----------', scriptText8);
-    res.render('scriptTemplate/8');}
+    if (matchMaliciousCode(scriptText8) == 1) { return; }
+    else {
+        res.locals.scriptText = scriptText8;
+        console.log('script8-----------', scriptText8);
+        res.render('scriptTemplate/8');
+    }
 });
 
 //代码重置处理，暂时未用，需要测试
@@ -524,7 +602,7 @@ router.post('/tableMatch', function (req, res) {
         case 't': var usertype = ""; break;
     }
     try {
-        Apply.newdistributionTable(req.session.user_id,req.session.userrole, year, courseid, min, date, time, function (err, result) {
+        Apply.newdistributionTable(req.session.user_id, req.session.userrole, year, courseid, min, date, time, function (err, result) {
             if (err) console.log('distributionTable err:' + err);
             console.log(result);
             if (result == 7) {
@@ -556,14 +634,15 @@ router.post('/tableMatch', function (req, res) {
 //管理员实验时，将选取的实验桌的状态设置一下
 router.post('/setstatus', function (req, res) {
     var tableid = req.body.tableid;
-    try{
-    Apply.setTablestatus(tableid, function (err, result) {
-        if (err)
-            console.log('setTablestatus err:' + err);
-        res.send(result[0].status + "");
-        return;
-    });}
-    catch(e){
+    try {
+        Apply.setTablestatus(tableid, function (err, result) {
+            if (err)
+                console.log('setTablestatus err:' + err);
+            res.send(result[0].status + "");
+            return;
+        });
+    }
+    catch (e) {
         console.log("设置选取的实验桌状态setTablestatus err");
         return res.end('获取数据异常');
     }
@@ -572,13 +651,14 @@ router.post('/setstatus', function (req, res) {
 //实验结束，释放桌子状态
 router.post('/tableFree', function (req, res) {
     var tableid = req.body.tableid;
-    try{
-    Apply.setTableFree(tableid, function (err, result) {
-        if (err) console.log('setTableFree err:' + err);
-        res.send('finished');
-        return;
-    });}
-    catch(e){
+    try {
+        Apply.setTableFree(tableid, function (err, result) {
+            if (err) console.log('setTableFree err:' + err);
+            res.send('finished');
+            return;
+        });
+    }
+    catch (e) {
         console.log("释放实验桌状态setTableFree err");
         return res.end('获取数据异常');
     }
@@ -587,13 +667,14 @@ router.post('/tableFree', function (req, res) {
 //------------------------实验页面刷新时的逻辑处理-----------------------------
 //管理员需要获取当前可用的实验桌数量
 router.get('/getstatus', function (req, res) {
-    try{
-    Apply.getTablestatus(function (err, result) {
-        if (err) console.log('getTablestatus err:' + err);
-        res.send(result);
-        return;
-    });}
-    catch(e){
+    try {
+        Apply.getTablestatus(function (err, result) {
+            if (err) console.log('getTablestatus err:' + err);
+            res.send(result);
+            return;
+        });
+    }
+    catch (e) {
         console.log("获取实验桌状态getTablestatus err");
         return res.end('获取数据异常');
     }

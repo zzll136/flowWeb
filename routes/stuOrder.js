@@ -113,7 +113,14 @@ router.post('/editTime', function (req, res) {
     var date = req.body.date;
     var timeid = req.body.timeid;
     var deviceNum = req.body.deviceNum;
-    var timestamp = req.body.timestamp;
+
+    var timeformat = date + " " + timeid + ":00:00";
+    var strtime = new Date(timeformat);
+    var timestamp = strtime.getTime();
+
+    var nowTimestamp=new Date().getTime();
+    if(nowTimestamp>=timestamp) {res.send("late");return;}
+    // var timestamp = req.body.timestamp;
     var year =req.body.year;
     var nowTime = new Date();
     try{

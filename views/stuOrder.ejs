@@ -216,8 +216,6 @@
             <script>
                 var url = window.location.search;
                 var yearUrl = decodeURI(url.substring(url.indexOf('=') + 1, url.indexOf("&")));
-                //  var Url=window.location.search.substr(1).split("&");
-                // var yearUrl=Url[0].substr(Url[0].indexOf("=")+1);
                 if (yearUrl)
                     $("#year_sel").find("option[value=" + yearUrl + "]").attr("selected", true);
                 var date;
@@ -294,14 +292,14 @@
                         }
                         if (timepassArray[i] == 1) alert("该日期已经过时，不能预约");
                         else {
-                                var nowTimestamp=new Date().getTime();
+                                // var nowTimestamp=new Date().getTime();
                                 var deviceNum = '<%=deviceNum%>';
                                 var timeid = id;
-                                var timeformat = date + " " + timeid + ":00:00";
-                                var strtime = new Date(timeformat);
-                                timestamp = strtime.getTime();
+                                // var timeformat = date + " " + timeid + ":00:00";
+                                // var strtime = new Date(timeformat);
+                                // var timestamp = strtime.getTime();
 
-                                if(nowTimestamp>=timestamp) {alert("该日期已经过时，不能预约");return;}
+                                // if(nowTimestamp>=timestamp) {alert("该日期已经过时，不能预约");return;}
                                 var year_copy = $("#year_sel option:selected").val();
 
                                 if (confirm("确定预约该时间段吗？")) {
@@ -310,10 +308,11 @@
                                     date: date,
                                     deviceNum: deviceNum,
                                     timeid: timeid,
-                                    timestamp: timestamp,
+                                    // timestamp: timestamp,
                                     year: year_copy
                                 }, function (data) {
-                                    if (data == 'noright') alert("你该学期没有权限做实验");
+                                    if (data=="late") alert("该时间已经过时，不能预约");
+                                    else if (data == 'noright') alert("你该学期没有权限做实验");
                                     else if (data == '0')
                                         alert("已预约该时间段，不能重复预约");
                                     else if (data == '1')
